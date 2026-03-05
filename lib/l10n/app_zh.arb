@@ -1,0 +1,150 @@
+{
+  "appTitle": "HYKOIUU",
+  "upNext": "接下来播放",
+  "videoViews": "{count, plural, =0{无观看} other{{count} 次观看}} • {date}",
+  "@videoViews": {
+    "placeholders": {
+      "count": {},
+      "date": {}
+    }
+  },
+  "daysAgo": "{count, plural, =0{今天} =1{1 天前} other{{count} 天前}}",
+  "@daysAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "weeksAgo": "{count, plural, =0{本周} =1{1 周前} other{{count} 周前}}",
+  "@weeksAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "hoursAgo": "{count, plural, =0{刚刚} =1{1 小时前} other{{count} 小时前}}",
+  "@hoursAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "minutesAgo": "{count, plural, =0{刚刚} =1{1 分钟前} other{{count} 分钟前}}",
+  "@minutesAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "justNow": "刚刚",
+  "showMore": "显示更多",
+  "showLess": "显示更少",
+  "dislike": "不喜欢",
+  "favorite": "收藏",
+  "tenThousand": "万",
+  "home": "首页",
+  "community": "社区",
+  "profile": "我的",
+  "login": "登录",
+  "invalidUsernameOrPassword": "无效的用户名或密码",
+  "username": "用户名",
+  "enterUsername": "请输入用户名",
+  "password": "密码",
+  "enterPassword": "请输入密码",
+  "dontHaveAnAccount": "没有帐户？ 注册",
+  "forgotPassword": "忘记密码？",
+  "myProfile": "我的资料",
+  "privacyPolicy": "隐私政策",
+  "myPosts": "我的帖子",
+  "myFavorites": "我的收藏",
+  "language": "语言",
+  "editProfile": "编辑个人资料",
+  "selectLanguage": "选择语言",
+  "logout": "登出",
+  "logoutConfirmation": "您确定要退出吗？",
+  "cancel": "取消",
+  "confirmLogout": "登出",
+  "easy": "简单",
+  "medium": "中等",
+  "hard": "困难",
+  "ultimate": "终极",
+  "invalidEmail": "无效的电子邮件地址",
+  "register": "注册",
+  "registrationSuccessful": "注册成功",
+  "codeSent": "验证码已发送",
+  "email": "电子邮件",
+  "enterValidEmail": "请输入有效的电子邮件",
+  "passwordTooShort": "密码必须至少为 6 个字符",
+  "verificationCode": "验证码",
+  "enterVerificationCode": "请输入验证码",
+  "sendVerificationCode": "发送验证码",
+  "agreement": "注册即表示您同意我们的",
+  "createPost": "创建帖子",
+  "publish": "发布",
+  "title": "标题",
+  "content": "内容",
+  "deletePost": "删除帖子",
+  "deletePostConfirmation": "您确定要删除此帖子吗？",
+  "delete": "删除",
+  "comments": "评论",
+  "privacyPolicyContent": "本隐私政策阐述了当您使用本服务时，我们关于收集、使用和披露您信息的政策和程序，并告知您所拥有的隐私权以及法律如何保护您。我们使用您的个人数据来提供和改进本服务。使用本服务即表示您同意我们根据本隐私政策收集和使用信息。\n\n**信息收集与使用**\n\n**收集的数据类型**\n*   **个人数据：** 在使用我们的服务时，我们可能会要求您提供某些可用于联系或识别您的个人身份信息。个人身份信息可能包括但不限于：电子邮件地址、用户名和个人资料图片。\n*   **使用数据：** 使用服务时会自动收集使用数据。这可能包括您设备的互联网协议地址（例如 IP 地址）、浏览器类型、浏览器版本、您访问我们服务的页面、您访问的时间和日期、在这些页面上花费的时间、唯一的设备标识符和其他诊断数据。\n*   **用户生成内容：** 我们会收集您在我们服务上创建的内容，包括您上传的视频和图片、您发表的评论、点赞和收藏。\n\n**您个人数据的使用**\n公司可能将个人数据用于以下目的：\n*   提供和维护我们的服务，包括监控我们服务的使用情况。\n*   管理您的帐户：管理您作为服务用户的注册。\n*   与您联系：通过电子邮件就与功能、产品或签约服务相关的更新或信息性通讯与您联系。\n*   为您提供我们提供的其他商品、服务 and 活动的新闻、特别优惠和一般信息。\n*   管理您的请求：处理和管理您向我们提出的请求。\n\n**共享您的信息**\n我们不会出售您的个人信息。我们可能会与代表我们执行服务（例如托管服务 and 分析）的第三方服务提供商共享您的信息。\n\n**您个人数据的安全**\n您个人数据的安全对我们很重要，但请记住，没有任何通过互联网传输的方法或电子存储方法是 100% 安全的。虽然我们努力使用商业上可接受的方式来保护您的个人数据，但我们无法保证其绝对安全。\n\n**儿童隐私**\n我们的服务不面向 13 岁以下的任何人。我们不会故意收集 13 岁以下任何人的个人身份信息。如果您是父母或监护人，并且您知道您的孩子向我们提供了个人数据，请与我们联系。\n\n**本隐私政策的变更**\n我们可能会不时更新我们的隐私政策。如有任何更改，我们会通过在此页面上发布新的隐私政策来通知您。",
+  "introduction": "介绍",
+  "replyingTo": "回复 {username}",
+  "@replyingTo": {
+    "placeholders": {
+      "username": {
+        "type": "String"
+      }
+    }
+  },
+  "postYourComment": "发表您的评论",
+  "beTheFirstToComment": "还没有人发言, 快来抢个沙发吧!",
+  "viewAllReplies": "查看全部 {count} 条回复",
+  "@viewAllReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetails": "{count} 条回复",
+  "@commentDetails": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addAComment": "添加评论",
+  "replies": "回复",
+  "fileLimitExceeded": "您最多只能选择 {count} 个文件。",
+  "@fileLimitExceeded": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectPicturesFromAlbum": "从相册选择图片",
+  "selectVideoFromAlbum": "从相册选择视频",
+  "sportVideos": "运动视频",
+  "resetPassword": "重置密码",
+  "resetYourPassword": "重设您的密码",
+  "resetPasswordInstruction": "请输入您的邮箱地址，我们会向您发送一个验证码来重置密码。",
+  "newPassword": "新密码",
+  "confirmNewPassword": "确认新密码",
+  "passwordsDoNotMatch": "两次输入的密码不一致",
+  "confirmReset": "确认重置",
+  "passwordResetSuccessLogin": "密码已成功重置，请登录",
+  "usernameAndEmailMismatch": "用户名和电子邮件不匹配",
+  "noRepliesYet": "暂无回复。",
+  "invitationCode": "邀请码",
+  "incorrectInvitationCode": "邀请码不正确",
+  "pleaseRequestVerificationCodeFirst": "请先获取验证码",
+  "invalidVerificationCode": "无效的验证码。",
+  "videoLoadError": "视频加载失败，请重试",
+  "noPostsYet": "还没有人发言，快来抢个沙发吧！",
+  "noVideosFound": "未找到视频",
+  "error": "错误",
+  "retry": "重试",
+  "deleteAccount": "注销账号",
+  "deleteAccountConfirmation": "您确定要注销账号吗？此操作不可撤销且将删除您的所有数据。",
+  "confirmDeleteAccount": "确认注销",
+  "defaultBio": "这个人很懒，什么都没有留下。"
+}

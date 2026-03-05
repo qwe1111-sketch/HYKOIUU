@@ -1,0 +1,59 @@
+{
+  "de": [
+    "noPostsYet",
+    "noVideosFound",
+    "error",
+    "retry",
+    "deleteAccount",
+    "deleteAccountConfirmation",
+    "confirmDeleteAccount",
+    "defaultBio"
+  ],
+
+  "es": [
+    "noPostsYet",
+    "noVideosFound",
+    "error",
+    "retry",
+    "deleteAccount",
+    "deleteAccountConfirmation",
+    "confirmDeleteAccount",
+    "defaultBio"
+  ],
+
+  "fr": [
+    "noPostsYet",
+    "noVideosFound",
+    "error",
+    "retry",
+    "deleteAccount",
+    "deleteAccountConfirmation",
+    "confirmDeleteAccount",
+    "defaultBio"
+  ],
+
+  "ja": [
+    "defaultBio"
+  ],
+
+  "ko": [
+    "noVideosFound",
+    "error",
+    "retry",
+    "deleteAccount",
+    "deleteAccountConfirmation",
+    "confirmDeleteAccount",
+    "defaultBio"
+  ],
+
+  "ru": [
+    "noPostsYet",
+    "noVideosFound",
+    "error",
+    "retry",
+    "deleteAccount",
+    "deleteAccountConfirmation",
+    "confirmDeleteAccount",
+    "defaultBio"
+  ]
+}

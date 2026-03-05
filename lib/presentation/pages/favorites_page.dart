@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sport_flutter/domain/entities/video.dart';
+import 'package:sport_flutter/presentation/bloc/favorites_bloc.dart';
+import 'package:sport_flutter/presentation/pages/video_detail_page.dart';
+import 'package:sport_flutter/presentation/widgets/video_list_item.dart';
+import 'package:sport_flutter/l10n/app_localizations.dart'; // Import localizations
+
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({super.key});
+
+  @override
+  State<FavoritesPage> createState() => _FavoritesPageState();
+}
+
+class _FavoritesPageState extends State<FavoritesPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<FavoritesBloc>().add(FetchFavorites());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!; // Access localizations
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.myFavorites), // Localized title
+      ),
+      body: BlocBuilder<FavoritesBloc, FavoritesState>(
+        builder: (context, state) {
+          if (state is FavoritesLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is FavoritesLoaded) {
+            if (state.videos.isEmpty) {
+              return Center(
+                child: Text(l10n.noRepliesYet), // Fallback to a localized empty text if noFavoritesYet not found
+              );
+            }
+            return ListView.separated(
+              itemCount: state.videos.length,
+              itemBuilder: (context, index) {
+                final video = state.videos[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoDetailPage(
+                          video: video,
+                        ),
+                      ),
+                    ).then((isFavorited) {
+                      if (isFavorited is bool && !isFavorited) {
+                        context.read<FavoritesBloc>().add(RemoveFavorite(video));
+                      }
+                    });
+                  },
+                  child: VideoListItem(video: video),
+                );
+              },
+              separatorBuilder: (context, index) => Divider(color: Colors.grey.shade200),
+            );
+          }
+          return Center(
+            child: Text(l10n.videoLoadError), // Localized error text
+          );
+        },
+      ),
+    );
+  }
+}

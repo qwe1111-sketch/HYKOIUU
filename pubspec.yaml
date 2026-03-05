@@ -1,0 +1,65 @@
+name: sport_flutter
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+6
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  iconsax: ^0.0.8
+  flutter_bloc: ^8.1.5
+  equatable: ^2.0.5
+  http: ^1.2.1
+  shared_preferences: ^2.2.3
+  shimmer: ^3.0.0
+
+  # Video & Image Caching
+  video_player: ^2.8.6
+  cached_network_image: ^3.3.1
+  flutter_cache_manager: ^3.3.2
+  carousel_slider: ^4.2.1
+  video_thumbnail: ^0.5.3
+  path_provider: ^2.0.11
+
+  # Lifecycle Management
+  visibility_detector: ^0.4.0+2
+
+  # Formatting
+  intl: ^0.20.2
+  timeago: ^3.7.1
+
+  # Added for file picking and uploading
+  image_picker: ^1.0.7
+  dio: ^5.4.1
+  crypto: ^3.0.3 # For OSS signature calculation
+  meta: ^1.12.0
+
+  # Font library
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1 # Add this line
+
+dependency_overrides:
+  http: ^1.2.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png" # Make sure this path is correct
+
+flutter:
+  uses-material-design: true
+  generate: true

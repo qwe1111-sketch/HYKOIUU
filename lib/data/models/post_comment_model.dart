@@ -1,0 +1,84 @@
+import 'package:sport_flutter/domain/entities/post_comment.dart';
+
+// The Model is responsible for parsing JSON and creating a data object.
+// It is separate from the domain Entity.
+class PostCommentModel {
+  final int id;
+  final String userId;
+  final int? parentCommentId;
+  final String content;
+  final String username;
+  final String? userAvatarUrl;
+  final int likeCount;
+  final int dislikeCount;
+  final DateTime createdAt;
+  final int replyCount;
+  final List<PostCommentModel> replies;
+  final String? userVote;
+
+  const PostCommentModel({
+    required this.id,
+    required this.userId,
+    this.parentCommentId,
+    required this.content,
+    required this.username,
+    this.userAvatarUrl,
+    required this.likeCount,
+    required this.dislikeCount,
+    required this.createdAt,
+    required this.replyCount,
+    this.replies = const [],
+    this.userVote,
+  });
+
+  factory PostCommentModel.fromJson(Map<String, dynamic> json) {
+    var createdAtString = json['createdAt'] as String;
+
+    // Handle non-standard 'ZZ' suffix from server if it exists
+    if (createdAtString.endsWith('ZZ')) {
+      createdAtString = createdAtString.substring(0, createdAtString.length - 1);
+    }
+
+    // The server for post comments sends a naive DateTime string that is implicitly in UTC+8.
+    // We parse it as a UTC timestamp by appending 'Z', and then subtract 8 hours to get the actual UTC time.
+    // This ensures that regardless of the server's timezone, we have the correct moment in time.
+    final dateTimeAsUtc = DateTime.parse(createdAtString + 'Z');
+    final createdAtUtc = dateTimeAsUtc.subtract(const Duration(hours: 8));
+
+    return PostCommentModel(
+      id: json['id'] as int,
+      userId: json['userId'].toString(), // Assuming userId can be int or string from json
+      parentCommentId: json['parentCommentId'] as int?,
+      content: json['content'] as String,
+      username: json['username'] as String? ?? '[已删除用户]',
+      userAvatarUrl: json['userAvatarUrl'] as String?,
+      likeCount: json['likeCount'] as int? ?? 0,
+      dislikeCount: json['dislikeCount'] as int? ?? 0,
+      createdAt: createdAtUtc, // Assign the corrected UTC DateTime
+      replyCount: json['replyCount'] as int? ?? 0,
+      replies: (json['replies'] as List<dynamic>? ?? [])
+          .map((replyJson) => PostCommentModel.fromJson(replyJson as Map<String, dynamic>))
+          .toList(),
+      userVote: json['userVote'] as String?,
+    );
+  }
+
+  // Converts this data-layer Model to a domain-layer Entity.
+  PostComment toEntity() {
+    return PostComment(
+      id: id,
+      userId: userId,
+      parentCommentId: parentCommentId,
+      content: content,
+      username: username,
+      userAvatarUrl: userAvatarUrl,
+      likeCount: likeCount,
+      dislikeCount: dislikeCount,
+      createdAt: createdAt,
+      replyCount: replyCount,
+      userVote: userVote,
+      // Recursively convert the replies from Model to Entity.
+      replies: replies.map((model) => model.toEntity()).toList(),
+    );
+  }
+}

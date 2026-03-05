@@ -1,0 +1,295 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sport_flutter/domain/entities/user.dart';
+import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
+import 'package:sport_flutter/presentation/bloc/locale_bloc.dart';
+import 'package:sport_flutter/presentation/pages/edit_profile_page.dart';
+import 'package:sport_flutter/presentation/pages/favorites_page.dart';
+import 'package:sport_flutter/presentation/pages/login_page.dart';
+import 'package:sport_flutter/presentation/pages/my_posts_page.dart';
+import 'package:sport_flutter/presentation/pages/privacy_policy_page.dart';
+import 'package:sport_flutter/presentation/pages/reset_password_page.dart';
+import 'package:sport_flutter/l10n/app_localizations.dart';
+import 'package:iconsax/iconsax.dart';
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  // Define the list of supported languages
+  static final List<Map<String, String>> _supportedLanguages = [
+    {'name': 'English', 'code': 'en'},
+    {'name': '中文', 'code': 'zh'},
+    {'name': 'Français', 'code': 'fr'},
+    {'name': 'Deutsch', 'code': 'de'},
+    {'name': 'Русский', 'code': 'ru'},
+    {'name': 'Español', 'code': 'es'},
+    {'name': '日本語', 'code': 'ja'},
+    {'name': '한국어', 'code': 'ko'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.myProfile),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Iconsax.setting_4),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthUnauthenticated) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const LoginPage()),
+              (route) => false,
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthAuthenticated) {
+            return ListView(
+              children: [
+                _buildUserInfoHeader(context, state.user, l10n),
+                const Divider(height: 0),
+                _buildActionList(context, state.user, l10n),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Iconsax.information),
+                  title: Text(l10n.privacyPolicy),
+                  trailing: const Icon(Iconsax.arrow_right_3),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const PrivacyPolicyPage(),
+                    ));
+                  },
+                ),
+                const Divider(),
+                _buildLogoutButton(context, l10n),
+                _buildDeleteAccountButton(context, l10n),
+                const SizedBox(height: 32),
+              ],
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  Widget _buildUserInfoHeader(BuildContext context, User user, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundImage: user.avatarUrl != null && user.avatarUrl!.isNotEmpty
+                ? NetworkImage(user.avatarUrl!)
+                : null,
+            child: user.avatarUrl == null || user.avatarUrl!.isEmpty
+                ? const Icon(Iconsax.profile, size: 50)
+                : null,
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  user.username,
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  (user.bio == null || user.bio!.isEmpty || user.bio == '这个人很懒，什么都没有留下。') 
+                    ? l10n.defaultBio 
+                    : user.bio!,
+                  style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionList(BuildContext context, User user, AppLocalizations l10n) {
+    final List<_ActionItem> items = [
+      _ActionItem(
+        icon: Iconsax.note_2,
+        title: l10n.myPosts,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const MyPostsPage(),
+          ));
+        },
+      ),
+      _ActionItem(
+        icon: Iconsax.star,
+        title: l10n.myFavorites,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const FavoritesPage(),
+          ));
+        },
+      ),
+      _ActionItem(
+        icon: Iconsax.global,
+        title: l10n.language,
+        onTap: () => _showLanguageDialog(context, l10n),
+      ),
+      _ActionItem(
+        icon: Iconsax.edit_2,
+        title: l10n.editProfile,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => EditProfilePage(user: user),
+          ));
+        },
+      ),
+      _ActionItem(
+        icon: Iconsax.key,
+        title: l10n.resetPassword,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => const ResetPasswordPage(),
+          ));
+        },
+      ),
+    ];
+
+    return Column(
+      children: items.map((item) {
+        return ListTile(
+          leading: Icon(item.icon),
+          title: Text(item.title),
+          trailing: const Icon(Iconsax.arrow_right_3),
+          onTap: item.onTap,
+        );
+      }).toList(),
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context, AppLocalizations l10n) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: Colors.grey.shade100.withOpacity(0.95),
+          title: Text(l10n.selectLanguage),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: _supportedLanguages.map((lang) {
+              return ListTile(
+                title: Text(lang['name']!),
+                onTap: () {
+                  context.read<LocaleBloc>().add(ChangeLocale(Locale(lang['code']!)));
+                  Navigator.of(dialogContext).pop();
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: TextButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (dialogContext) => AlertDialog(
+              backgroundColor: Colors.white.withOpacity(0.95),
+              title: Text(l10n.logout),
+              content: Text(l10n.logoutConfirmation),
+              actions: [
+                TextButton(
+                  child: Text(l10n.cancel),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                ),
+                TextButton(
+                  child: Text(l10n.confirmLogout),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                    context.read<AuthBloc>().add(LogoutEvent());
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        style: TextButton.styleFrom(
+          backgroundColor: const Color.fromRGBO(255, 0, 0, 0.05),
+          foregroundColor: Colors.red,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: Text(l10n.logout),
+      ),
+    );
+  }
+
+  Widget _buildDeleteAccountButton(BuildContext context, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: TextButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (dialogContext) => AlertDialog(
+              backgroundColor: Colors.white.withOpacity(0.95),
+              title: Text(l10n.deleteAccount, style: const TextStyle(color: Colors.red)),
+              content: Text(l10n.deleteAccountConfirmation),
+              actions: [
+                TextButton(
+                  child: Text(l10n.cancel),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: Text(l10n.confirmDeleteAccount),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                    context.read<AuthBloc>().add(DeleteAccountEvent());
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.grey,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        child: Text(
+          l10n.deleteAccount,
+          style: const TextStyle(decoration: TextDecoration.underline, fontSize: 12),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionItem {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  _ActionItem({required this.icon, required this.title, required this.onTap});
+}

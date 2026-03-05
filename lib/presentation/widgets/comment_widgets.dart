@@ -1,0 +1,415 @@
+
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:sport_flutter/common/time_formatter.dart';
+import 'package:sport_flutter/domain/entities/comment.dart';
+import 'package:sport_flutter/l10n/app_localizations.dart';
+import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
+import 'package:sport_flutter/presentation/bloc/comment_bloc.dart';
+import 'package:iconsax/iconsax.dart';
+
+// Helper function to show a single, replaceable replies sheet.
+Future<Comment?> _showRepliesSheet(BuildContext context, Comment parentComment) {
+  return showModalBottomSheet<Comment>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => BlocProvider.value(
+      value: context.read<CommentBloc>(),
+      child: _RepliesSheet(parentComment: parentComment),
+    ),
+  );
+}
+
+/// The main container for the entire comment section.
+class CommentSection extends StatefulWidget {
+  final int videoId;
+  const CommentSection({super.key, required this.videoId});
+
+  @override
+  State<CommentSection> createState() => _CommentSectionState();
+}
+
+class _CommentSectionState extends State<CommentSection> {
+  Comment? _replyingToComment;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<CommentBloc>().add(FetchComments(widget.videoId));
+  }
+
+  void _setReplyingTo(Comment? comment) {
+    setState(() => _replyingToComment = comment);
+  }
+
+  // This function handles the sheet replacement logic.
+  void _handleShowReplies(Comment startingComment) async {
+    Comment? nextCommentToShow = startingComment;
+    while (nextCommentToShow != null) {
+      nextCommentToShow = await _showRepliesSheet(context, nextCommentToShow);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    return Column(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: () {
+              _setReplyingTo(null);
+              FocusScope.of(context).unfocus();
+            },
+            behavior: HitTestBehavior.translucent,
+            child: BlocConsumer<CommentBloc, CommentState>(
+              listener: (context, state) {
+                // When a post is successful from the main input, clear the target.
+                if (state is CommentPostSuccess) {
+                  _setReplyingTo(null);
+                }
+              },
+              builder: (context, state) {
+                // This robust builder logic handles all UI states correctly.
+                if (state is CommentLoaded) {
+                  if (state.comments.isEmpty) {
+                    return Center(child: Text(localizations.beTheFirstToComment));
+                  }
+                  return RefreshIndicator(
+                    onRefresh: () async =>
+                        context.read<CommentBloc>().add(FetchComments(widget.videoId)),
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount: state.comments.length,
+                      itemBuilder: (context, index) => _CommentItem(
+                        comment: state.comments[index],
+                        onReply: _setReplyingTo,
+                        onShowReplies: _handleShowReplies,
+                      ),
+                    ),
+                  );
+                }
+                if (state is CommentError) {
+                  return Center(child: Text('Error: ${state.message}'));
+                }
+                // For ANY other state (Initial, Loading), show the loading indicator.
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+          ),
+        ),
+        _CommentInputField(
+          videoId: widget.videoId,
+          replyingToComment: _replyingToComment,
+          onCancelReply: () => _setReplyingTo(null),
+        ),
+      ],
+    );
+  }
+}
+
+/// Renders a single comment item.
+class _CommentItem extends StatelessWidget {
+  final Comment comment;
+  final ValueChanged<Comment> onReply;
+  final Function(Comment) onShowReplies;
+  final bool isSheetHeader;
+
+  const _CommentItem({
+    required this.comment,
+    required this.onReply,
+    required this.onShowReplies,
+    this.isSheetHeader = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            backgroundImage: comment.userAvatarUrl != null && comment.userAvatarUrl!.isNotEmpty
+                ? NetworkImage(comment.userAvatarUrl!)
+                : null,
+            child: comment.userAvatarUrl == null || comment.userAvatarUrl!.isEmpty
+                ? const Icon(Iconsax.profile)
+                : null,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(comment.username, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600)),
+                const SizedBox(height: 4),
+                Text(comment.content),
+                const SizedBox(height: 8),
+                _buildCommentActions(context, localizations),
+                if (comment.replyCount > 0 && !isSheetHeader)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: TextButton(
+                      onPressed: () => onShowReplies(comment),
+                      child: Text(localizations.viewAllReplies(comment.replyCount), style: const TextStyle(fontSize: 12, color: Colors.blueAccent)),
+                    ),
+                  )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommentActions(BuildContext context, AppLocalizations localizations) {
+    final bloc = context.read<CommentBloc>();
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final voteStyle = textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
+    final authState = context.watch<AuthBloc>().state;
+    String? currentUserId;
+    if (authState is AuthAuthenticated) {
+      currentUserId = authState.user.id;
+    }
+
+    return Row(
+      children: [
+        Text(formatTimestamp(comment.createdAt, localizations), style: textTheme.bodySmall?.copyWith(color: Colors.grey.shade600)),
+        const Spacer(),
+
+        IconButton(icon: Icon(Iconsax.like, size: 16, color: comment.userVote == 'like' ? colorScheme.primary : Colors.grey.shade600), onPressed: () => bloc.add(VoteComment(comment.id, 'like'))),
+        if (comment.likeCount > 0) Text(NumberFormat.compact().format(comment.likeCount), style: voteStyle),
+        const SizedBox(width: 12),
+
+        IconButton(icon: Icon(Iconsax.dislike, size: 16, color: comment.userVote == 'dislike' ? Colors.red : Colors.grey.shade600), onPressed: () => bloc.add(VoteComment(comment.id, 'dislike'))),
+        if (comment.dislikeCount > 0) Text(NumberFormat.compact().format(comment.dislikeCount), style: voteStyle),
+        const SizedBox(width: 12),
+
+        IconButton(icon: Icon(Iconsax.message_text_1, size: 16, color: Colors.grey.shade600), onPressed: () => onReply(comment)),
+
+        if (currentUserId != null && comment.userId == currentUserId)
+          IconButton(icon: Icon(Iconsax.trash, size: 16, color: Colors.grey.shade600), onPressed: () => bloc.add(DeleteComment(comment.id))),
+      ],
+    );
+  }
+}
+
+
+/// The replaceable bottom sheet for replies.
+class _RepliesSheet extends StatefulWidget {
+  final Comment parentComment;
+  const _RepliesSheet({required this.parentComment});
+
+  @override
+  State<_RepliesSheet> createState() => _RepliesSheetState();
+}
+
+class _RepliesSheetState extends State<_RepliesSheet> {
+  late Comment _replyingTo;
+
+  @override
+  void initState() {
+    super.initState();
+    _replyingTo = widget.parentComment;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final videoId = context.read<CommentBloc>().currentVideoId;
+    final localizations = AppLocalizations.of(context)!;
+
+    return BlocBuilder<CommentBloc, CommentState>(
+      builder: (context, state) {
+        // Find the latest version of the parent comment from the current state.
+        Comment parentComment = widget.parentComment;
+        if (state is CommentLoaded) {
+            final fullList = state.comments;
+            parentComment = _findCommentByIdRecursive(fullList, widget.parentComment.id) ?? widget.parentComment;
+        }
+
+        return DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.4,
+          maxChildSize: 0.9,
+          builder: (_, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+              child: Column(
+                children: [
+                  _buildHeader(context, parentComment.replyCount, localizations),
+                  const Divider(height: 1),
+                  _CommentItem(
+                      comment: parentComment,
+                      onReply: (c) => setState(() => _replyingTo = c),
+                      onShowReplies: (parent) {},
+                      isSheetHeader: true,
+                  ),
+                  const Divider(height: 1),
+                  Expanded(
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: parentComment.replies.length,
+                      itemBuilder: (context, index) {
+                        final reply = parentComment.replies[index];
+                        return _CommentItem(
+                            comment: reply,
+                            onReply: (c) => setState(() => _replyingTo = c),
+                            onShowReplies: (parent) => Navigator.of(context).pop(parent),
+                        );
+                      },
+                    ),
+                  ),
+                  _CommentInputField(
+                    videoId: videoId,
+                    replyingToComment: _replyingTo,
+                    onCancelReply: () => setState(() => _replyingTo = parentComment),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+  
+  Comment? _findCommentByIdRecursive(List<Comment> comments, int id) {
+      for (var comment in comments) {
+          if (comment.id == id) return comment;
+          if (comment.replies.isNotEmpty) {
+              final found = _findCommentByIdRecursive(comment.replies, id);
+              if (found != null) return found;
+          }
+      }
+      return null;
+  }
+
+  Widget _buildHeader(BuildContext context, int replyCount, AppLocalizations localizations) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const SizedBox(width: 48),
+          Text(localizations.commentDetails(replyCount)),
+          IconButton(
+              icon: const Icon(Iconsax.close_circle),
+              onPressed: () => Navigator.of(context).pop()),
+        ],
+      ),
+    );
+  }
+}
+
+
+/// The input field widget.
+class _CommentInputField extends StatefulWidget {
+  final int videoId;
+  final Comment? replyingToComment;
+  final VoidCallback onCancelReply;
+
+  const _CommentInputField({
+    required this.videoId,
+    this.replyingToComment,
+    required this.onCancelReply,
+  });
+
+  @override
+  State<_CommentInputField> createState() => _CommentInputFieldState();
+}
+
+class _CommentInputFieldState extends State<_CommentInputField> {
+  final _controller = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void didUpdateWidget(covariant _CommentInputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.replyingToComment != oldWidget.replyingToComment) {
+       _focusNode.requestFocus();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _submitComment() {
+    if (_controller.text.trim().isEmpty) return;
+
+    context.read<CommentBloc>().add(PostComment(
+          widget.videoId,
+          _controller.text.trim(),
+          parentCommentId: widget.replyingToComment?.id,
+        ));
+
+    _controller.clear();
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final hintText = widget.replyingToComment != null
+        ? localizations.replyingTo(widget.replyingToComment!.username)
+        : localizations.addAComment;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey.shade200))),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.replyingToComment != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Row(
+                children: [
+                  Text(localizations.replyingTo(widget.replyingToComment!.username), style: Theme.of(context).textTheme.bodySmall),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Iconsax.close_circle, size: 16),
+                    onPressed: widget.onCancelReply,
+                  )
+                ],
+              ),
+            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    border: InputBorder.none,
+                    isDense: true,
+                  ),
+                  maxLines: null,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Iconsax.send_1),
+                onPressed: _submitComment,
+                color: Theme.of(context).primaryColor,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

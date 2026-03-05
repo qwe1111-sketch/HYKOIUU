@@ -1,0 +1,65 @@
+import 'package:equatable/equatable.dart';
+import 'package:sport_flutter/domain/repositories/video_repository.dart';
+
+class Video extends Equatable {
+  final int id;
+  final String title;
+  final String? description;
+  final String videoUrl;
+  final String thumbnailUrl;
+  final String authorName;
+  final String? userAvatarUrl;
+  final int viewCount;
+  final int likeCount;
+  final DateTime createdAt;
+  final bool isFavorited;
+  final Difficulty difficulty;
+
+  const Video({
+    required this.id,
+    required this.title,
+    this.description,
+    required this.videoUrl,
+    required this.thumbnailUrl,
+    required this.authorName,
+    this.userAvatarUrl,
+    required this.viewCount,
+    required this.likeCount,
+    required this.createdAt,
+    this.isFavorited = false,
+    required this.difficulty,
+  });
+
+  Video copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? videoUrl,
+    String? thumbnailUrl,
+    String? authorName,
+    String? userAvatarUrl,
+    int? viewCount,
+    int? likeCount,
+    DateTime? createdAt,
+    bool? isFavorited,
+    Difficulty? difficulty,
+  }) {
+    return Video(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      videoUrl: videoUrl ?? this.videoUrl,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      authorName: authorName ?? this.authorName,
+      userAvatarUrl: userAvatarUrl ?? this.userAvatarUrl,
+      viewCount: viewCount ?? this.viewCount,
+      likeCount: likeCount ?? this.likeCount,
+      createdAt: createdAt ?? this.createdAt,
+      isFavorited: isFavorited ?? this.isFavorited,
+      difficulty: difficulty ?? this.difficulty,
+    );
+  }
+
+  @override
+  List<Object?> get props => [id, title, description, videoUrl, thumbnailUrl, authorName, userAvatarUrl, viewCount, likeCount, createdAt, isFavorited, difficulty];
+}
