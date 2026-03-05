@@ -45,5 +45,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library so you can choose an avatar or post images.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need to use your camera so you can take photos for your avatar.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need to use your microphone so you can record videos with sound.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
 </dict>
 </plist>
