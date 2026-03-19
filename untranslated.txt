@@ -7,7 +7,11 @@
     "deleteAccount",
     "deleteAccountConfirmation",
     "confirmDeleteAccount",
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ],
 
   "es": [
@@ -18,7 +22,11 @@
     "deleteAccount",
     "deleteAccountConfirmation",
     "confirmDeleteAccount",
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ],
 
   "fr": [
@@ -29,11 +37,19 @@
     "deleteAccount",
     "deleteAccountConfirmation",
     "confirmDeleteAccount",
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ],
 
   "ja": [
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ],
 
   "ko": [
@@ -43,7 +59,11 @@
     "deleteAccount",
     "deleteAccountConfirmation",
     "confirmDeleteAccount",
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ],
 
   "ru": [
@@ -54,6 +74,10 @@
     "deleteAccount",
     "deleteAccountConfirmation",
     "confirmDeleteAccount",
-    "defaultBio"
+    "defaultBio",
+    "selectCastDevice",
+    "noCastDevicesFound",
+    "castingTo",
+    "castFailed"
   ]
 }

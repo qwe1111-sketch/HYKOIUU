@@ -342,4 +342,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get defaultBio => '这个人很懒，什么都没有留下。';
+
+  @override
+  String get selectCastDevice => '选择投屏设备';
+
+  @override
+  String get noCastDevicesFound => '未发现可用设备，请确保手机和电视在同一Wi-Fi下';
+
+  @override
+  String castingTo(String deviceName) {
+    return '正在投屏到 $deviceName';
+  }
+
+  @override
+  String castFailed(String error) {
+    return '投屏失败: $error';
+  }
 }

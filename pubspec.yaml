@@ -45,6 +45,11 @@ dependencies:
   # Font library
   google_fonts: ^6.2.1
 
+  # Screen Casting (双协议支持)
+  cast: ^2.1.0
+  bonsoir: 5.1.11
+  dlna_dart: ^0.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -54,6 +59,7 @@ dev_dependencies:
 
 dependency_overrides:
   http: ^1.2.1
+  bonsoir: 5.1.11
 
 flutter_icons:
   android: true

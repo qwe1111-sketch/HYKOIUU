@@ -673,6 +673,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This person is lazy and hasn\'t left anything.'**
   String get defaultBio;
+
+  /// No description provided for @selectCastDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Cast Device'**
+  String get selectCastDevice;
+
+  /// No description provided for @noCastDevicesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No devices found, please ensure phone and TV are on the same Wi-Fi'**
+  String get noCastDevicesFound;
+
+  /// No description provided for @castingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Casting to {deviceName}'**
+  String castingTo(String deviceName);
+
+  /// No description provided for @castFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Cast failed: {error}'**
+  String castFailed(String error);
 }
 
 class _AppLocalizationsDelegate

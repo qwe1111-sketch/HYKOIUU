@@ -9,12 +9,14 @@ class VideoPlayerWidget extends StatefulWidget {
   final VideoPlayerController controller;
   final bool isFullScreen;
   final VoidCallback onToggleFullScreen;
+  final VoidCallback? onCast;
 
   const VideoPlayerWidget({
     super.key,
     required this.controller,
     required this.isFullScreen,
     required this.onToggleFullScreen,
+    this.onCast,
   });
 
   @override
@@ -158,6 +160,20 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           ),
         ),
         Positioned(
+          top: 0,
+          right: 0,
+          child: Row(
+            children: [
+              if (widget.onCast != null)
+                IconButton(
+                  icon: const Icon(Icons.cast),
+                  onPressed: widget.onCast,
+                  color: Colors.white,
+                ),
+            ],
+          ),
+        ),
+        Positioned(
           bottom: 0,
           left: 0,
           right: 0,
@@ -221,7 +237,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         widget.controller.setPlaybackSpeed(speed);
       },
       itemBuilder: (context) => [0.5, 1.0, 1.5, 2.0]
-          .map((speed) => PopupMenuItem(value: speed, child: Text('${speed}x')))
+          .map((speed) => PopupMenuItem<double>(value: speed, child: Text('${speed}x')))
           .toList(),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

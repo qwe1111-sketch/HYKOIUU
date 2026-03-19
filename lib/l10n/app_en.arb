@@ -146,5 +146,23 @@
   "deleteAccount": "Delete Account",
   "deleteAccountConfirmation": "Are you sure you want to delete your account? This action is irreversible and will delete all your data.",
   "confirmDeleteAccount": "Delete Account",
-  "defaultBio": "This person is lazy and hasn't left anything."
+  "defaultBio": "This person is lazy and hasn't left anything.",
+  "selectCastDevice": "Select Cast Device",
+  "noCastDevicesFound": "No devices found, please ensure phone and TV are on the same Wi-Fi",
+  "castingTo": "Casting to {deviceName}",
+  "@castingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "castFailed": "Cast failed: {error}",
+  "@castFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

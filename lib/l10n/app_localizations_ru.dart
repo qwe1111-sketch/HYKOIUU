@@ -361,4 +361,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get defaultBio => 'This person is lazy and hasn\'t left anything.';
+
+  @override
+  String get selectCastDevice => 'Select Cast Device';
+
+  @override
+  String get noCastDevicesFound =>
+      'No devices found, please ensure phone and TV are on the same Wi-Fi';
+
+  @override
+  String castingTo(String deviceName) {
+    return 'Casting to $deviceName';
+  }
+
+  @override
+  String castFailed(String error) {
+    return 'Cast failed: $error';
+  }
 }

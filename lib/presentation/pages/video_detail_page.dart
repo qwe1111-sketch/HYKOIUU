@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cast/cast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,8 +107,10 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         final currentLocale = Localizations.localeOf(context).languageCode;
         await _translateContent(currentLocale);
 
-        context.read<VideoBloc>().add(FetchVideosByDifficulty(_currentVideo.difficulty));
-        await _fetchInteractiveStatus();
+        if (mounted) {
+          context.read<VideoBloc>().add(FetchVideosByDifficulty(_currentVideo.difficulty));
+          await _fetchInteractiveStatus();
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -188,7 +191,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         });
       }
     } catch (_) {
-      // Silently fail or log error, as this is non-critical data
     }
   }
 
@@ -261,7 +263,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         headers: headers,
       );
     } catch (_) {
-      // Handle error silently
     }
   }
 
@@ -379,6 +380,16 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
 
+  void _startCast() async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return _CastDeviceList(videoUrl: _currentVideo.videoUrl, videoTitle: _translatedTitle);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final playerWidget = FutureBuilder(
@@ -390,6 +401,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             controller: _controller,
             isFullScreen: _isFullScreen,
             onToggleFullScreen: _toggleFullScreen,
+            onCast: _startCast,
           );
         }
         return AspectRatio(
@@ -425,8 +437,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                 headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                   return <Widget>[SliverAppBar(
                       title: Text(_translatedTitle),                      floating: true,
-                      pinned: false,
-                      snap: true,
+                      pinned: false,                      snap: true,
                     ),
                     SliverToBoxAdapter(
                       child: playerWidget,
@@ -475,6 +486,134 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _CastDeviceList extends StatefulWidget {
+  final String videoUrl;
+  final String videoTitle;
+
+  const _CastDeviceList({required this.videoUrl, required this.videoTitle});
+
+  @override
+  State<_CastDeviceList> createState() => _CastDeviceListState();
+}
+
+class _CastDeviceListState extends State<_CastDeviceList> {
+  late Future<List<CastDevice>> _devicesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _devicesFuture = CastDiscoveryService().search();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(l10n.selectCastDevice, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {
+                  setState(() {
+                    _devicesFuture = CastDiscoveryService().search();
+                  });
+                },
+              ),
+            ],
+          ),
+          const Divider(),
+          FutureBuilder<List<CastDevice>>(
+            future: _devicesFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text('${l10n.error}: ${snapshot.error}'),
+                );
+              }
+              final devices = snapshot.data ?? [];
+              if (devices.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Text(l10n.noCastDevicesFound),
+                );
+              }
+              return Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: devices.length,
+                  itemBuilder: (context, index) {
+                    final device = devices[index];
+                    return ListTile(
+                      leading: const Icon(Icons.tv),
+                      title: Text(device.name),
+                      subtitle: Text(device.host),
+                      onTap: () async {
+                        try {
+                          final session = await CastSessionManager().startSession(device);
+                          
+                          session.stateStream.listen((state) {
+                            if (state == CastSessionState.connected) {
+                              session.sendMessage('urn:x-cast:com.google.cast.media', {
+                                'type': 'LOAD',
+                                'autoPlay': true,
+                                'currentTime': 0,
+                                'media': {
+                                  'contentId': widget.videoUrl,
+                                  'contentType': 'video/mp4',
+                                  'streamType': 'BUFFERED',
+                                  'metadata': {
+                                    'metadataType': 0,
+                                    'title': widget.videoTitle,
+                                  }
+                                },
+                                'requestId': 1,
+                              });
+                            }
+                          });
+
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.castingTo(device.name))),
+                            );
+                            Navigator.pop(context);
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.castFailed(e.toString()))),
+                            );
+                          }
+                        }
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

@@ -146,5 +146,23 @@
   "deleteAccount": "注销账号",
   "deleteAccountConfirmation": "您确定要注销账号吗？此操作不可撤销且将删除您的所有数据。",
   "confirmDeleteAccount": "确认注销",
-  "defaultBio": "这个人很懒，什么都没有留下。"
+  "defaultBio": "这个人很懒，什么都没有留下。",
+  "selectCastDevice": "选择投屏设备",
+  "noCastDevicesFound": "未发现可用设备，请确保手机和电视在同一Wi-Fi下",
+  "castingTo": "正在投屏到 {deviceName}",
+  "@castingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "castFailed": "投屏失败: {error}",
+  "@castFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }
