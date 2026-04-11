@@ -29,6 +29,34 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count месяцев назад',
+      many: '$count месяцев назад',
+      few: '$count месяца назад',
+      one: '$count месяц назад',
+      zero: 'В этом месяце',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count лет назад',
+      many: '$count лет назад',
+      few: '$count года назад',
+      one: '$count год назад',
+      zero: 'В этом году',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -116,7 +144,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get invalidUsernameOrPassword =>
-      'Неверное имя пользователя или пароль';
+      'Неверный имя пользователя или пароль';
 
   @override
   String get username => 'Имя пользователя';
@@ -338,44 +366,88 @@ class AppLocalizationsRu extends AppLocalizations {
   String get videoLoadError => 'Не удалось загрузить видео';
 
   @override
-  String get noPostsYet => 'No posts yet. Be the first to post!';
+  String get noPostsYet =>
+      'Сообщений пока нет. Будьте первым, кто их опубликует!';
 
   @override
-  String get noVideosFound => 'No videos found';
+  String get noVideosFound => 'Видео не найдено';
 
   @override
-  String get error => 'Error';
+  String get error => 'Ошибка';
 
   @override
-  String get retry => 'Retry';
+  String get retry => 'Повторить';
 
   @override
-  String get deleteAccount => 'Delete Account';
+  String get deleteAccount => 'Удалить аккаунт';
 
   @override
   String get deleteAccountConfirmation =>
-      'Are you sure you want to delete your account? This action is irreversible and will delete all your data.';
+      'Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо и приведет к удалению всех ваших данных.';
 
   @override
-  String get confirmDeleteAccount => 'Delete Account';
+  String get confirmDeleteAccount => 'Удалить аккаунт';
 
   @override
-  String get defaultBio => 'This person is lazy and hasn\'t left anything.';
+  String get defaultBio => 'Этот человек ленив и ничего не оставил.';
 
   @override
-  String get selectCastDevice => 'Select Cast Device';
+  String get selectCastDevice => 'Выберите устройство для трансляции';
 
   @override
   String get noCastDevicesFound =>
-      'No devices found, please ensure phone and TV are on the same Wi-Fi';
+      'Устройства не найдены, убедитесь, что телефон и телевизор подключены к одной сети Wi-Fi';
 
   @override
   String castingTo(String deviceName) {
-    return 'Casting to $deviceName';
+    return 'Трансляция на $deviceName';
   }
 
   @override
   String castFailed(String error) {
-    return 'Cast failed: $error';
+    return 'Сбой трансляции: $error';
   }
+
+  @override
+  String get enterNewPassword => 'Введите новый пароль';
+
+  @override
+  String get enterConfirmPassword => 'Подтвердите новый пароль';
+
+  @override
+  String get enterUsernameHint => 'Введите имя пользователя';
+
+  @override
+  String get enterEmailHint => 'Введите эл. почту';
+
+  @override
+  String get enterCodeHint => 'Введите код подтверждения';
+
+  @override
+  String get enterPasswordHint => 'Введите пароль';
+
+  @override
+  String get enterInvitationCodeHint => 'Введите пригласительный код';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle =>
+      'Давайте отправимся в путешествие по изучению\nфутбола';
+
+  @override
+  String get noAccount => 'Нет аккаунта? ';
+
+  @override
+  String get signUp => 'Зарегистрироваться';
+
+  @override
+  String get enterTitleHint => 'Пожалуйста, введите заголовок';
+
+  @override
+  String get enterContentHint => 'Пожалуйста, предоставьте содержание';
+
+  @override
+  String get save => 'Сохранить';
 }

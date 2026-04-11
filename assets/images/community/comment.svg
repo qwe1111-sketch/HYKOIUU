@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>评论@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="社区/Posts" transform="translate(-288, -798)">
+            <g id="编组-4" transform="translate(12, 688)">
+                <g id="评论" transform="translate(276, 110)">
+                    <g id="编组" transform="translate(1, 1)">
+                        <path d="M16,8 C16,12.41828 12.4182836,16 8,16 C5.61061039,16 0,16 0,16 C0,16 0,10.02888 0,8 C0,3.58172 3.58173242,0 8,0 C12.4182836,0 16,3.58172 16,8 Z" id="路径" stroke="#999999" stroke-width="1.5" fill="#999999" fill-rule="nonzero"></path>
+                        <line x1="3.999972" y1="5.6" x2="11.1999648" y2="5.6" id="路径" stroke="#11130B" stroke-width="1.6"></line>
+                        <line x1="3.999972" y1="8.8" x2="11.1999648" y2="8.8" id="路径" stroke="#11130B" stroke-width="1.6"></line>
+                        <line x1="3.999972" y1="12" x2="7.999968" y2="12" id="路径" stroke="#11130B" stroke-width="1.6"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

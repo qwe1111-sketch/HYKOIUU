@@ -1,8 +1,6 @@
-
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cast/cast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,6 +23,7 @@ import 'package:sport_flutter/presentation/widgets/video_intro_panel.dart';
 import 'package:sport_flutter/presentation/widgets/video_player_widget.dart';
 import 'package:sport_flutter/services/translation_service.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class VideoDetailPage extends StatefulWidget {
   final Video video;
@@ -162,9 +161,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     } catch (e) {
       debugPrint("翻译失败：$e");
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('翻译失败: $e')),
-        );
         setState(() {
           _translatedTitle = _currentVideo.title;
           _translatedDesc = _currentVideo.description ?? '';
@@ -380,16 +376,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
   }
 
-  void _startCast() async {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return _CastDeviceList(videoUrl: _currentVideo.videoUrl, videoTitle: _translatedTitle);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final playerWidget = FutureBuilder(
@@ -401,14 +387,13 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
             controller: _controller,
             isFullScreen: _isFullScreen,
             onToggleFullScreen: _toggleFullScreen,
-            onCast: _startCast,
           );
         }
         return AspectRatio(
           aspectRatio: 16 / 9,
           child: Container(
             color: Colors.black,
-            child: const Center(child: CircularProgressIndicator()),
+            child: const Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00))),
           ),
         );
       },
@@ -422,198 +407,109 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (bool didPop, dynamic result) {
-            if (didPop) return;
-            Navigator.of(context).pop(result as bool?);
-          },
-          child: BlocProvider.value(
-            value: _commentBloc,
-            child: DefaultTabController(
-              length: 2,
-              child: NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                  return <Widget>[SliverAppBar(
-                      title: Text(_translatedTitle),                      floating: true,
-                      pinned: false,                      snap: true,
-                    ),
-                    SliverToBoxAdapter(
-                      child: playerWidget,
-                    ),
-                    SliverPersistentHeader(
-                      delegate: _SliverAppBarDelegate(
-                        TabBar(
-                          tabs: [
-                            Tab(text: AppLocalizations.of(context)!.introduction),
-                            Tab(text: AppLocalizations.of(context)!.comments),
-                          ],
-                        ),
-                      ),
-                      pinned: true,
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  children: [
-                    _isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : BlocBuilder<VideoBloc, VideoState>(
-                            builder: (context, state) {
-                              List<Video> recommendedVideos = [];
-                              if (state is VideoLoaded) {
-                                recommendedVideos = state.videos;
-                              }
-                              return VideoIntroPanel(
-                                currentVideo: _currentVideo.copyWith(title: _translatedTitle, description: _translatedDesc),
-                                recommendedVideos: recommendedVideos,
-                                isLiked: _isLiked,
-                                isDisliked: _isDisliked,
-                                isFavorited: _isFavorited,
-                                isInteracting: _isInteracting,
-                                onChangeVideo: _changeVideo,
-                                onLike: _toggleLike,
-                                onDislike: _toggleDislike,
-                                onFavorite: _toggleFavorite,
-                              );
-                            },
+      backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: false, // 设为 false，我们手动控制输入框偏移，防止 TabBarView 空间被过度压缩
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (didPop) return;
+          Navigator.of(context).pop(result as bool?);
+        },
+        child: BlocProvider.value(
+          value: _commentBloc,
+          child: DefaultTabController(
+            length: 2,
+            child: Column(
+              children: [
+                // 自定义标题栏 (替代 SliverAppBar)
+                SafeArea(
+                  bottom: false,
+                  child: Container(
+                    height: 56,
+                    color: Colors.black,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/images/community/back.svg',
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
-                    CommentSection(videoId: _currentVideo.id),
-                  ],
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        Expanded(
+                          child: Text(
+                            _translatedTitle,
+                            style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 48), 
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                // 固定在顶部的视频播放器
+                playerWidget,
+                // TabBar
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.white.withOpacity(0.15),
+                        width: 0.5,
+                      ),
+                    ),
+                  ),
+                  child: TabBar(
+                    indicatorColor: const Color(0xFFCCFF00),
+                    indicatorSize: TabBarIndicatorSize.label,
+                    labelColor: const Color(0xFFCCFF00),
+                    unselectedLabelColor: Colors.white.withOpacity(0.4),
+                    labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    dividerColor: Colors.transparent, 
+                    tabs: [
+                      Tab(text: AppLocalizations.of(context)!.introduction),
+                      Tab(text: AppLocalizations.of(context)!.comments),
+                    ],
+                  ),
+                ),
+                // 下方可滚动内容
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00)))
+                          : BlocBuilder<VideoBloc, VideoState>(
+                              builder: (context, state) {
+                                List<Video> recommendedVideos = [];
+                                if (state is VideoLoaded) {
+                                  recommendedVideos = state.videos;
+                                }
+                                return VideoIntroPanel(
+                                  currentVideo: _currentVideo.copyWith(title: _translatedTitle, description: _translatedDesc),
+                                  recommendedVideos: recommendedVideos,
+                                  isLiked: _isLiked,
+                                  isDisliked: _isDisliked,
+                                  isFavorited: _isFavorited,
+                                  isInteracting: _isInteracting,
+                                  onChangeVideo: _changeVideo,
+                                  onLike: _toggleLike,
+                                  onDislike: _toggleDislike,
+                                  onFavorite: _toggleFavorite,
+                                );
+                              },
+                            ),
+                      CommentSection(videoId: _currentVideo.id),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CastDeviceList extends StatefulWidget {
-  final String videoUrl;
-  final String videoTitle;
-
-  const _CastDeviceList({required this.videoUrl, required this.videoTitle});
-
-  @override
-  State<_CastDeviceList> createState() => _CastDeviceListState();
-}
-
-class _CastDeviceListState extends State<_CastDeviceList> {
-  late Future<List<CastDevice>> _devicesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _devicesFuture = CastDiscoveryService().search();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(l10n.selectCastDevice, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () {
-                  setState(() {
-                    _devicesFuture = CastDiscoveryService().search();
-                  });
-                },
-              ),
-            ],
-          ),
-          const Divider(),
-          FutureBuilder<List<CastDevice>>(
-            future: _devicesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
-              if (snapshot.hasError) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Text('${l10n.error}: ${snapshot.error}'),
-                );
-              }
-              final devices = snapshot.data ?? [];
-              if (devices.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Text(l10n.noCastDevicesFound),
-                );
-              }
-              return Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: devices.length,
-                  itemBuilder: (context, index) {
-                    final device = devices[index];
-                    return ListTile(
-                      leading: const Icon(Icons.tv),
-                      title: Text(device.name),
-                      subtitle: Text(device.host),
-                      onTap: () async {
-                        try {
-                          final session = await CastSessionManager().startSession(device);
-                          
-                          session.stateStream.listen((state) {
-                            if (state == CastSessionState.connected) {
-                              session.sendMessage('urn:x-cast:com.google.cast.media', {
-                                'type': 'LOAD',
-                                'autoPlay': true,
-                                'currentTime': 0,
-                                'media': {
-                                  'contentId': widget.videoUrl,
-                                  'contentType': 'video/mp4',
-                                  'streamType': 'BUFFERED',
-                                  'metadata': {
-                                    'metadataType': 0,
-                                    'title': widget.videoTitle,
-                                  }
-                                },
-                                'requestId': 1,
-                              });
-                            }
-                          });
-
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.castingTo(device.name))),
-                            );
-                            Navigator.pop(context);
-                          }
-                        } catch (e) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.castFailed(e.toString()))),
-                            );
-                          }
-                        }
-                      },
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ],
       ),
     );
   }
@@ -633,7 +529,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: Colors.black,
       child: _tabBar,
     );
   }

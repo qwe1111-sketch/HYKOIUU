@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>发送@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="社区/Posts" transform="translate(-329, -1026)">
+            <g id="编组-6" transform="translate(0, 1010)">
+                <g id="发送" transform="translate(329, 16)">
+                    <rect id="矩形" x="0" y="0" width="18" height="18"></rect>
+                    <polygon id="路径" stroke="#999999" stroke-width="1.26315789" stroke-linejoin="round" points="16.9999579 1 11.3999726 17 8.19998105 9.8 1 6.6"></polygon>
+                    <line x1="17" y1="1" x2="8.20002316" y2="9.8" id="路径" stroke="#999999" stroke-width="1.26315789" stroke-linecap="round" stroke-linejoin="round"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

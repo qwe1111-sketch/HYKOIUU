@@ -25,7 +25,7 @@ dependencies:
   video_player: ^2.8.6
   cached_network_image: ^3.3.1
   flutter_cache_manager: ^3.3.2
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   video_thumbnail: ^0.5.3
   path_provider: ^2.0.11
 
@@ -45,17 +45,20 @@ dependencies:
   # Font library
   google_fonts: ^6.2.1
 
-  # Screen Casting (双协议支持)
+  # Screen Casting
   cast: ^2.1.0
   bonsoir: 5.1.11
-  dlna_dart: ^0.1.5
+  dlna_dart: ^0.1.0
+
+  # SVG Support
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^5.0.0
-  flutter_launcher_icons: ^0.13.1 # Add this line
+  flutter_launcher_icons: ^0.13.1
 
 dependency_overrides:
   http: ^1.2.1
@@ -64,8 +67,13 @@ dependency_overrides:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/icon.png" # Make sure this path is correct
+  image_path: "assets/images/icon.png"
 
 flutter:
   uses-material-design: true
   generate: true
+  assets:
+    - assets/images/profile/
+    - assets/images/community/
+    - assets/images/home/
+    - assets/images/login/

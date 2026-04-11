@@ -8,25 +8,37 @@
       "date": {}
     }
   },
-  "daysAgo": "{count, plural, =0{Heute} =1{Vor 1 Tag} other{Vor {count} Tagen}}",
+  "monthsAgo": "{count, plural, =0{Diesen Monat} =1{vor 1 Monat} other{vor {count} Monaten}}",
+  "@monthsAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "yearsAgo": "{count, plural, =0{Dieses Jahr} =1{vor 1 Jahr} other{vor {count} Jahren}}",
+  "@yearsAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "daysAgo": "{count, plural, =0{Heute} =1{vor 1 Tag} other{vor {count} Tagen}}",
   "@daysAgo": {
     "placeholders": {
       "count": {}
     }
   },
-  "weeksAgo": "{count, plural, =0{Diese Woche} =1{Vor 1 Woche} other{Vor {count} Wochen}}",
+  "weeksAgo": "{count, plural, =0{Diese Woche} =1{vor 1 Woche} other{vor {count} Wochen}}",
   "@weeksAgo": {
     "placeholders": {
       "count": {}
     }
   },
-  "hoursAgo": "{count, plural, =0{Gerade eben} =1{Vor 1 Stunde} other{Vor {count} Stunden}}",
+  "hoursAgo": "{count, plural, =0{Gerade eben} =1{vor 1 Stunde} other{vor {count} Stunden}}",
   "@hoursAgo": {
     "placeholders": {
       "count": {}
     }
   },
-  "minutesAgo": "{count, plural, =0{Gerade eben} =1{Vor 1 Minute} other{Vor {count} Minuten}}",
+  "minutesAgo": "{count, plural, =0{Gerade eben} =1{vor 1 Minute} other{vor {count} Minuten}}",
   "@minutesAgo": {
     "placeholders": {
       "count": {}
@@ -138,5 +150,19 @@
   "incorrectInvitationCode": "Falscher Einladungscode",
   "pleaseRequestVerificationCodeFirst": "Bitte fordern Sie zuerst den Verifizierungscode an",
   "invalidVerificationCode": "Ungültiger Verifizierungscode.",
-  "videoLoadError": "Video konnte nicht geladen werden"
+  "videoLoadError": "Video konnte nicht geladen werden",
+  "enterNewPassword": "Geben Sie Ihr neues Passwort ein",
+  "enterConfirmPassword": "Bestätigen Sie Ihr neues Passwort",
+  "enterUsernameHint": "Benutzernamen eingeben",
+  "enterEmailHint": "E-Mail-Adresse eingeben",
+  "enterCodeHint": "Verifizierungscode eingeben",
+  "passwordHint": "Passwort eingeben",
+  "enterInvitationCodeHint": "Einladungscode eingeben",
+  "loginWelcomeTitle": "HYKOIUU",
+  "loginWelcomeSubtitle": "Begeben wir uns auf die Reise des Lernens\nüber Fußball",
+  "noAccount": "Kein Konto? ",
+  "signUp": "Registrieren",
+  "enterTitleHint": "Bitte Titel eingeben",
+  "enterContentHint": "Bitte Inhalt eingeben",
+  "save": "Speichern"
 }

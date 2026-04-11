@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -98,7 +97,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     } else if (controller.value.isInitialized) {
       playerContent = VideoPlayer(controller);
     } else {
-      playerContent = const Center(child: CircularProgressIndicator());
+      playerContent = const Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00)));
     }
 
     return GestureDetector(
@@ -188,7 +187,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     child: Row(
                       children: [
                         Text(_formatDuration(position),
-                            style: const TextStyle(color: Colors.white)),
+                            style: const TextStyle(color: Colors.white, fontSize: 12)),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -196,15 +195,15 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                               widget.controller,
                               allowScrubbing: true,
                               colors: VideoProgressColors(
-                                playedColor: Theme.of(context).primaryColor,
-                                bufferedColor: Colors.grey.withOpacity(0.5),
-                                backgroundColor: Colors.black.withOpacity(0.2),
+                                playedColor: const Color(0xFFCCFF00), // 修改为荧光绿
+                                bufferedColor: Colors.white.withOpacity(0.3),
+                                backgroundColor: Colors.white.withOpacity(0.1),
                               ),
                             ),
                           ),
                         ),
                         Text(_formatDuration(duration),
-                            style: const TextStyle(color: Colors.white)),
+                            style: const TextStyle(color: Colors.white, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -231,18 +230,30 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
   }
 
   Widget _buildSpeedMenu() {
+    final currentSpeed = widget.controller.value.playbackSpeed;
     return PopupMenuButton<double>(
       onSelected: (speed) {
         _startHideTimer();
         widget.controller.setPlaybackSpeed(speed);
       },
+      color: const Color(0xFF1C1C1E), // 弹窗背景色
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       itemBuilder: (context) => [0.5, 1.0, 1.5, 2.0]
-          .map((speed) => PopupMenuItem<double>(value: speed, child: Text('${speed}x')))
+          .map((speed) => PopupMenuItem<double>(
+                value: speed,
+                child: Text(
+                  '${speed}x',
+                  style: TextStyle(
+                    color: speed == currentSpeed ? const Color(0xFFCCFF00) : Colors.white, // 选中项为荧光绿
+                    fontWeight: speed == currentSpeed ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+              ))
           .toList(),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          '${widget.controller.value.playbackSpeed}x',
+          '${currentSpeed}x',
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

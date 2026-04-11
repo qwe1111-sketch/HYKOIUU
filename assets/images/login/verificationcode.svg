@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Verification Code@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="登录/Register" transform="translate(-28, -431)">
+            <g id="编组备份-2" transform="translate(12, 388)">
+                <g id="Verification-Code" transform="translate(16, 43)">
+                    <rect id="矩形" x="0" y="0" width="18" height="18"></rect>
+                    <g id="编组" transform="translate(2, 1)" stroke="#999999" stroke-linejoin="round">
+                        <path d="M0,2.05095645 L7.00334444,0 L14,2.05095645 L14,6.25697735 C14,10.6778015 11.1806333,14.6025146 7.00101111,16 C2.82026111,14.6025536 0,10.676943 0,6.25502616 L0,2.05095645 Z" id="路径"></path>
+                        <polyline id="路径" stroke-linecap="round" points="3.5 7.41454373 6.22222222 10.1462177 10.8888889 5.46334801"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

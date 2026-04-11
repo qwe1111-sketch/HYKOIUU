@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Email@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="登录/Register" transform="translate(-28, -247)" stroke="#999999">
+            <g id="编组备份" transform="translate(12, 204)">
+                <g id="Email" transform="translate(16, 43)">
+                    <g id="编组" transform="translate(1, 1)">
+                        <polygon id="路径" points="0 15 16 15 16 10.0684932 16 5.1369863 8 5.1369863 0 5.1369863 0 10.0684932"></polygon>
+                        <polyline id="路径" points="0 5.1369863 8 11.3013699 16 5.1369863"></polyline>
+                        <polyline id="路径" points="8 5.1369863 0 5.1369863 0 11.3013699"></polyline>
+                        <polyline id="路径" points="16 11.3013699 16 5.1369863 8 5.1369863"></polyline>
+                        <line x1="3.2" y1="2.67123288" x2="12.8" y2="2.67123288" id="路径"></line>
+                        <line x1="4.8" y1="0.205479452" x2="11.2" y2="0.205479452" id="路径"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

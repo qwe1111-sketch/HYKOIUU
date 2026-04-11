@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>更多@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="我的" transform="translate(-325, -240)">
+            <g id="1列" transform="translate(12, 178)">
+                <g id="编组-3" transform="translate(324, 73) rotate(-180) translate(-324, -73)translate(313, 62)">
+                    <rect id="矩形" x="0" y="0" width="22" height="22"></rect>
+                    <polyline id="路径" stroke="#FFFFFF" stroke-width="1.3125" stroke-linecap="round" stroke-linejoin="round" points="15 18 8 11 15 4"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

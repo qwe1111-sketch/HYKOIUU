@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sport_flutter/data/cache/video_cache_manager.dart';
 import 'package:sport_flutter/domain/entities/community_post.dart';
-import 'package:sport_flutter/services/translation_service.dart';
 import 'package:video_player/video_player.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import './media_gallery.dart';
 import './full_screen_media_viewer.dart';
 
@@ -70,7 +69,6 @@ class _PostHeaderState extends State<PostHeader> {
             aspectRatio: 16 / 9,
             child: Stack(
               children: <Widget>[
-                // Video Player
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
@@ -90,8 +88,6 @@ class _PostHeaderState extends State<PostHeader> {
                     ),
                   ),
                 ),
-
-                // Play/Pause Button
                 Align(
                   alignment: Alignment.center,
                   child: GestureDetector(
@@ -101,19 +97,23 @@ class _PostHeaderState extends State<PostHeader> {
                     child: AnimatedOpacity(
                       opacity: _controller!.value.isPlaying ? 0.0 : 1.0,
                       duration: const Duration(milliseconds: 300),
-                      child: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.5),
-                          shape: BoxShape.circle,
+                      child: SvgPicture.asset(
+                        'assets/images/community/play.svg',
+                        width: 50,
+                        height: 50,
+                        placeholderBuilder: (context) => Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Iconsax.play, color: Colors.white, size: 30),
                         ),
-                        child: const Icon(Iconsax.play, color: Colors.white, size: 48),
                       ),
                     ),
                   ),
                 ),
-
-                // Progress Bar
                 if (_controller!.value.isPlaying)
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -121,10 +121,10 @@ class _PostHeaderState extends State<PostHeader> {
                       _controller!,
                       allowScrubbing: true,
                       padding: const EdgeInsets.all(8.0),
-                      colors: VideoProgressColors(
-                        playedColor: Theme.of(context).primaryColor,
-                        bufferedColor: Colors.white.withOpacity(0.5),
-                        backgroundColor: Colors.black.withOpacity(0.25),
+                      colors: const VideoProgressColors(
+                        playedColor: Color(0xFFCCFF00),
+                        bufferedColor: Colors.white24,
+                        backgroundColor: Colors.black26,
                       ),
                     ),
                   ),
@@ -132,7 +132,7 @@ class _PostHeaderState extends State<PostHeader> {
             ),
           );
         } else {
-          return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator()));
+          return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00))));
         }
       },
     );
@@ -140,9 +140,8 @@ class _PostHeaderState extends State<PostHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -152,94 +151,70 @@ class _PostHeaderState extends State<PostHeader> {
 
           if (widget.post.videoUrls.isNotEmpty)
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(0),
               child: _buildVideoPlayer(),
             ),
 
-          // Spacer
-          if (widget.post.imageUrls.isNotEmpty || widget.post.videoUrls.isNotEmpty)
-            const SizedBox(height: 12.0),
+          const SizedBox(height: 16.0),
 
-          // Author info, title, and content
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: widget.post.userAvatarUrl != null && widget.post.userAvatarUrl!.isNotEmpty
-                    ? CachedNetworkImageProvider(widget.post.userAvatarUrl!)
-                    : null,
-                child: widget.post.userAvatarUrl == null || widget.post.userAvatarUrl!.isEmpty
-                    ? const Icon(Iconsax.profile, size: 18)
-                    : null,
-              ),
-              const SizedBox(width: 8),
-              Text(widget.post.username, style: Theme.of(context).textTheme.titleMedium),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFCCFF00), width: 1.5),
+                      ),
+                      child: ClipOval(
+                        child: Container(
+                          width: 34,
+                          height: 34,
+                          color: Colors.white10,
+                          child: widget.post.userAvatarUrl != null && widget.post.userAvatarUrl!.isNotEmpty
+                              ? CachedNetworkImage(
+                                  imageUrl: widget.post.userAvatarUrl!,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) => const Icon(Icons.person, size: 20, color: Colors.white54),
+                                )
+                              : const Icon(Icons.person, size: 20, color: Colors.white54),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      widget.post.username,
+                      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  widget.post.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    height: 1.3,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.post.content,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 12),
-          _TranslatedText(
-            key: ValueKey('title_${widget.post.id}_${locale.languageCode}'),
-            text: widget.post.title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold) ?? const TextStyle(),
-          ),
-          const SizedBox(height: 8),
-          _TranslatedText(
-            key: ValueKey('content_${widget.post.id}_${locale.languageCode}'),
-            text: widget.post.content,
-            style: Theme.of(context).textTheme.bodyLarge ?? const TextStyle(),
-          ),
-          const SizedBox(height: 16),
         ],
       ),
-    );
-  }
-}
-
-// A widget that translates the given text and displays it.
-class _TranslatedText extends StatefulWidget {
-  final String text;
-  final TextStyle style;
-
-  const _TranslatedText({super.key, required this.text, required this.style});
-
-  @override
-  State<_TranslatedText> createState() => _TranslatedTextState();
-}
-
-class _TranslatedTextState extends State<_TranslatedText> {
-  String? _translatedText;
-
-  @override
-  void initState() {
-    super.initState();
-    _translateText();
-  }
-
-  @override
-  void didUpdateWidget(covariant _TranslatedText oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.text != oldWidget.text) {
-      _translateText();
-    }
-  }
-
-  Future<void> _translateText() async {
-    if (!mounted) return;
-    final locale = Localizations.localeOf(context);
-    final translationService = context.read<TranslationService>();
-    final translated = await translationService.translate(widget.text, locale.languageCode);
-    if (mounted) {
-      setState(() {
-        _translatedText = translated;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _translatedText ?? widget.text,
-      style: widget.style,
     );
   }
 }

@@ -33,6 +33,17 @@ class PostComment extends Equatable {
     this.userVote,
   });
 
+  /// 递归计算所有层级的回复总数
+  int get totalReplyCount {
+    if (replies.isEmpty) return replyCount;
+    int total = replies.length;
+    for (var reply in replies) {
+      // 累加子评论的所有后代回复
+      total += reply.totalReplyCount;
+    }
+    return total;
+  }
+
   PostComment copyWith({
     int? id,
     String? userId,

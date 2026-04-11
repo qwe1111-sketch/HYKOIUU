@@ -216,6 +216,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onSendCode(SendCodeEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthLoading(loadingType: 'SendCode'));
     try {
       await sendCodeUseCase(event.email);
       _isCodeSentForRegistration = true;
@@ -226,6 +227,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onSendPasswordResetCode(SendPasswordResetCodeEvent event, Emitter<AuthState> emit) async {
+    emit(const AuthLoading(loadingType: 'SendCode'));
     try {
       await sendPasswordResetCodeUseCase(event.email);
       emit(AuthCodeSent());

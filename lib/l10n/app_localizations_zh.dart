@@ -26,6 +26,30 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 个月前',
+      one: '1 个月前',
+      zero: '本月',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 年前',
+      one: '1 年前',
+      zero: '今年',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -228,7 +252,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacyPolicyContent =>
-      '本隐私政策阐述了当您使用本服务时，我们关于收集、使用和披露您信息的政策和程序，并告知您所拥有的隐私权以及法律如何保护您。我们使用您的个人数据来提供和改进本服务。使用本服务即表示您同意我们根据本隐私政策收集和使用信息。\n\n**信息收集与使用**\n\n**收集的数据类型**\n*   **个人数据：** 在使用我们的服务时，我们可能会要求您提供某些可用于联系或识别您的个人身份信息。个人身份信息可能包括但不限于：电子邮件地址、用户名和个人资料图片。\n*   **使用数据：** 使用服务时会自动收集使用数据。这可能包括您设备的互联网协议地址（例如 IP 地址）、浏览器类型、浏览器版本、您访问我们服务的页面、您访问的时间和日期、在这些页面上花费的时间、唯一的设备标识符和其他诊断数据。\n*   **用户生成内容：** 我们会收集您在我们服务上创建的内容，包括您上传的视频和图片、您发表的评论、点赞和收藏。\n\n**您个人数据的使用**\n公司可能将个人数据用于以下目的：\n*   提供和维护我们的服务，包括监控我们服务的使用情况。\n*   管理您的帐户：管理您作为服务用户的注册。\n*   与您联系：通过电子邮件就与功能、产品或签约服务相关的更新或信息性通讯与您联系。\n*   为您提供我们提供的其他商品、服务 and 活动的新闻、特别优惠和一般信息。\n*   管理您的请求：处理和管理您向我们提出的请求。\n\n**共享您的信息**\n我们不会出售您的个人信息。我们可能会与代表我们执行服务（例如托管服务 and 分析）的第三方服务提供商共享您的信息。\n\n**您个人数据的安全**\n您个人数据的安全对我们很重要，但请记住，没有任何通过互联网传输的方法或电子存储方法是 100% 安全的。虽然我们努力使用商业上可接受的方式来保护您的个人数据，但我们无法保证其绝对安全。\n\n**儿童隐私**\n我们的服务不面向 13 岁以下的任何人。我们不会故意收集 13 岁以下任何人的个人身份信息。如果您是父母或监护人，并且您知道您的孩子向我们提供了个人数据，请与我们联系。\n\n**本隐私政策的变更**\n我们可能会不时更新我们的隐私政策。如有任何更改，我们会通过在此页面上发布新的隐私政策来通知您。';
+      '本隐私政策阐述了当您使用本服务时，我们关于收集、使用和披露您信息的政策和程序，并告知您所拥有的隐私权以及法律如何保护您。我们使用您的个人数据来提供和改进本服务。使用本服务即表示您同意我们根据本隐私政策收集和使用信息。\n\n**信息收集与使用**\n\n**收集的数据类型**\n*   **个人数据：** 在使用我们的服务时，我们可能会要求您提供某些可用于联系或识别您的个人身份信息。个人身份信息可能包括但不限于：电子邮件地址、用户名和个人资料图片。\n*   **使用数据：** 使用服务时会自动收集使用数据。这可能包括您设备的互联网协议地址（例如 IP 地址）、浏览器类型、浏览器版本、您访问我们服务的页面、您访问的时间和日期、在这些页面上花费的时间、唯一的 device 标识符和其他诊断数据。\n*   **用户生成内容：** 我们会收集您在我们服务上创建的内容，包括您上传的视频和图片、您发表的评论、点赞和收藏。\n\n**您个人数据的使用**\n公司可能将个人数据用于以下目的：\n*   提供和维护我们的服务，包括监控我们服务的使用情况。\n*   管理您的帐户：管理您作为服务用户的注册。\n*   与您联系：通过电子邮件就与功能、产品或签约服务相关的更新或信息性通讯与您联系。\n*   为您提供我们提供的其他商品、服务 and 活动的新闻、特别优惠和一般信息。\n*   管理您的请求：处理和管理您向我们提出的请求。\n\n**共享您的信息**\n我们不会出售您的个人信息。我们可能会与代表我们执行服务（例如托管服务 and 分析）的第三方服务提供商共享您的信息。\n\n**您个人数据的安全**\n您个人数据的安全对我们很重要，但请记住，没有任何通过互联网传输的方法或电子存储方法是 100% 安全的。虽然我们努力使用商业上可接受的方式来保护您的个人数据，但我们无法保证其绝对安全。\n\n**儿童隐私**\n我们的服务不面向 13 岁以下的任何人。我们不会故意收集 13 岁以下任何人的个人身份信息。如果您是父母 or 监护人，并且您知道您的孩子向我们提供了个人数据，请与我们联系。\n\n**本隐私政策的变更**\n我们可能会不时更新我们的隐私政策。如有任何更改，我们会通过在此页面上发布新的隐私政策来通知您。';
 
   @override
   String get introduction => '介绍';
@@ -358,4 +382,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String castFailed(String error) {
     return '投屏失败: $error';
   }
+
+  @override
+  String get enterNewPassword => '请输入新密码';
+
+  @override
+  String get enterConfirmPassword => '请确认新密码';
+
+  @override
+  String get enterUsernameHint => '请输入用户名';
+
+  @override
+  String get enterEmailHint => '请输入电子邮箱';
+
+  @override
+  String get enterCodeHint => '请输入验证码';
+
+  @override
+  String get enterPasswordHint => '请输入密码';
+
+  @override
+  String get enterInvitationCodeHint => '请输入邀请码';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle => '让我们踏上学习足球的旅程';
+
+  @override
+  String get noAccount => '没有账号？ ';
+
+  @override
+  String get signUp => '注册';
+
+  @override
+  String get enterTitleHint => '请输入标题';
+
+  @override
+  String get enterContentHint => '请输入内容';
+
+  @override
+  String get save => '保存';
 }

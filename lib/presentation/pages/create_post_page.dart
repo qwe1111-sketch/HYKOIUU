@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,27 +45,92 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     await showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {
         return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                  leading: const Icon(Icons.photo_library),
-                  title: Text(l10n.selectPicturesFromAlbum),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    _pickImages();
-                  }),
-              ListTile(
-                leading: const Icon(Icons.video_library),
-                title: Text(l10n.selectVideoFromAlbum),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  _pickVideo();
-                },
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              _pickImages();
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              alignment: Alignment.center,
+                              child: Text(
+                                l10n.selectPicturesFromAlbum,
+                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                          const Divider(color: Colors.white10, height: 1, indent: 0, endIndent: 0),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              _pickVideo();
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              alignment: Alignment.center,
+                              child: Text(
+                                l10n.selectVideoFromAlbum,
+                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        ),
+                        child: Text(
+                          l10n.cancel,
+                          style: const TextStyle(
+                            color: Color(0xFFCCFF00),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -120,62 +186,100 @@ class _CreatePostPageState extends State<CreatePostPage> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.createPost),
-          actions: [
-            BlocBuilder<CommunityBloc, CommunityState>(
-              builder: (context, state) {
-                final isSubmitting = state is CommunityLoading;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ElevatedButton(
-                    onPressed: canPost && !isSubmitting
-                        ? () {
-                            context.read<CommunityBloc>().add(AddPost(
-                                  title: _titleController.text,
-                                  content: _contentController.text,
-                                  mediaFiles: _selectedFiles,
-                                ));
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.purple.shade200,
-                      foregroundColor: Colors.white,
-                      disabledBackgroundColor: Colors.grey.shade400,
+        backgroundColor: const Color(0xFF121212),
+        body: Column(
+          children: [
+            // AppBar
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
-                    child: isSubmitting
-                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : Text(l10n.publish),
-                  ),
-                );
-              },
+                    Text(
+                      l10n.createPost,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    BlocBuilder<CommunityBloc, CommunityState>(
+                      builder: (context, state) {
+                        final isSubmitting = state is CommunityLoading;
+                        return GestureDetector(
+                          onTap: canPost && !isSubmitting
+                              ? () {
+                                  context.read<CommunityBloc>().add(AddPost(
+                                        title: _titleController.text,
+                                        content: _contentController.text,
+                                        mediaFiles: _selectedFiles,
+                                      ));
+                                }
+                              : null,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: canPost && !isSubmitting ? const Color(0xFFCCFF00) : Colors.grey.shade800,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: isSubmitting
+                                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
+                                : Text(
+                                    l10n.publish,
+                                    style: TextStyle(
+                                      color: canPost && !isSubmitting ? Colors.black : Colors.white38,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8), // 减小顶部边距
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: _titleController,
+                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                      decoration: InputDecoration(
+                        hintText: l10n.enterTitleHint,
+                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 18),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                    const Divider(color: Colors.white12, thickness: 1, height: 16), // 减小高度
+                    TextField(
+                      controller: _contentController,
+                      style: const TextStyle(color: Colors.white70, fontSize: 16),
+                      decoration: InputDecoration(
+                        hintText: l10n.enterContentHint,
+                        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 16),
+                        border: InputBorder.none,
+                      ),
+                      minLines: 1, // 动态高度
+                      maxLines: 8,
+                    ),
+                    const SizedBox(height: 60), // 进一步减小间距
+                    _buildMediaGrid(),
+                  ],
+                ),
+              ),
             ),
           ],
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: _titleController,
-                style: Theme.of(context).textTheme.headlineSmall,
-                decoration: InputDecoration.collapsed(
-                  hintText: l10n.title,
-                ),
-              ),
-              const Divider(height: 32),
-              TextField(
-                controller: _contentController,
-                decoration: InputDecoration.collapsed(
-                  hintText: l10n.content,
-                ),
-                maxLines: 10,
-              ),
-              const SizedBox(height: 16),
-              _buildMediaGrid(),
-            ],
-          ),
         ),
       ),
     );
@@ -187,8 +291,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
       ),
       itemCount: _selectedFiles.length + (_selectedFiles.length < 6 ? 1 : 0),
       itemBuilder: (context, index) {
@@ -197,10 +301,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
             onTap: _showMediaPickerOptions,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(8),
+                color: Colors.white.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFCCFF00).withOpacity(0.5), width: 1),
               ),
-              child: const Icon(Icons.add_photo_alternate_outlined, size: 48, color: Colors.black54),
+              child: const Icon(Icons.add, size: 32, color: Color(0xFFCCFF00)),
             ),
           );
         }
@@ -212,7 +317,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           alignment: Alignment.topRight,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(12.0),
               child: SizedBox(
                 width: double.infinity,
                 height: double.infinity,
@@ -221,15 +326,21 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     : _VideoThumbnail(videoFile: file),
               ),
             ),
-            IconButton(
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-              icon: const CircleAvatar(radius: 12, backgroundColor: Colors.black54, child: Icon(Icons.close, color: Colors.white, size: 16)),
-              onPressed: () {
+            GestureDetector(
+              onTap: () {
                 setState(() {
                   _selectedFiles.removeAt(index);
                 });
               },
+              child: Container(
+                margin: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF1A1A1A),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: Color(0xFFCCFF00), size: 14),
+              ),
             ),
           ],
         );
@@ -270,7 +381,6 @@ class _VideoThumbnailState extends State<_VideoThumbnail> {
         });
       }
     } catch (e) {
-      // Handle error, maybe show a broken icon
       debugPrint("Error generating thumbnail: $e");
     }
   }

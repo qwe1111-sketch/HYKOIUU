@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_flutter/l10n/app_localizations.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class VideoActionButtons extends StatelessWidget {
   final bool isLiked;
@@ -28,34 +28,33 @@ class VideoActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: Iconsax.like,
-            label: _formatNumber(context, likeCount),
-            onPressed: onLike,
-            isSelected: isLiked,
-          ),
+        _buildActionButton(
+          context: context,
+          iconPath: isLiked ? 'assets/images/community/like.svg' : 'assets/images/home/like1.svg',
+          label: _formatNumber(context, likeCount),
+          onPressed: onLike,
+          isSelected: isLiked,
+          useColorFilter: false, // 全部使用切图原色
         ),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: isDisliked ? Iconsax.dislike : Iconsax.dislike,
-            label: l10n.dislike,
-            onPressed: onDislike,
-            isSelected: isDisliked,
-          ),
+        _buildActionButton(
+          context: context,
+          iconPath: isDisliked 
+              ? 'assets/images/community/dislike_filled.svg' 
+              : 'assets/images/community/dislike.svg',
+          label: l10n.dislike,
+          onPressed: onDislike,
+          isSelected: isDisliked,
+          useColorFilter: false, // 全部使用切图原色
         ),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: isFavorited ? Iconsax.star1 : Iconsax.star,
-            label: l10n.favorite,
-            onPressed: onFavorite,
-            isSelected: isFavorited,
-          ),
+        _buildActionButton(
+          context: context,
+          iconPath: isFavorited ? 'assets/images/home/favorites.svg' : 'assets/images/home/hard.svg',
+          label: l10n.favorite,
+          onPressed: onFavorite,
+          isSelected: isFavorited,
+          useColorFilter: false, // 全部使用切图原色
         ),
       ],
     );
@@ -63,28 +62,42 @@ class VideoActionButtons extends StatelessWidget {
 
   Widget _buildActionButton({
     required BuildContext context,
-    required IconData icon,
+    required String iconPath,
     required String label,
     required bool isSelected,
     VoidCallback? onPressed,
+    bool useColorFilter = true,
   }) {
     final bool isButtonDisabled = isInteracting && (onPressed == onLike || onPressed == onDislike);
+    
+    final Color activeColor = const Color(0xFFCCFF00);
+    final Color inactiveColor = Colors.white.withOpacity(0.4);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(8.0),
       onTap: isButtonDisabled ? null : onPressed,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 28,
-              color: isSelected ? Theme.of(context).colorScheme.primary : (isButtonDisabled ? Colors.grey : Theme.of(context).iconTheme.color),
+            SvgPicture.asset(
+              iconPath,
+              width: 28,
+              height: 28,
+              // 全部取消 colorFilter，完全展示切图本身的颜色和细节（如镂空）
+              colorFilter: useColorFilter 
+                  ? (isSelected ? ColorFilter.mode(activeColor, BlendMode.srcIn) : ColorFilter.mode(inactiveColor, BlendMode.srcIn))
+                  : null,
             ),
-            const SizedBox(height: 4),
-            Text(label, style: Theme.of(context).textTheme.labelMedium),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? activeColor : inactiveColor,
+                fontSize: 12,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              ),
+            ),
           ],
         ),
       ),

@@ -8,6 +8,18 @@
       "date": {}
     }
   },
+  "monthsAgo": "{count, plural, =0{В этом месяце} one{{count} месяц назад} few{{count} месяца назад} many{{count} месяцев назад} other{{count} месяцев назад}}",
+  "@monthsAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "yearsAgo": "{count, plural, =0{В этом году} one{{count} год назад} few{{count} года назад} many{{count} лет назад} other{{count} лет назад}}",
+  "@yearsAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "daysAgo": "{count, plural, =0{Сегодня} one{{count} день назад} few{{count} дня назад} many{{count} дней назад} other{{count} дней назад}}",
   "@daysAgo": {
     "placeholders": {
@@ -42,7 +54,7 @@
   "community": "Сообщество",
   "profile": "Профиль",
   "login": "Войти",
-  "invalidUsernameOrPassword": "Неверное имя пользователя или пароль",
+  "invalidUsernameOrPassword": "Неверный имя пользователя или пароль",
   "username": "Имя пользователя",
   "enterUsername": "Пожалуйста, введите имя пользователя",
   "password": "Пароль",
@@ -138,5 +150,45 @@
   "incorrectInvitationCode": "Неверный пригласительный код",
   "pleaseRequestVerificationCodeFirst": "Сначала запросите код подтверждения",
   "invalidVerificationCode": "Неверный код подтверждения.",
-  "videoLoadError": "Не удалось загрузить видео"
+  "videoLoadError": "Не удалось загрузить видео",
+  "noPostsYet": "Сообщений пока нет. Будьте первым, кто их опубликует!",
+  "noVideosFound": "Видео не найдено",
+  "error": "Ошибка",
+  "retry": "Повторить",
+  "deleteAccount": "Удалить аккаунт",
+  "deleteAccountConfirmation": "Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо и приведет к удалению всех ваших данных.",
+  "confirmDeleteAccount": "Удалить аккаунт",
+  "defaultBio": "Этот человек ленив и ничего не оставил.",
+  "selectCastDevice": "Выберите устройство для трансляции",
+  "noCastDevicesFound": "Устройства не найдены, убедитесь, что телефон и телевизор подключены к одной сети Wi-Fi",
+  "castingTo": "Трансляция на {deviceName}",
+  "@castingTo": {
+    "placeholders": {
+      "deviceName": {
+        "type": "String"
+      }
+    }
+  },
+  "castFailed": "Сбой трансляции: {error}",
+  "@castFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "enterNewPassword": "Введите новый пароль",
+  "enterConfirmPassword": "Подтвердите новый пароль",
+  "enterUsernameHint": "Введите имя пользователя",
+  "enterEmailHint": "Введите эл. почту",
+  "enterCodeHint": "Введите код подтверждения",
+  "enterPasswordHint": "Введите пароль",
+  "enterInvitationCodeHint": "Введите пригласительный код",
+  "loginWelcomeTitle": "HYKOIUU",
+  "loginWelcomeSubtitle": "Давайте отправимся в путешествие по изучению\nфутбола",
+  "noAccount": "Нет аккаунта? ",
+  "signUp": "Зарегистрироваться",
+  "enterTitleHint": "Пожалуйста, введите заголовок",
+  "enterContentHint": "Пожалуйста, предоставьте содержание",
+  "save": "Сохранить"
 }

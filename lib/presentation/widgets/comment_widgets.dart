@@ -1,27 +1,14 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:sport_flutter/common/time_formatter.dart';
 import 'package:sport_flutter/domain/entities/comment.dart';
 import 'package:sport_flutter/l10n/app_localizations.dart';
 import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/comment_bloc.dart';
-import 'package:iconsax/iconsax.dart';
-
-// Helper function to show a single, replaceable replies sheet.
-Future<Comment?> _showRepliesSheet(BuildContext context, Comment parentComment) {
-  return showModalBottomSheet<Comment>(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => BlocProvider.value(
-      value: context.read<CommentBloc>(),
-      child: _RepliesSheet(parentComment: parentComment),
-    ),
-  );
-}
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sport_flutter/presentation/pages/post_detail/widgets/comment_item_placeholder.dart';
 
 /// The main container for the entire comment section.
 class CommentSection extends StatefulWidget {
@@ -45,17 +32,10 @@ class _CommentSectionState extends State<CommentSection> {
     setState(() => _replyingToComment = comment);
   }
 
-  // This function handles the sheet replacement logic.
-  void _handleShowReplies(Comment startingComment) async {
-    Comment? nextCommentToShow = startingComment;
-    while (nextCommentToShow != null) {
-      nextCommentToShow = await _showRepliesSheet(context, nextCommentToShow);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Column(
       children: [
@@ -68,36 +48,47 @@ class _CommentSectionState extends State<CommentSection> {
             behavior: HitTestBehavior.translucent,
             child: BlocConsumer<CommentBloc, CommentState>(
               listener: (context, state) {
-                // When a post is successful from the main input, clear the target.
                 if (state is CommentPostSuccess) {
                   _setReplyingTo(null);
                 }
               },
               builder: (context, state) {
-                // This robust builder logic handles all UI states correctly.
                 if (state is CommentLoaded) {
                   if (state.comments.isEmpty) {
-                    return Center(child: Text(localizations.beTheFirstToComment));
+                    return Center(
+                      child: Text(
+                        localizations.beTheFirstToComment,
+                        style: const TextStyle(color: Colors.white30, fontSize: 16),
+                      ),
+                    );
                   }
                   return RefreshIndicator(
+                    color: const Color(0xFFCCFF00), 
+                    backgroundColor: const Color(0xFF1C1C1E),
                     onRefresh: () async =>
                         context.read<CommentBloc>().add(FetchComments(widget.videoId)),
                     child: ListView.builder(
-                      padding: const EdgeInsets.all(8.0),
+                      physics: isKeyboardVisible 
+                          ? const NeverScrollableScrollPhysics() 
+                          : const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       itemCount: state.comments.length,
                       itemBuilder: (context, index) => _CommentItem(
                         comment: state.comments[index],
+                        videoId: widget.videoId,
                         onReply: _setReplyingTo,
-                        onShowReplies: _handleShowReplies,
                       ),
                     ),
                   );
                 }
                 if (state is CommentError) {
-                  return Center(child: Text('Error: ${state.message}'));
+                  return Center(child: Text('Error: ${state.message}', style: const TextStyle(color: Colors.white)));
                 }
-                // For ANY other state (Initial, Loading), show the loading indicator.
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFCCFF00),
+                  ),
+                );
               },
             ),
           ),
@@ -112,216 +103,450 @@ class _CommentSectionState extends State<CommentSection> {
   }
 }
 
-/// Renders a single comment item.
 class _CommentItem extends StatelessWidget {
   final Comment comment;
+  final int videoId;
   final ValueChanged<Comment> onReply;
-  final Function(Comment) onShowReplies;
-  final bool isSheetHeader;
+  final bool isReply;
+  final bool showReplyButton;
+  final String? repliedToContent;
 
   const _CommentItem({
     required this.comment,
+    required this.videoId,
     required this.onReply,
-    required this.onShowReplies,
-    this.isSheetHeader = false,
+    this.isReply = false,
+    this.showReplyButton = true,
+    this.repliedToContent,
   });
+
+  void _showReplySheet(BuildContext context, Comment parentComment) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => BlocProvider.value(
+        value: BlocProvider.of<CommentBloc>(context),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.8,
+          minChildSize: 0.4,
+          maxChildSize: 0.95,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return _ReplySheet(
+              parentComment: parentComment,
+              videoId: videoId,
+              scrollController: scrollController,
+              onReply: onReply,
+            );
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-      child: Row(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            backgroundImage: comment.userAvatarUrl != null && comment.userAvatarUrl!.isNotEmpty
-                ? NetworkImage(comment.userAvatarUrl!)
-                : null,
-            child: comment.userAvatarUrl == null || comment.userAvatarUrl!.isEmpty
-                ? const Icon(Iconsax.profile)
-                : null,
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(comment.username, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.shade600)),
-                const SizedBox(height: 4),
-                Text(comment.content),
-                const SizedBox(height: 8),
-                _buildCommentActions(context, localizations),
-                if (comment.replyCount > 0 && !isSheetHeader)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: TextButton(
-                      onPressed: () => onShowReplies(comment),
-                      child: Text(localizations.viewAllReplies(comment.replyCount), style: const TextStyle(fontSize: 12, color: Colors.blueAccent)),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFCCFF00), width: 1.5),
+                ),
+                child: ClipOval(
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    color: Colors.white10,
+                    child: (comment.userAvatarUrl != null && comment.userAvatarUrl!.isNotEmpty)
+                        ? CachedNetworkImage(
+                            imageUrl: comment.userAvatarUrl!,
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) => const Icon(Icons.person, size: 18, color: Colors.white54),
+                          )
+                        : const Icon(Icons.person, size: 18, color: Colors.white54),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(comment.username, style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w500)),
+                    const SizedBox(height: 6),
+                    if (isReply && repliedToContent != null)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4.0),
+                        child: Text(
+                          'Replying to $repliedToContent',
+                          style: const TextStyle(color: Colors.white30, fontSize: 14, height: 1.4),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    Text(
+                      comment.content,
+                      style: const TextStyle(color: Colors.white, fontSize: 15, height: 1.4),
                     ),
-                  )
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
+          const SizedBox(height: 12),
+          _buildActionRow(context),
+          if (showReplyButton && comment.replyCount > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0, left: 44),
+              child: GestureDetector(
+                onTap: () => _showReplySheet(context, comment),
+                child: Text(
+                  localizations.viewAllReplies(comment.replyCount),
+                  style: const TextStyle(color: Color(0xFFCCFF00), fontSize: 13, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildCommentActions(BuildContext context, AppLocalizations localizations) {
+  Widget _buildActionRow(BuildContext context) {
     final bloc = context.read<CommentBloc>();
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
-    final voteStyle = textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold);
+    final localizations = AppLocalizations.of(context)!;
+    final timeString = formatTimestamp(comment.createdAt, localizations);
     final authState = context.watch<AuthBloc>().state;
     String? currentUserId;
     if (authState is AuthAuthenticated) {
       currentUserId = authState.user.id;
     }
 
-    return Row(
-      children: [
-        Text(formatTimestamp(comment.createdAt, localizations), style: textTheme.bodySmall?.copyWith(color: Colors.grey.shade600)),
-        const Spacer(),
+    const activeColor = Color(0xFFCCFF00);
+    const inactiveColor = Color(0xFF999999);
 
-        IconButton(icon: Icon(Iconsax.like, size: 16, color: comment.userVote == 'like' ? colorScheme.primary : Colors.grey.shade600), onPressed: () => bloc.add(VoteComment(comment.id, 'like'))),
-        if (comment.likeCount > 0) Text(NumberFormat.compact().format(comment.likeCount), style: voteStyle),
-        const SizedBox(width: 12),
+    return Padding(
+      padding: const EdgeInsets.only(left: 44),
+      child: Row(
+        children: [
+          Text(timeString, style: const TextStyle(color: Colors.white30, fontSize: 12)),
+          const Spacer(),
+          SizedBox(
+            width: 45,
+            child: _ActionButton(
+              assetPath: 'assets/images/community/like.svg',
+              color: comment.userVote == 'like' ? activeColor : inactiveColor,
+              count: comment.likeCount,
+              onTap: () => bloc.add(VoteComment(comment.id, 'like')),
+            ),
+          ),
+          SizedBox(
+            width: 45,
+            child: _ActionButton(
+              assetPath: comment.userVote == 'dislike' ? 'assets/images/community/dislike_filled.svg' : 'assets/images/community/dislike.svg',
+              color: comment.userVote == 'dislike' ? activeColor : inactiveColor,
+              count: comment.dislikeCount,
+              useColorFilter: false, 
+              onTap: () => bloc.add(VoteComment(comment.id, 'dislike')),
+            ),
+          ),
+          SizedBox(
+            width: 40,
+            child: _ActionButton(
+              assetPath: 'assets/images/community/comment.svg',
+              useColorFilter: false,
+              onTap: () => onReply(comment),
+            ),
+          ),
+          if (currentUserId != null && comment.userId == currentUserId)
+            SizedBox(
+              width: 40,
+              child: _ActionButton(
+                assetPath: 'assets/images/community/delete_filled.svg',
+                useColorFilter: false,
+                onTap: () => _showDeleteConfirmation(context),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 
-        IconButton(icon: Icon(Iconsax.dislike, size: 16, color: comment.userVote == 'dislike' ? Colors.red : Colors.grey.shade600), onPressed: () => bloc.add(VoteComment(comment.id, 'dislike'))),
-        if (comment.dislikeCount > 0) Text(NumberFormat.compact().format(comment.dislikeCount), style: voteStyle),
-        const SizedBox(width: 12),
-
-        IconButton(icon: Icon(Iconsax.message_text_1, size: 16, color: Colors.grey.shade600), onPressed: () => onReply(comment)),
-
-        if (currentUserId != null && comment.userId == currentUserId)
-          IconButton(icon: Icon(Iconsax.trash, size: 16, color: Colors.grey.shade600), onPressed: () => bloc.add(DeleteComment(comment.id))),
-      ],
+  void _showDeleteConfirmation(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        backgroundColor: const Color(0xFF1C1C1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+              child: Column(
+                children: [
+                  Text(
+                    l10n.delete,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'Confirm to delete this comment?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(color: Colors.white12, height: 1),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => Navigator.of(dialogContext).pop(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      alignment: Alignment.center,
+                      child: Text(l10n.cancel, style: const TextStyle(color: Colors.white, fontSize: 16)),
+                    ),
+                  ),
+                ),
+                Container(width: 0.5, height: 50, color: Colors.white12),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context.read<CommentBloc>().add(DeleteComment(comment.id));
+                      Navigator.of(dialogContext).pop();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      alignment: Alignment.center,
+                      child: Text(
+                        l10n.delete,
+                        style: const TextStyle(color: Color(0xFFCCFF00), fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-
-/// The replaceable bottom sheet for replies.
-class _RepliesSheet extends StatefulWidget {
+class _ReplySheet extends StatefulWidget {
   final Comment parentComment;
-  const _RepliesSheet({required this.parentComment});
+  final int videoId;
+  final ScrollController scrollController;
+  final ValueChanged<Comment> onReply;
+
+  const _ReplySheet({
+    required this.parentComment,
+    required this.videoId,
+    required this.scrollController,
+    required this.onReply,
+  });
 
   @override
-  State<_RepliesSheet> createState() => _RepliesSheetState();
+  State<_ReplySheet> createState() => _ReplySheetState();
 }
 
-class _RepliesSheetState extends State<_RepliesSheet> {
-  late Comment _replyingTo;
+class _ReplySheetState extends State<_ReplySheet> {
+  Comment? _localReplyingTo;
 
-  @override
-  void initState() {
-    super.initState();
-    _replyingTo = widget.parentComment;
+  Comment? _findCommentById(List<Comment> comments, int id) {
+    for (var c in comments) {
+      if (c.id == id) return c;
+      if (c.replies.isNotEmpty) {
+        final found = _findCommentById(c.replies, id);
+        if (found != null) return found;
+      }
+    }
+    return null;
+  }
+
+  void _onLocalReplyTapped(Comment comment) {
+    setState(() {
+      _localReplyingTo = comment;
+    });
+  }
+
+  void _onCancelLocalReply() {
+    setState(() {
+      _localReplyingTo = null;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final videoId = context.read<CommentBloc>().currentVideoId;
-    final localizations = AppLocalizations.of(context)!;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final isKeyboardVisible = bottomInset > 0;
 
-    return BlocBuilder<CommentBloc, CommentState>(
-      builder: (context, state) {
-        // Find the latest version of the parent comment from the current state.
-        Comment parentComment = widget.parentComment;
-        if (state is CommentLoaded) {
-            final fullList = state.comments;
-            parentComment = _findCommentByIdRecursive(fullList, widget.parentComment.id) ?? widget.parentComment;
-        }
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xFF1C1C1E),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: BlocBuilder<CommentBloc, CommentState>(
+        builder: (context, state) {
+          if (state is CommentLoaded) {
+            final parentComment = _findCommentById(state.comments, widget.parentComment.id);
 
-        return DraggableScrollableSheet(
-          initialChildSize: 0.7,
-          minChildSize: 0.4,
-          maxChildSize: 0.9,
-          builder: (_, scrollController) {
-            return Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-              child: Column(
-                children: [
-                  _buildHeader(context, parentComment.replyCount, localizations),
-                  const Divider(height: 1),
-                  _CommentItem(
-                      comment: parentComment,
-                      onReply: (c) => setState(() => _replyingTo = c),
-                      onShowReplies: (parent) {},
-                      isSheetHeader: true,
+            if (parentComment == null) {
+              return const SizedBox.shrink();
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 12, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.close, color: Colors.white, size: 20),
+                        ),
+                      ),
+                    ],
                   ),
-                  const Divider(height: 1),
-                  Expanded(
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: parentComment.replies.length,
-                      itemBuilder: (context, index) {
-                        final reply = parentComment.replies[index];
-                        return _CommentItem(
-                            comment: reply,
-                            onReply: (c) => setState(() => _replyingTo = c),
-                            onShowReplies: (parent) => Navigator.of(context).pop(parent),
-                        );
-                      },
-                    ),
+                ),
+                _CommentItem(
+                  comment: parentComment,
+                  videoId: widget.videoId,
+                  onReply: _onLocalReplyTapped,
+                  isReply: false,
+                  showReplyButton: false,
+                ),
+                const Divider(color: Colors.white10, height: 1, thickness: 1),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      _onCancelLocalReply();
+                      FocusScope.of(context).unfocus();
+                    },
+                    behavior: HitTestBehavior.translucent,
+                    child: parentComment.replies.isEmpty
+                        ? const Center(child: Text('No replies yet', style: TextStyle(color: Colors.white30)))
+                        : ListView.builder(
+                            controller: widget.scrollController,
+                            physics: isKeyboardVisible 
+                                ? const NeverScrollableScrollPhysics() 
+                                : const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                            padding: const EdgeInsets.only(top: 8, bottom: 20),
+                            itemCount: parentComment.replies.length,
+                            itemBuilder: (context, index) {
+                              final reply = parentComment.replies[index];
+                              return _CommentItem(
+                                comment: reply,
+                                videoId: widget.videoId,
+                                onReply: _onLocalReplyTapped,
+                                isReply: true,
+                                showReplyButton: true,
+                                repliedToContent: parentComment.content,
+                              );
+                            },
+                          ),
                   ),
-                  _CommentInputField(
-                    videoId: videoId,
-                    replyingToComment: _replyingTo,
-                    onCancelReply: () => setState(() => _replyingTo = parentComment),
-                  ),
-                ],
-              ),
+                ),
+                _CommentInputField(
+                  videoId: widget.videoId,
+                  replyingToComment: _localReplyingTo,
+                  fallbackParentComment: parentComment,
+                  onCancelReply: _onCancelLocalReply,
+                  useBottomPadding: false,
+                ),
+              ],
             );
-          },
-        );
-      },
+          }
+          return const Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00)));
+        },
+      ),
     );
   }
-  
-  Comment? _findCommentByIdRecursive(List<Comment> comments, int id) {
-      for (var comment in comments) {
-          if (comment.id == id) return comment;
-          if (comment.replies.isNotEmpty) {
-              final found = _findCommentByIdRecursive(comment.replies, id);
-              if (found != null) return found;
-          }
-      }
-      return null;
-  }
+}
 
-  Widget _buildHeader(BuildContext context, int replyCount, AppLocalizations localizations) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+class _ActionButton extends StatelessWidget {
+  final String assetPath;
+  final Color? color;
+  final int? count;
+  final VoidCallback onTap;
+  final bool useColorFilter;
+
+  const _ActionButton({
+    required this.assetPath,
+    this.color,
+    this.count,
+    required this.onTap,
+    this.useColorFilter = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(width: 48),
-          Text(localizations.commentDetails(replyCount)),
-          IconButton(
-              icon: const Icon(Iconsax.close_circle),
-              onPressed: () => Navigator.of(context).pop()),
+          SvgPicture.asset(
+            assetPath,
+            width: 18,
+            height: 18,
+            colorFilter: useColorFilter && color != null 
+                ? ColorFilter.mode(color!, BlendMode.srcIn) 
+                : null,
+          ),
+          if (count != null && count! > 0) ...[
+            const SizedBox(width: 4),
+            Text(
+              count.toString(),
+              style: TextStyle(color: color ?? const Color(0xFF999999), fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ],
         ],
       ),
     );
   }
 }
 
-
-/// The input field widget.
 class _CommentInputField extends StatefulWidget {
   final int videoId;
   final Comment? replyingToComment;
+  final Comment? fallbackParentComment;
   final VoidCallback onCancelReply;
+  final bool useBottomPadding;
 
   const _CommentInputField({
     required this.videoId,
     this.replyingToComment,
+    this.fallbackParentComment,
     required this.onCancelReply,
+    this.useBottomPadding = true,
   });
 
   @override
@@ -333,10 +558,16 @@ class _CommentInputFieldState extends State<_CommentInputField> {
   final _focusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void didUpdateWidget(covariant _CommentInputField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.replyingToComment != oldWidget.replyingToComment) {
-       _focusNode.requestFocus();
+    if (widget.replyingToComment != null && 
+        widget.replyingToComment?.id != oldWidget.replyingToComment?.id) {
+      _focusNode.requestFocus();
     }
   }
 
@@ -350,63 +581,77 @@ class _CommentInputFieldState extends State<_CommentInputField> {
   void _submitComment() {
     if (_controller.text.trim().isEmpty) return;
 
+    final int? parentId = widget.replyingToComment?.id ?? widget.fallbackParentComment?.id;
+
     context.read<CommentBloc>().add(PostComment(
           widget.videoId,
           _controller.text.trim(),
-          parentCommentId: widget.replyingToComment?.id,
+          parentCommentId: parentId,
         ));
-
     _controller.clear();
-    FocusScope.of(context).unfocus();
+    _focusNode.unfocus();
+    widget.onCancelReply();
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final hintText = widget.replyingToComment != null
-        ? localizations.replyingTo(widget.replyingToComment!.username)
+    final displayComment = widget.replyingToComment ?? widget.fallbackParentComment;
+    final hintText = displayComment != null
+        ? localizations.replyingTo(displayComment.username)
         : localizations.addAComment;
 
+    final bottomInset = widget.useBottomPadding ? MediaQuery.of(context).viewInsets.bottom : 0.0;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.grey.shade200))),
+      padding: EdgeInsets.fromLTRB(16, 8, 16, 16 + bottomInset), 
+      decoration: const BoxDecoration(
+        color: Colors.black,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (widget.replyingToComment != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: Row(
-                children: [
-                  Text(localizations.replyingTo(widget.replyingToComment!.username), style: Theme.of(context).textTheme.bodySmall),
-                  const Spacer(),
-                  IconButton(
-                    icon: const Icon(Iconsax.close_circle, size: 16),
-                    onPressed: widget.onCancelReply,
-                  )
-                ],
-              ),
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFF2C2C2E),
+              borderRadius: BorderRadius.circular(24),
             ),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    border: InputBorder.none,
-                    isDense: true,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    style: const TextStyle(color: Colors.white, fontSize: 15),
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: const TextStyle(color: Colors.white30, fontSize: 15),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
                   ),
-                  maxLines: null,
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Iconsax.send_1),
-                onPressed: _submitComment,
-                color: Theme.of(context).primaryColor,
-              ),
-            ],
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: _controller,
+                  builder: (context, value, child) {
+                    final bool hasText = value.text.trim().isNotEmpty;
+                    return GestureDetector(
+                      onTap: _submitComment,
+                      child: SvgPicture.asset(
+                        'assets/images/community/send.svg',
+                        width: 20,
+                        height: 20,
+                        colorFilter: ColorFilter.mode(
+                          hasText ? const Color(0xFFCCFF00) : Colors.white54,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),

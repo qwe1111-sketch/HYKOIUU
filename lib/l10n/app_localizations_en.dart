@@ -27,6 +27,30 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count months ago',
+      one: '1 month ago',
+      zero: 'This month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count years ago',
+      one: '1 year ago',
+      zero: 'This year',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -365,4 +389,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => 'Enter your new password';
+
+  @override
+  String get enterConfirmPassword => 'Confirm your new password';
+
+  @override
+  String get enterUsernameHint => 'Enter the Username';
+
+  @override
+  String get enterEmailHint => 'Enter the Email';
+
+  @override
+  String get enterCodeHint => 'Enter the Verification Code';
+
+  @override
+  String get enterPasswordHint => 'Enter the Password';
+
+  @override
+  String get enterInvitationCodeHint => 'Enter the Invitation Code';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle =>
+      'Let\'s embark on the journey of learning\nabout football';
+
+  @override
+  String get noAccount => 'Don\'t have an account? ';
+
+  @override
+  String get signUp => 'Sign up';
+
+  @override
+  String get enterTitleHint => 'Please enter the title';
+
+  @override
+  String get enterContentHint => 'Please provide the content';
+
+  @override
+  String get save => 'Save';
 }

@@ -36,37 +36,11 @@ class _MediaGalleryState extends State<MediaGallery> {
   @override
   Widget build(BuildContext context) {
     if (widget.imageUrls.isEmpty) return const SizedBox.shrink();
-    if (widget.imageUrls.length == 1) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => FullScreenMediaViewer(
-              mediaUrls: widget.imageUrls,
-              initialIndex: 0,
-            ),
-          ));
-        },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: CachedNetworkImage(
-              imageUrl: widget.imageUrls.first,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration.zero,
-              fadeOutDuration: Duration.zero,
-              placeholder: (context, url) => Container(color: Colors.grey.shade200),
-              errorWidget: (context, url, error) => Container(color: Colors.grey.shade200, child: const Icon(Icons.error, color: Colors.grey)),
-            ),
-          ),
-        ),
-      );
-    }
-
+    
     return Column(
       children: [
-        SizedBox(
-          height: 250,
+        AspectRatio(
+          aspectRatio: 4 / 3, // 更接近设计图比例
           child: PageView.builder(
             controller: _pageController,
             itemCount: widget.imageUrls.length,
@@ -80,36 +54,36 @@ class _MediaGalleryState extends State<MediaGallery> {
                     ),
                   ));
                 },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.imageUrls[index],
-                    fit: BoxFit.cover,
-                    fadeInDuration: Duration.zero,
-                    fadeOutDuration: Duration.zero,
-                    placeholder: (context, url) => Container(color: Colors.grey.shade200),
-                    errorWidget: (context, url, error) => Container(color: Colors.grey.shade200, child: const Icon(Icons.error, color: Colors.grey)),
-                  ),
+                child: CachedNetworkImage(
+                  imageUrl: widget.imageUrls[index],
+                  fit: BoxFit.cover,
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
+                  placeholder: (context, url) => Container(color: Colors.white10),
+                  errorWidget: (context, url, error) => Container(color: Colors.white10, child: const Icon(Icons.error, color: Colors.grey)),
                 ),
               );
             },
           ),
         ),
         if (widget.imageUrls.length > 1)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(widget.imageUrls.length, (index) {
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                width: _currentPage == index ? 12 : 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: _currentPage == index ? Theme.of(context).primaryColor : Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              );
-            }),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(widget.imageUrls.length, (index) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: _currentPage == index ? 8 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: _currentPage == index ? const Color(0xFFCCFF00) : Colors.white24,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                );
+              }),
+            ),
           )
       ],
     );

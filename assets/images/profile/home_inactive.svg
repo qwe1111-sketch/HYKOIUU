@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>首页-未选中@2x</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="28" height="28"></rect>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#CDF815" offset="0%"></stop>
+            <stop stop-color="#9EEE09" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="我的" transform="translate(-57, -736)">
+            <g id="3" transform="translate(12, 722)">
+                <g id="首页-未选中" transform="translate(45, 14)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip" fill-rule="nonzero"></g>
+                    <g id="首页" mask="url(#mask-2)" fill="url(#linearGradient-3)" fill-rule="nonzero">
+                        <g transform="translate(3, 3)" id="路径">
+                            <path d="M12.4583204,0.429087927 C11.5792887,-0.143029309 10.4207113,-0.143029309 9.54167956,0.429087927 L1.43989934,5.62106676 C0.536798282,6.21562985 0,7.19493783 0.00472683972,8.23905609 L0.00472683972,18.9530124 C-0.0875961735,20.5394218 1.18351156,21.8997244 2.85192389,22 L7.724566,22 L7.724566,15.873025 C7.72455671,15.3868297 7.92856463,14.9207066 8.29138151,14.5779486 C8.65419839,14.2351906 9.14586193,14.0441035 9.65741928,14.0470324 L12.3425807,14.0470324 C12.8541381,14.0441035 13.3458016,14.2351906 13.7086185,14.5779486 C14.0714354,14.9207066 14.2754433,15.3868297 14.275434,15.873025 L14.275434,22 L19.1480761,22 C20.8164884,21.8997244 22.0875962,20.5394218 21.9952732,18.9530124 L21.9952732,8.23905609 C22.0106282,7.20304269 21.4919578,6.22536509 20.6063966,5.62106676 L12.4583204,0.429087927 Z"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

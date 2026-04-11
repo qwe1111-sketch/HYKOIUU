@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>My Posts@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="我的" transform="translate(-28, -196)" stroke="#FFFFFF">
+            <g id="1列" transform="translate(12, 178)">
+                <g id="编组-12备份" transform="translate(16, 16)">
+                    <g id="My-Posts" transform="translate(0, 2)">
+                        <g id="编组" transform="translate(1, 1)">
+                            <path d="M8,16 C12.41828,16 16,12.41828 16,8 C16,3.58172 12.41828,0 8,0 C3.58172,0 0,3.58172 0,8 C0,9.08468 0.215868,10.11896 0.606988,11.06216 C0.808928,11.54916 1.057584,12.01188 1.347372,12.44476 C1.444628,12.59004 1.262172,13.50844 0.8,15.2 C2.49156,14.73784 3.40996,14.55536 3.55524,14.65264 C3.98812,14.9424 4.45084,15.19108 4.93784,15.393 C5.88104,15.78412 6.91532,16 8,16 Z" id="路径"></path>
+                            <line x1="5.0418" y1="6.32804" x2="11.75352" y2="6.32804" id="路径" stroke-linecap="round"></line>
+                            <line x1="7.13868" y1="4.69512" x2="5.9732" y2="11.30488" id="路径" stroke-linecap="round"></line>
+                            <line x1="9.93868" y1="4.69512" x2="8.7732" y2="11.30488" id="路径" stroke-linecap="round"></line>
+                            <line x1="4.2418" y1="9.6" x2="10.95352" y2="9.6" id="路径" stroke-linecap="round"></line>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

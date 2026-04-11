@@ -27,12 +27,36 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Monaten',
+      one: 'vor 1 Monat',
+      zero: 'Diesen Monat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'vor $count Jahren',
+      one: 'vor 1 Jahr',
+      zero: 'Dieses Jahr',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Vor $count Tagen',
-      one: 'Vor 1 Tag',
+      other: 'vor $count Tagen',
+      one: 'vor 1 Tag',
       zero: 'Heute',
     );
     return '$_temp0';
@@ -43,8 +67,8 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Vor $count Wochen',
-      one: 'Vor 1 Woche',
+      other: 'vor $count Wochen',
+      one: 'vor 1 Woche',
       zero: 'Diese Woche',
     );
     return '$_temp0';
@@ -55,8 +79,8 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Vor $count Stunden',
-      one: 'Vor 1 Stunde',
+      other: 'vor $count Stunden',
+      one: 'vor 1 Stunde',
       zero: 'Gerade eben',
     );
     return '$_temp0';
@@ -67,8 +91,8 @@ class AppLocalizationsDe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Vor $count Minuten',
-      one: 'Vor 1 Minute',
+      other: 'vor $count Minuten',
+      one: 'vor 1 Minute',
       zero: 'Gerade eben',
     );
     return '$_temp0';
@@ -371,4 +395,47 @@ class AppLocalizationsDe extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => 'Geben Sie Ihr neues Passwort ein';
+
+  @override
+  String get enterConfirmPassword => 'Bestätigen Sie Ihr neues Passwort';
+
+  @override
+  String get enterUsernameHint => 'Benutzernamen eingeben';
+
+  @override
+  String get enterEmailHint => 'E-Mail-Adresse eingeben';
+
+  @override
+  String get enterCodeHint => 'Verifizierungscode eingeben';
+
+  @override
+  String get enterPasswordHint => 'Enter the Password';
+
+  @override
+  String get enterInvitationCodeHint => 'Einladungscode eingeben';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle =>
+      'Begeben wir uns auf die Reise des Lernens\nüber Fußball';
+
+  @override
+  String get noAccount => 'Kein Konto? ';
+
+  @override
+  String get signUp => 'Registrieren';
+
+  @override
+  String get enterTitleHint => 'Bitte Titel eingeben';
+
+  @override
+  String get enterContentHint => 'Bitte Inhalt eingeben';
+
+  @override
+  String get save => 'Speichern';
 }

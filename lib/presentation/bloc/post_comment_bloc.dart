@@ -18,9 +18,10 @@ abstract class PostCommentEvent extends Equatable {
 
 class FetchPostComments extends PostCommentEvent {
   final int postId;
-  const FetchPostComments(this.postId);
+  final bool silent; // Added silent flag
+  const FetchPostComments(this.postId, {this.silent = false});
   @override
-  List<Object> get props => [postId];
+  List<Object> get props => [postId, silent];
 }
 
 class CreateComment extends PostCommentEvent {
@@ -84,16 +85,16 @@ class PostCommentInitial extends PostCommentState {}
 
 class PostCommentLoading extends PostCommentState {}
 
-class PostDeletionInProgress extends PostCommentState {} // Added this state
+class PostDeletionInProgress extends PostCommentState {}
 
-class PostDeletionSuccess extends PostCommentState {} // Added this state
+class PostDeletionSuccess extends PostCommentState {}
 
 class PostDeletionFailure extends PostCommentState {
   final String message;
   const PostDeletionFailure(this.message);
   @override
   List<Object> get props => [message];
-} // Added this state
+}
 
 class PostCommentLoaded extends PostCommentState {
   final List<PostComment> comments;
@@ -116,7 +117,7 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
   final LikePostCommentUseCase likePostComment;
   final DislikePostCommentUseCase dislikePostComment;
   final DeletePostCommentUseCase deletePostComment;
-  final DeleteCommunityPost deleteCommunityPost; // Added this line
+  final DeleteCommunityPost deleteCommunityPost;
 
   PostCommentBloc({
     required this.getPostComments,
@@ -124,7 +125,7 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
     required this.likePostComment,
     required this.dislikePostComment,
     required this.deletePostComment,
-    required this.deleteCommunityPost, // Added this line
+    required this.deleteCommunityPost,
   }) : super(PostCommentInitial()) {
     on<FetchPostComments>(_onFetchPostComments);
     on<CreateComment>(_onCreateComment);
@@ -132,7 +133,7 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
     on<LikeComment>(_onLikeComment);
     on<DislikeComment>(_onDislikeComment);
     on<DeleteComment>(_onDeleteComment);
-    on<DeletePost>(_onDeletePost); // Added this line
+    on<DeletePost>(_onDeletePost);
   }
 
   int? _currentPostId;
@@ -142,7 +143,10 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
   Future<void> _onFetchPostComments(
       FetchPostComments event, Emitter<PostCommentState> emit) async {
     _currentPostId = event.postId;
-    emit(PostCommentLoading());
+    // Only emit loading if not silent and current state is not already loaded
+    if (!event.silent && state is! PostCommentLoaded) {
+      emit(PostCommentLoading());
+    }
     try {
       final comments = await getPostComments(event.postId);
       emit(PostCommentLoaded(comments));
@@ -162,33 +166,27 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
   Future<void> _onCreateComment(
       CreateComment event, Emitter<PostCommentState> emit) async {
     try {
-      // Attempt to create the comment via the use case
       await createPostComment(CreatePostCommentParams(
           postId: event.postId,
           content: event.content,
           parentCommentId: event.parentCommentId));
       
-      // On success, trigger a refresh to fetch all comments including the new one
       if (_currentPostId != null) {
-        add(FetchPostComments(_currentPostId!));
+        add(FetchPostComments(_currentPostId!, silent: true)); // Use silent fetch
       }
     } catch (e) {
-      // Check if the error is likely due to the parent comment being deleted
       final bool isParentCommentNotFoundError =
           event.parentCommentId != null && e.toString().contains('400');
 
       if (isParentCommentNotFoundError) {
-        // Emit a specific, user-friendly error message
         emit(PostCommentError(
             'Failed to reply: The original comment may have been deleted.'));
       } else {
-        // Emit a more generic error for other failures
         emit(PostCommentError('Failed to post comment. Please try again.'));
       }
       
-      // In either error case, refresh the comments to ensure the UI reflects the latest server state
       if (_currentPostId != null) {
-        add(FetchPostComments(_currentPostId!));
+        add(FetchPostComments(_currentPostId!, silent: true));
       }
     }
   }
@@ -234,7 +232,7 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
       await deletePostComment(event.commentId);
     } catch (e) {
       print('Failed to sync delete action: ${e.toString()}');
-       if (_currentPostId != null) add(FetchPostComments(_currentPostId!));
+       if (_currentPostId != null) add(FetchPostComments(_currentPostId!, silent: true));
     }
   }
 
@@ -250,19 +248,19 @@ class PostCommentBloc extends Bloc<PostCommentEvent, PostCommentState> {
       int newDislikeCount = comment.dislikeCount;
 
       if (voteType == 'like') {
-        if (comment.userVote == 'like') { // Un-liking
+        if (comment.userVote == 'like') {
           newVoteStatus = null;
           newLikeCount--;
-        } else { // Liking or switching from dislike
+        } else {
           newVoteStatus = 'like';
           newLikeCount++;
           if (comment.userVote == 'dislike') newDislikeCount--;
         }
-      } else { // voteType == 'dislike'
-        if (comment.userVote == 'dislike') { // Un-disliking
+      } else {
+        if (comment.userVote == 'dislike') {
           newVoteStatus = null;
           newDislikeCount--;
-        } else { // Disliking or switching from like
+        } else {
           newVoteStatus = 'dislike';
           newDislikeCount++;
           if (comment.userVote == 'like') newLikeCount--;

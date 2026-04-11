@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Language@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="我的" transform="translate(-28, -312)" stroke="#FFFFFF">
+            <g id="1列备份" transform="translate(12, 294)">
+                <g id="编组-12备份" transform="translate(16, 16)">
+                    <g id="Language" transform="translate(0, 2)">
+                        <g id="编组" transform="translate(1, 1)">
+                            <path d="M8,16 C12.41828,16 16,12.41828 16,8 C16,3.58172 12.41828,0 8,0 C3.58172,0 0,3.58172 0,8 C0,12.41828 3.58172,16 8,16 Z" id="路径"></path>
+                            <line x1="0" y1="8" x2="16" y2="8" id="路径"></line>
+                            <path d="M8,16 C9.76732,16 11.2,12.41828 11.2,8 C11.2,3.58172 9.76732,0 8,0 C6.23268,0 4.8,3.58172 4.8,8 C4.8,12.41828 6.23268,16 8,16 Z" id="路径"></path>
+                            <path d="M2.343164,2.45684 C3.79088,3.90456 5.79088,4.8 8,4.8 C10.20916,4.8 12.20916,3.90456 13.65688,2.45684" id="路径"></path>
+                            <path d="M13.65688,13.54316 C12.20916,12.09544 10.20916,11.2 8,11.2 C5.79088,11.2 3.79088,12.09544 2.343164,13.54316" id="路径"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

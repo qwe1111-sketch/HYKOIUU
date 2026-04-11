@@ -27,6 +27,30 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count개월 전',
+      one: '1개월 전',
+      zero: '이번 달',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count년 전',
+      one: '1년 전',
+      zero: '올해',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -229,7 +253,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get privacyPolicyContent =>
-      '본 개인정보 처리방침은 귀하가 서비스를 사용할 때 귀하의 정보 수집, 사용 및 공개에 관한 저희의 정책과 절차를 설명하며, 귀하의 개인정보 보호 권리 및 법률에 따른 보호 방식을 안내합니다. 저희는 서비스 제공 및 개선을 위해 귀하의 개인정보를 사용합니다. 서비스를 사용함으로써 귀하는 본 개인정보 처리방침에 따라 정보 수집 및 사용에 동의하는 것으로 간주됩니다.\n\n**정보 수집 및 사용**\n\n**수집되는 데이터 유형**\n*   **개인정보:** 저희 서비스 사용 중에 저희는 귀하에게 연락하거나 식별할 수 있는 특정 개인 식별 정보를 요청할 수 있습니다. 개인 식별 정보에는 다음이 포함될 수 있지만 이에 국한되지 않습니다: 이메일 주소, 아이디 및 프로필 사진.\n*   **사용 데이터:** 사용 데이터는 서비스 사용 시 자동으로 수집됩니다. 이에는 귀하의 장치 IP 주소, 브라우저 유형, 브라우저 버전, 방문한 저희 서비스 페이지, 방문 날짜 및 시간, 해당 페이지에서 소요된 시간, 고유 장치 식별자 및 기타 진단 데이터 등의 정보가 포함될 수 있습니다.\n*   **사용자 생성 콘텐츠:** 저희는 귀하가 저희 서비스에서 생성한 콘텐츠를 수집합니다. 이에는 귀하가 업로드한 비디오 및 이미지, 게시한 댓글, 좋아요 및 즐겨찾기가 포함됩니다.\n\n**귀하의 개인정보 사용**\n회사는 다음과 같은 목적으로 개인정보를 사용할 수 있습니다:\n*   저희 서비스 제공 및 유지 관리, 포함하여 저희 서비스 사용 모니터링.\n*   귀하의 계정 관리: 서비스 사용자로서의 귀하의 등록 관리.\n*   귀하에게 연락: 기능, 제품 또는 계약된 서비스와 관련된 업데이트 또는 정보 통신을 이메일로 귀하에게 연락.\n*   저희가 제공하는 기타 상품, 서비스 및 이벤트에 대한 뉴스, 특별 할인 및 일반 정보 제공.\n*   귀하의 요청 관리: 저희에 대한 귀하의 요청 접수 및 관리.\n\n**귀하의 정보 공유**\n저희는 귀하의 개인정보를 판매하지 않습니다. 저희는 호스팅 서비스 및 분석과 같이 저희 대신 서비스를 수행하는 제3자 서비스 제공업체와 귀하의 정보를 공유할 수 있습니다.';
+      '본 개인정보 처리방침은 귀하가 서비스를 사용할 때 귀하의 정보 수집, 사용 및 공개에 관한 저희의 정책과 절차를 설명하며, 귀하의 개인정보 보호 권리 및 법률에 따른 보호 방식을 안내합니다. 저희는 서비스 제공 및 개선을 위해 귀하의 개인정보를 사용합니다. 서비스를 사용함으로써 귀하는 본 개인정보 처리방침에 따라 정보 수집 및 사용에 동의하는 것으로 간주됩니다.\n\n**정보 수집 및 사용**\n\n**수집되는 데이터 유형**\n*   **개인정보:** 저희 서비스 사용 중에 저희는 귀하에게 연락하거나 식별할 수 있는 특정 개인 식별 정보를 요청할 수 있습니다. 개인 식별 정보에는 다음이 포함될 수 있지만 이에 국한되지 않습니다: 이메일 주소, 아이디 및 프로필 사진.\n*   **사용 데이터:** 사용 데이터는 서비스 사용 시 자동으로 수집됩니다. 이에는 귀하의 장치 IP 주소, 브라우저 유형, 브라우저 버전, 방문한 저희 서비스 페이지, 방문 날짜 및 시간, 해당 페이지에서 소요된 시간, 고유 장치 식별자 및 기타 집계 데이터 등의 정보가 포함될 수 있습니다.\n*   **사용자 생성 콘텐츠:** 저희는 귀하가 저희 서비스에서 생성한 콘텐츠를 수집합니다. 이에는 귀하가 업로드한 비디오 및 이미지, 게시한 댓글, 좋아요 및 즐겨찾기가 포함됩니다.\n\n**귀하의 개인정보 사용**\n회사는 다음과 같은 목적으로 개인정보를 사용할 수 있습니다:\n*   저희 서비스 제공 및 유지 관리, 포함하여 저희 서비스 사용 모니터링.\n*   귀하의 계정 관리: 서비스 사용자로서의 귀하의 등록 관리.\n*   귀하에게 연락: 기능, 제품 또는 계약된 서비스와 관련된 업데이트 또는 정보 통신을 이메일로 귀하에게 연락.\n*   저희가 제공하는 기타 상품, 서비스 및 이벤트에 대한 뉴스, 특별 할인 및 일반 정보 제공.\n*   귀하의 요청 관리: 저희에 대한 귀하의 요청 접수 및 관리.\n\n**귀하의 정보 공유**\n저희는 귀하의 개인정보를 판매하지 않습니다. 저희는 호스팅 서비스 및 분석과 같이 저희 대신 서비스를 수행하는 제3자 서비스 제공업체와 귀하의 정보를 공유할 수 있습니다.';
 
   @override
   String get introduction => '소개';
@@ -362,4 +386,46 @@ class AppLocalizationsKo extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => '새 비밀번호를 입력하세요';
+
+  @override
+  String get enterConfirmPassword => '새 비밀번호를 확인하세요';
+
+  @override
+  String get enterUsernameHint => '아이디를 입력하세요';
+
+  @override
+  String get enterEmailHint => '이메일을 입력하세요';
+
+  @override
+  String get enterCodeHint => '인증코드를 입력하세요';
+
+  @override
+  String get enterPasswordHint => '비밀번호를 입력하세요';
+
+  @override
+  String get enterInvitationCodeHint => '초대 코드를 입력하세요';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle => '축구에 대해 배우는 여행을 시작해 봅시다';
+
+  @override
+  String get noAccount => '계정이 없으신가요? ';
+
+  @override
+  String get signUp => '회원가입';
+
+  @override
+  String get enterTitleHint => '제목을 입력해주세요';
+
+  @override
+  String get enterContentHint => '내용을 입력해주세요';
+
+  @override
+  String get save => '저장';
 }

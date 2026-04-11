@@ -27,12 +27,36 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'hace $count meses',
+      one: 'hace 1 mes',
+      zero: 'Este mes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'hace $count años',
+      one: 'hace 1 año',
+      zero: 'Este año',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hace $count días',
-      one: 'Hace 1 día',
+      other: 'hace $count días',
+      one: 'hace 1 día',
       zero: 'Hoy',
     );
     return '$_temp0';
@@ -43,8 +67,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hace $count semanas',
-      one: 'Hace 1 semana',
+      other: 'hace $count semanas',
+      one: 'hace 1 semana',
       zero: 'Esta semana',
     );
     return '$_temp0';
@@ -55,8 +79,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hace $count horas',
-      one: 'Hace 1 hora',
+      other: 'hace $count horas',
+      one: 'hace 1 hora',
       zero: 'Justo ahora',
     );
     return '$_temp0';
@@ -67,8 +91,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hace $count minutos',
-      one: 'Hace 1 minuto',
+      other: 'hace $count minutos',
+      one: 'hace 1 minuto',
       zero: 'Justo ahora',
     );
     return '$_temp0';
@@ -235,7 +259,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get privacyPolicyContent =>
-      'Esta Política de Privacidad describe nuestras políticas y procedimientos sobre la recolección, uso y divulgación de tu información cuando usas el Servicio y te informa sobre tus derechos de privacidad y cómo la ley te protege. Usamos tus datos personales para proporcionar y mejorar el Servicio. Al usar el Servicio, aceptas la recolección y uso de información de acuerdo con esta Política de Privacidad.\n\n**Recolección y uso de información**\n\n**Tipos de datos recolectados**\n*   **Datos personales:** Al usar nuestro Servicio, podemos pedirte que nos proporciones cierta información personal identificable que pueda usarse para contactarte o identificarte. La información personal identificable puede incluir, pero no se limita a: dirección de correo electrónico, nombre de usuario y foto de perfil.\n*   **Datos de uso:** Los datos de uso se recolectan automáticamente al usar el Servicio. Esto puede incluir información como la dirección IP de tu dispositivo, tipo de navegador, versión del navegador, las páginas de nuestro Servicio que visitas, la fecha y hora de tu visita, el tiempo que pasas en esas páginas, identificadores únicos de dispositivo y otros datos de diagnóstico.\n*   **Contenido generado por el usuario:** Recolectamos el contenido que creas en nuestro Servicio, que incluye videos e imágenes que subes, comentarios que publicas, me gustas y favoritos.\n\n**Uso de tus datos personales**\nLa Compañía puede usar datos personales para los siguientes fines:\n*   Proporcionar y mantener nuestro Servicio, incluyendo monitorear el uso de nuestro Servicio.\n*   Gestionar tu Cuenta: gestionar tu registro como usuario del Servicio.\n*   Contactarte: Para contactarte por correo electrónico con respecto a actualizaciones o comunicaciones informativas relacionadas con las funcionalidades, productos o servicios contratados.\n*   Proporcionarte noticias, ofertas especiales e información general sobre otros bienes, servicios y eventos que ofrecemos.\n*   Gestionar tus solicitudes: Atender y gestionar tus solicitudes a nosotros.\n\n**Divulgación de tu información**\nNo vendemos tu información personal. Podemos compartir tu información con proveedores de servicios de terceros que prestan servicios en nuestro nombre, como servicios de alojamiento y análisis.';
+      'Esta Política de Privacidad describe nuestras políticas y procedimientos sobre la recolección, uso y divulgación de tu información cuando usas el Servicio y te informa sobre tus derechos de privacidad y cómo la ley te protege. Usamos tus datos personales para proporcionar y mejorar el Servicio. Al usar el Servicio, aceptas la recolección y uso de información de acuerdo con esta Política de Privacidad.\n\n**Recolección y uso de información**\n\n**Tipos de datos recolectados**\n*   **Datos personales:** Al usar nuestro Servicio, podemos pedirte que nos proporciones cierta información personal identificable que pueda usarse para contactarte o identificarte. La información personal identificable puede incluir, pero no se limita a: dirección de correo electrónico, nombre de usuario y foto de perfil.\n*   **Datos de uso:** Los datos de uso se recolectan automáticamente al usar el Servicio. Esto puede incluir información como la dirección IP de tu dispositivo, tipo de navegador, versión del navegador, las páginas de nuestro Servicio que visitas, la fecha y hora de tu visita, el tiempo que pasas en esas páginas, identificadores únicos de dispositivo y otros datos de diagnóstico.\n*   **Contenido generado por el usuario:** Recolectamos el contenido que creas en nuestro Servicio, que incluye videos e imágenes que subes, comentarios que publicas, me gustas y favoritos.\n\n**Uso de tus datos personales**\nLa Compañía puede usar datos personales para los siguientes fines:\n*   Proporcionar y mantener nuestro Servicio, incluyendo monitorear el uso de nuestro Servicio.\n*   Gestionar tu Account: gestionar tu registro como usuario del Servicio.\n*   Contactarte: Para contactarte por correo electrónico con respecto a actualizaciones o comunicaciones informativas relacionadas con las funcionalidades, productos o servicios contratados.\n*   Proporcionarte noticias, ofertas especiales e información general sobre otros bienes, servicios y eventos que ofrecemos.\n*   Gestionar tus solicitudes: Atender y gestionar tus solicitudes a nosotros.\n\n**Divulgación de tu información**\nNo vendemos tu información personal. Podemos compartir tu información con proveedores de servicios de terceros que prestan servicios en nuestro nombre, como servicios de alojamiento y análisis.';
 
   @override
   String get introduction => 'Introducción';
@@ -371,4 +395,47 @@ class AppLocalizationsEs extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => 'Ingresa tu nueva contraseña';
+
+  @override
+  String get enterConfirmPassword => 'Confirma tu nueva contraseña';
+
+  @override
+  String get enterUsernameHint => 'Ingresa el nombre de usuario';
+
+  @override
+  String get enterEmailHint => 'Ingresa el correo electrónico';
+
+  @override
+  String get enterCodeHint => 'Ingresa el código de verificación';
+
+  @override
+  String get enterPasswordHint => 'Ingresa la contraseña';
+
+  @override
+  String get enterInvitationCodeHint => 'Ingresa el código de invitación';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle =>
+      'Embarquémonos en el viaje de aprender\nsobre el fútbol';
+
+  @override
+  String get noAccount => '¿No tienes una cuenta? ';
+
+  @override
+  String get signUp => 'Regístrate';
+
+  @override
+  String get enterTitleHint => 'Por favor ingresa el título';
+
+  @override
+  String get enterContentHint => 'Por favor proporciona el contenido';
+
+  @override
+  String get save => 'Guardar';
 }

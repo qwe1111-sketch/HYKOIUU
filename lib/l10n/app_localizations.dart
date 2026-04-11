@@ -128,6 +128,18 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{No views} =1{1 view} other{{count} views}} • {date}'**
   String videoViews(num count, Object date);
 
+  /// No description provided for @monthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{This month} =1{1 month ago} other{{count} months ago}}'**
+  String monthsAgo(num count);
+
+  /// No description provided for @yearsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{This year} =1{1 year ago} other{{count} years ago}}'**
+  String yearsAgo(num count);
+
   /// No description provided for @daysAgo.
   ///
   /// In en, this message translates to:
@@ -697,6 +709,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cast failed: {error}'**
   String castFailed(String error);
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @enterConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your new password'**
+  String get enterConfirmPassword;
+
+  /// No description provided for @enterUsernameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Username'**
+  String get enterUsernameHint;
+
+  /// No description provided for @enterEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Email'**
+  String get enterEmailHint;
+
+  /// No description provided for @enterCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Verification Code'**
+  String get enterCodeHint;
+
+  /// No description provided for @enterPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Password'**
+  String get enterPasswordHint;
+
+  /// No description provided for @enterInvitationCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the Invitation Code'**
+  String get enterInvitationCodeHint;
+
+  /// No description provided for @loginWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'HYKOIUU'**
+  String get loginWelcomeTitle;
+
+  /// No description provided for @loginWelcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s embark on the journey of learning\nabout football'**
+  String get loginWelcomeSubtitle;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get noAccount;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get signUp;
+
+  /// No description provided for @enterTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the title'**
+  String get enterTitleHint;
+
+  /// No description provided for @enterContentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please provide the content'**
+  String get enterContentHint;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
 }
 
 class _AppLocalizationsDelegate

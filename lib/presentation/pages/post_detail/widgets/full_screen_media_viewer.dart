@@ -183,9 +183,9 @@ class _FullScreenVideoPlayerState extends State<_FullScreenVideoPlayer> {
                               _controller,
                               allowScrubbing: true,
                               padding: const EdgeInsets.all(12.0),
-                              colors: VideoProgressColors(
-                                playedColor: Theme.of(context).primaryColor,
-                                bufferedColor: Colors.grey.withOpacity(0.5),
+                              colors: const VideoProgressColors(
+                                playedColor: Color(0xFFCCFF00),
+                                bufferedColor: Colors.white24,
                                 backgroundColor: Colors.transparent,
                               ),
                             ),

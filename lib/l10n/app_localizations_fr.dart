@@ -27,12 +27,36 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'il y a $count mois',
+      one: 'il y a 1 mois',
+      zero: 'Ce mois-ci',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'il y a $count ans',
+      one: 'il y a 1 an',
+      zero: 'Cette année',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Il y a $count jours',
-      one: 'Il y a 1 jour',
+      other: 'il y a $count jours',
+      one: 'il y a 1 jour',
       zero: 'Aujourd\'hui',
     );
     return '$_temp0';
@@ -43,8 +67,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Il y a $count semaines',
-      one: 'Il y a 1 semaine',
+      other: 'il y a $count semaines',
+      one: 'il y a 1 semaine',
       zero: 'Cette semaine',
     );
     return '$_temp0';
@@ -55,8 +79,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Il y a $count heures',
-      one: 'Il y a 1 heure',
+      other: 'il y a $count heures',
+      one: 'il y a 1 heure',
       zero: 'À l\'instant',
     );
     return '$_temp0';
@@ -67,8 +91,8 @@ class AppLocalizationsFr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Il y a $count minutes',
-      one: 'Il y a 1 minute',
+      other: 'il y a $count minutes',
+      one: 'il y a 1 minute',
       zero: 'À l\'instant',
     );
     return '$_temp0';
@@ -233,7 +257,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get privacyPolicyContent =>
-      'La présente Politique de confidentialité décrit nos politiques et procédures relatives à la collecte, l\'utilisation et la divulgation de vos informations lorsque vous utilisez le Service et vous informe de vos droits en matière de confidentialité et de la manière dont la loi vous protège. Nous utilisons vos données personnelles pour fournir et améliorer le Service. En utilisant le Service, vous acceptez la collecte et l\'utilisation des informations conformément à la présente Politique de confidentialité.\n\n**Collecte et utilisation des informations**\n\n**Types de données collectées**\n*   **Données personnelles :** Lors de l\'utilisation de notre Service, nous pouvons vous demander de nous fournir certaines informations personnellement identifiables qui peuvent être utilisées pour vous contacter ou vous identifier. Les informations personnellement identifiables peuvent inclure, mais ne sont pas limitées à : adresse e-mail, nom d\'utilisateur et photo de profil.\n*   **Données d\'utilisation :** Les données d\'utilisation sont collectées automatiquement lors de l\'utilisation du Service. Cela peut inclure des informations telles que l\'adresse IP de votre appareil, le type de navigateur, la version du navigateur, les pages de notre Service que vous visitez, la date et l\'heure de votre visite, le temps passé sur ces pages, les identifiants d\'appareil uniques et autres données de diagnostic.\n*   **Contenu généré par l\'utilisateur :** Nous collectons le contenu que vous créez sur notre Service, y compris les vidéos et images que vous téléchargez, les commentaires que vous publiez, les likes et les favoris.\n\n**Utilisation de vos données personnelles**\nLa Société peut utiliser les données personnelles à以下es fins :\n*   Pour fournir et maintenir notre Service, y compris pour surveiller l\'utilisation de notre Service.\n*   Pour gérer votre Compte : pour gérer votre inscription en tant qu\'utilisateur du Service.\n*   Pour vous contacter : Pour vous contacter par e-mail concernant des mises à jour ou des communications informatives relatives aux fonctionnalités, produits ou services contractés.\n*   Pour vous fournir des nouvelles, des offres spéciales et des informations générales sur autres biens, services et événements que nous proposons.\n*   Pour gérer vos demandes : Pour traiter et gérer vos demandes auprès de nous.\n\n**Divulgation de vos informations**\nNous ne vendons pas vos informations personnelles. Nous pouvons partager vos informations avec des prestataires de services tiers qui effectuent des services en notre nom, tels que les services d\'hébergement et l\'analyse.';
+      'La présente Politique de confidentialité décrit nos politiques et procédures relatives à la collecte, l\'utilisation et la divulgation de vos informations lorsque vous utilisez le Service et vous informe de vos droits en matière de confidentialité et de la manière dont la loi vous protège. Nous utilisons vos données personnelles pour fournir et améliorer le Service. En utilisant le Service, vous acceptez la collecte et l\'utilisation des informations conformément à la présente Politique de confidentialité.\n\n**Collecte et utilisation des informations**\n\n**Types de données collectées**\n*   **Données personnelles :** Lors de l\'utilisation de notre Service, nous pouvons vous demander de nous fournir certaines informations personnellement identifiables qui peuvent être utilisées pour vous contacter ou vous identifier. Les informations personnellement identifiables peuvent inclure, mais ne sont pas limitées à : adresse e-mail, nom d\'utilisateur et photo de profil.\n*   **Données d\'utilisation :** Les données d\'utilisation sont collectées automatiquement lors de l\'utilisation du Service. Cela peut inclure des informations telles que l\'adresse IP de votre appareil, le type de navigateur, la version du navigateur, les pages de notre Service que vous visitez, la date et l\'heure de votre visite, le temps passé sur ces pages, les identifiants d\'appareil uniques et autres données de diagnostic.\n*   **Contenu généré par l\'utilisateur :** Nous collectons le contenu que vous créez sur notre Service, y compris les vidéos et images que vous téléchargez, les commentaires que vous publiez, les likes et les favoris.\n\n**Utilisation de vos données personnelles**\nLa Société peut utiliser les données personnelles à以下es fins :\n*   Pour fournir et maintenir notre Service, l\'utilisation de notre Service.\n*   Pour gérer votre Compte : pour gérer votre inscription en tant qu\'utilisateur du Service.\n*   Pour vous contacter : Pour vous contacter par e-mail concernant des mises à jour ou des communications informatives relatives aux fonctionnalités, produits ou services contractés.\n*   Pour vous fournir des nouvelles, des offres spéciales et des informations générales sur autres biens, services et événements que nous proposons.\n*   Pour gérer vos demandes : Pour traiter et gérer vos demandes auprès de nous.\n\n**Divulgation de vos informations**\nNous ne vendons pas vos informations personnelles. Nous pouvons partager vos informations avec des prestataires de services tiers qui effectuent des services en notre nom, tels que les services d\'hébergement et l\'analyse.';
 
   @override
   String get introduction => 'Introduction';
@@ -371,4 +395,47 @@ class AppLocalizationsFr extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => 'Entrez votre nouveau mot de passe';
+
+  @override
+  String get enterConfirmPassword => 'Confirmez votre nouveau mot de passe';
+
+  @override
+  String get enterUsernameHint => 'Entrez le nom d\'utilisateur';
+
+  @override
+  String get enterEmailHint => 'Entrez l\'adresse e-mail';
+
+  @override
+  String get enterCodeHint => 'Entrez le code de vérification';
+
+  @override
+  String get enterPasswordHint => 'Enter the Password';
+
+  @override
+  String get enterInvitationCodeHint => 'Entrez le code d\'invitation';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle =>
+      'Commençons le voyage d\'apprentissage\ndu football';
+
+  @override
+  String get noAccount => 'Pas de compte ? ';
+
+  @override
+  String get signUp => 'S\'inscrire';
+
+  @override
+  String get enterTitleHint => 'Veuillez entrer le titre';
+
+  @override
+  String get enterContentHint => 'Veuillez fournir le contenu';
+
+  @override
+  String get save => 'Enregistrer';
 }

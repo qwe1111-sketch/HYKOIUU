@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sport_flutter/domain/entities/community_post.dart';
 import 'package:sport_flutter/domain/entities/post_comment.dart';
-import 'package:sport_flutter/domain/entities/user.dart';
 import 'package:sport_flutter/l10n/app_localizations.dart';
 import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/post_comment_bloc.dart';
@@ -13,8 +12,8 @@ import 'package:sport_flutter/presentation/pages/post_detail/widgets/comment_sec
 import 'package:sport_flutter/presentation/pages/post_detail/widgets/post_header.dart';
 import 'package:sport_flutter/presentation/pages/post_detail/widgets/sliver_persistent_header_delegate.dart';
 import 'package:sport_flutter/presentation/widgets/shimmer.dart';
-import 'package:sport_flutter/services/translation_service.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PostDetailPage extends StatefulWidget {
   final CommunityPost post;
@@ -48,11 +47,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void _scrollListener() {
     if (_postHeaderKey.currentContext == null) return;
 
-    final renderSliver =
-        _postHeaderKey.currentContext!.findRenderObject() as RenderSliver;
+    final renderSliver = _postHeaderKey.currentContext!.findRenderObject() as RenderSliver;
     final postHeaderHeight = renderSliver.geometry!.scrollExtent;
 
-    // Show the title when the user has scrolled past the post header.
     final shouldShow = _scrollController.offset >= postHeaderHeight;
 
     if (shouldShow != _isAppBarTitleVisible) {
@@ -78,77 +75,82 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: Colors.grey[50],
-          title: Text(l10n.deletePost),
-          content: Text(l10n.deletePostConfirmation),
-          actions: <Widget>[
-            TextButton(
-              child: Text(l10n.cancel),
-              onPressed: () => Navigator.of(dialogContext).pop(),
+      builder: (BuildContext dialogContext) => Dialog(
+        backgroundColor: const Color(0xFF1C1C1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+              child: Column(
+                children: [
+                  Text(
+                    l10n.deletePost,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.deletePostConfirmation,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
+              ),
             ),
-            TextButton(
-              child: Text(l10n.delete, style: const TextStyle(color: Colors.red)),
-              onPressed: () {
-                context.read<PostCommentBloc>().add(DeletePost(widget.post.id));
-                Navigator.of(dialogContext).pop();
-              },
+            const Divider(color: Colors.white12, height: 1),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => Navigator.of(dialogContext).pop(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      alignment: Alignment.center,
+                      child: Text(l10n.cancel, style: const TextStyle(color: Colors.white, fontSize: 16)),
+                    ),
+                  ),
+                ),
+                Container(width: 0.5, height: 50, color: Colors.white12),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context.read<PostCommentBloc>().add(DeletePost(widget.post.id));
+                      Navigator.of(dialogContext).pop();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      alignment: Alignment.center,
+                      child: Text(
+                        l10n.delete,
+                        style: const TextStyle(color: Color(0xFFCCFF00), fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final authState = context.watch<AuthBloc>().state;
     final currentUser = authState is AuthAuthenticated ? authState.user : null;
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 1.0,
-        titleSpacing: 0.0,
-        title: AnimatedOpacity(
-          opacity: _isAppBarTitleVisible ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 300),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 16,
-                backgroundImage: widget.post.userAvatarUrl != null && widget.post.userAvatarUrl!.isNotEmpty
-                    ? CachedNetworkImageProvider(widget.post.userAvatarUrl!)
-                    : null,
-                child: widget.post.userAvatarUrl == null || widget.post.userAvatarUrl!.isEmpty
-                    ? const Icon(Iconsax.profile, size: 18)
-                    : null,
-              ),
-              const SizedBox(width: 8),
-              Text(widget.post.username),
-            ],
-          ),
-        ),
-        actions: [
-          if (currentUser != null && widget.post.userId.toString() == currentUser.id)
-            IconButton(
-              icon: const Icon(Iconsax.trash),
-              onPressed: _showDeleteConfirmationDialog,
-            ),
-        ],
-      ),
+      backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: true,
       body: BlocListener<PostCommentBloc, PostCommentState>(
         listener: (context, state) {
           if (state is PostDeletionSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('帖子已成功删除'), duration: Duration(seconds: 1)),
-            );
             Navigator.of(context).pop(true);
-          } else if (state is PostDeletionFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('删除失败: ${state.message}')),
-            );
           }
         },
         child: GestureDetector(
@@ -156,110 +158,120 @@ class _PostDetailPageState extends State<PostDetailPage> {
             FocusScope.of(context).unfocus();
             _onCancelReply();
           },
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              SliverToBoxAdapter(key: _postHeaderKey, child: PostHeader(post: widget.post)),
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: SportSliverPersistentHeaderDelegate(
-                  maxHeight: 40,
-                  minHeight: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text(AppLocalizations.of(context)!.comments, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Column(
+            children: [
+              // Custom AppBar
+              SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      Expanded(
+                        child: AnimatedOpacity(
+                          opacity: _isAppBarTitleVisible ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 300),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 14,
+                                backgroundImage: widget.post.userAvatarUrl != null && widget.post.userAvatarUrl!.isNotEmpty
+                                    ? CachedNetworkImageProvider(widget.post.userAvatarUrl!)
+                                    : null,
+                                child: widget.post.userAvatarUrl == null || widget.post.userAvatarUrl!.isEmpty
+                                    ? const Icon(Iconsax.profile, size: 14)
+                                    : null,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                widget.post.username,
+                                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (currentUser != null && widget.post.userId.toString() == currentUser.id)
+                        IconButton(
+                          onPressed: _showDeleteConfirmationDialog,
+                          icon: SvgPicture.asset(
+                            'assets/images/community/delete.svg',
+                            width: 22,
+                            height: 22,
+                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                          ),
+                        ),
+                      const SizedBox(width: 8),
+                    ],
                   ),
                 ),
               ),
-              BlocBuilder<PostCommentBloc, PostCommentState>(
-                builder: (context, state) {
-                  if (state is PostCommentLoading) {
-                    return const SliverToBoxAdapter(
-                      child: SizedBox(height: 400, child: ShimmerLoading()),
-                    );
-                  }
-                  if (state is PostCommentLoaded) {
-                    if (state.comments.isEmpty) {
-                      return SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 40.0),
-                            child: Text(
-                              AppLocalizations.of(context)!.beTheFirstToComment,
-                              style: const TextStyle(color: Colors.grey, fontSize: 16),
-                            ),
+              Expanded(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  // 关键点：键盘弹起时禁止滚动
+                  physics: isKeyboardVisible 
+                      ? const NeverScrollableScrollPhysics() 
+                      : const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  slivers: [
+                    SliverToBoxAdapter(key: _postHeaderKey, child: PostHeader(post: widget.post)),
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: SportSliverPersistentHeaderDelegate(
+                        maxHeight: 50,
+                        minHeight: 50,
+                        child: Container(
+                          color: Colors.black,
+                          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.comments,
+                            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      );
-                    }
-                    return CommentSection(postId: widget.post.id, onReplyTapped: _onReplyTapped);
-                  }
-                  if (state is PostCommentError) {
-                    return SliverToBoxAdapter(
-                      child: Center(child: Text('Error: ${state.message}')),
-                    );
-                  }
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                },
+                      ),
+                    ),
+                    BlocBuilder<PostCommentBloc, PostCommentState>(
+                      builder: (context, state) {
+                        if (state is PostCommentLoading) {
+                          return const SliverToBoxAdapter(child: SizedBox(height: 200, child: ShimmerLoading()));
+                        }
+                        if (state is PostCommentLoaded) {
+                          if (state.comments.isEmpty) {
+                            return SliverToBoxAdapter(
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 60.0),
+                                  child: Text(
+                                    l10n.beTheFirstToComment,
+                                    style: const TextStyle(color: Colors.white30, fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return CommentSection(postId: widget.post.id, onReplyTapped: _onReplyTapped);
+                        }
+                        return const SliverToBoxAdapter(child: SizedBox.shrink());
+                      },
+                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                  ],
+                ),
+              ),
+              CommentInputField(
+                postId: widget.post.id,
+                replyingTo: _replyingTo,
+                onCancelReply: _onCancelReply,
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: CommentInputField(
-        postId: widget.post.id,
-        replyingTo: _replyingTo,
-        onCancelReply: _onCancelReply,
-      ),
-    );
-  }
-}
-
-// A widget that translates the given text and displays it.
-class _TranslatedText extends StatefulWidget {
-  final String text;
-  final TextStyle style;
-
-  const _TranslatedText({required this.text, required this.style});
-
-  @override
-  State<_TranslatedText> createState() => _TranslatedTextState();
-}
-
-class _TranslatedTextState extends State<_TranslatedText> {
-  String? _translatedText;
-
-  @override
-  void initState() {
-    super.initState();
-    _translateText();
-  }
-
-  @override
-  void didUpdateWidget(covariant _TranslatedText oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.text != oldWidget.text) {
-      _translateText();
-    }
-  }
-
-  Future<void> _translateText() async {
-    if (!mounted) return;
-    final locale = Localizations.localeOf(context);
-    final translationService = context.read<TranslationService>();
-    final translated = await translationService.translate(widget.text, locale.languageCode);
-    if (mounted) {
-      setState(() {
-        _translatedText = translated;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _translatedText ?? widget.text,
-      style: widget.style,
     );
   }
 }

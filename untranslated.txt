@@ -11,7 +11,8 @@
     "selectCastDevice",
     "noCastDevicesFound",
     "castingTo",
-    "castFailed"
+    "castFailed",
+    "enterPasswordHint"
   ],
 
   "es": [
@@ -41,7 +42,8 @@
     "selectCastDevice",
     "noCastDevicesFound",
     "castingTo",
-    "castFailed"
+    "castFailed",
+    "enterPasswordHint"
   ],
 
   "ja": [
@@ -53,21 +55,6 @@
   ],
 
   "ko": [
-    "noVideosFound",
-    "error",
-    "retry",
-    "deleteAccount",
-    "deleteAccountConfirmation",
-    "confirmDeleteAccount",
-    "defaultBio",
-    "selectCastDevice",
-    "noCastDevicesFound",
-    "castingTo",
-    "castFailed"
-  ],
-
-  "ru": [
-    "noPostsYet",
     "noVideosFound",
     "error",
     "retry",

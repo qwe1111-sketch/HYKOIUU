@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>新增@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+        <g id="社区" transform="translate(-341, -55)" stroke="#AAF218" stroke-width="1.5">
+            <g id="导航栏" transform="translate(0, 44)">
+                <g id="新增" transform="translate(341, 11)">
+                    <g id="编组" transform="translate(1, 1)">
+                        <path d="M10,20 C15.52285,20 20,15.52285 20,10 C20,4.47715 15.52285,0 10,0 C4.47715,0 0,4.47715 0,10 C0,15.52285 4.47715,20 10,20 Z" id="路径"></path>
+                        <line x1="10" y1="6" x2="10" y2="14" id="路径" stroke-linecap="round"></line>
+                        <line x1="6" y1="10" x2="14" y2="10" id="路径" stroke-linecap="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sport_flutter/domain/entities/post_comment.dart';
 import 'package:sport_flutter/presentation/bloc/post_comment_bloc.dart';
 import 'package:sport_flutter/presentation/pages/post_detail/widgets/comment_item.dart';
-import 'package:sport_flutter/presentation/pages/post_detail/widgets/comment_item_placeholder.dart';
 
 class CommentSection extends StatelessWidget {
   final int postId;
@@ -15,10 +14,15 @@ class CommentSection extends StatelessWidget {
     return BlocBuilder<PostCommentBloc, PostCommentState>(
       builder: (context, state) {
         if (state is PostCommentLoading) {
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) => const CommentItemPlaceholder(),
-              childCount: 5, // Show 5 shimmer placeholders
+          // 统一修改为荧光绿进度条，移除骨架屏
+          return const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xFFCCFF00),
+                ),
+              ),
             ),
           );
         }

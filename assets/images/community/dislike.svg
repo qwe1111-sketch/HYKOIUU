@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>不喜欢@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="社区/Posts" transform="translate(-224, -798)">
+            <g id="编组-4" transform="translate(12, 688)">
+                <g id="不喜欢" transform="translate(212, 110)">
+                    <g id="编组" transform="translate(1, 2)">
+                        <path d="M4.4,0 C1.969948,0 0,2.00862898 0,4.48636901 C0,8.97273803 5.2,13.0512553 8,14 C10.8,13.0512553 16,8.97273803 16,4.48636901 C16,2.00862898 14.03004,0 11.6,0 C10.11188,0 8.79628,0.753261357 8,1.90621741 C7.20372,0.753261357 5.88812,0 4.4,0 Z" id="路径" stroke="#999999" stroke-width="1.63140691" fill="#999999" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M9.6,4.89422074 L6.4,8.15703457 L9.6,4.89422074 Z" id="路径" fill="#333333"></path>
+                        <line x1="9.6" y1="4.89422074" x2="6.4" y2="8.15703457" id="路径" stroke="#11130B" stroke-width="1.63140691" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <path d="M6.4,4.89426153 L9.6,8.15703457 L6.4,4.89426153 Z" id="路径" fill="#333333"></path>
+                        <line x1="6.4" y1="4.89426153" x2="9.6" y2="8.15703457" id="路径" stroke="#11130B" stroke-width="1.63140691" stroke-linecap="round" stroke-linejoin="round"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

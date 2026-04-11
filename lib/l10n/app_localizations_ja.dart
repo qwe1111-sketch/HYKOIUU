@@ -27,6 +27,30 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String monthsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countヶ月前',
+      one: '1ヶ月前',
+      zero: '今月',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String yearsAgo(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count年前',
+      one: '1年前',
+      zero: '今年',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String daysAgo(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -362,4 +386,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String castFailed(String error) {
     return 'Cast failed: $error';
   }
+
+  @override
+  String get enterNewPassword => '新しいパスワードを入力してください';
+
+  @override
+  String get enterConfirmPassword => '新しいパスワードを確認してください';
+
+  @override
+  String get enterUsernameHint => 'ユーザー名を入力してください';
+
+  @override
+  String get enterEmailHint => 'メールアドレスを入力してください';
+
+  @override
+  String get enterCodeHint => '確認コードを入力してください';
+
+  @override
+  String get enterPasswordHint => 'パスワードを入力してください';
+
+  @override
+  String get enterInvitationCodeHint => '招待コードを入力してください';
+
+  @override
+  String get loginWelcomeTitle => 'HYKOIUU';
+
+  @override
+  String get loginWelcomeSubtitle => 'フットボールについて学ぶ旅に出かけましょう';
+
+  @override
+  String get noAccount => 'アカウントをお持ちでないですか？ ';
+
+  @override
+  String get signUp => '新規登録';
+
+  @override
+  String get enterTitleHint => 'タイトルを入力してください';
+
+  @override
+  String get enterContentHint => '内容を入力してください';
+
+  @override
+  String get save => '保存';
 }
