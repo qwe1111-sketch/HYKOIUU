@@ -12,6 +12,12 @@ import 'l10n/app_localizations.dart';
 import 'package:timeago/timeago.dart' as timeago;
 // ignore: implementation_imports
 import 'package:timeago/src/messages/zh_cn_messages.dart';
+import 'package:timeago/src/messages/ko_messages.dart';
+import 'package:timeago/src/messages/ja_messages.dart';
+import 'package:timeago/src/messages/ru_messages.dart';
+import 'package:timeago/src/messages/fr_messages.dart';
+import 'package:timeago/src/messages/de_messages.dart';
+import 'package:timeago/src/messages/es_messages.dart';
 
 // Core
 import 'package:sport_flutter/presentation/pages/login_page.dart';
@@ -79,7 +85,15 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Register timeago locales
   timeago.setLocaleMessages('zh', ZhCnMessages());
+  timeago.setLocaleMessages('ko', KoMessages());
+  timeago.setLocaleMessages('ja', JaMessages());
+  timeago.setLocaleMessages('ru', RuMessages());
+  timeago.setLocaleMessages('fr', FrMessages());
+  timeago.setLocaleMessages('de', DeMessages());
+  timeago.setLocaleMessages('es', EsMessages());
 
   // HTTP Clients
   final httpClient = http.Client();

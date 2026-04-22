@@ -9,6 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:sport_flutter/domain/entities/video.dart';
 import 'package:sport_flutter/domain/repositories/video_repository.dart';
 import 'package:sport_flutter/domain/usecases/favorite_video.dart';
@@ -20,6 +21,7 @@ import 'package:sport_flutter/presentation/bloc/video_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/video_event.dart';
 import 'package:sport_flutter/presentation/bloc/video_state.dart';
 import 'package:sport_flutter/presentation/pages/video_detail_page.dart';
+import 'package:sport_flutter/presentation/widgets/translated_text.dart';
 
 // 自定义菜单分割线，确保不参与点击阴影
 class CustomPopupMenuDivider extends PopupMenuEntry<Never> {
@@ -51,7 +53,6 @@ class VideosPage extends StatefulWidget {
 
 class _VideosPageState extends State<VideosPage> {
   int _selectedDifficultyIndex = 0;
-  final List<String> _difficultyKeys = ['Beginner', 'Basic', 'Intermediate', 'Advanced'];
   late final VideoBloc _currentBloc;
 
   @override
@@ -147,7 +148,14 @@ class _VideosPageState extends State<VideosPage> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: state.videos.length,
-                          itemBuilder: (context, index) => _VideoListCard(video: state.videos[index]),
+                          itemBuilder: (context, index) {
+                            final video = state.videos[index];
+                            // 严格过滤：只有难度枚举匹配的才显示在列表中
+                            if (video.difficulty != Difficulty.values[_selectedDifficultyIndex]) {
+                              return const SizedBox.shrink();
+                            }
+                            return _VideoListCard(video: video);
+                          },
                         );
                       }
                       return const Center(child: CircularProgressIndicator(color: Color(0xFFCCFF00)));
@@ -296,17 +304,45 @@ class _CarouselItem extends StatelessWidget {
     }
   }
 
+  // 改进的视频判定
+  bool _isRealVideo(String url) {
+    if (url.isEmpty) return false;
+    final videoExtensions = ['.mp4', '.m3u8', '.mov', '.avi', '.flv', '.wmv'];
+    final lowerUrl = url.toLowerCase();
+    
+    if (videoExtensions.any((ext) => lowerUrl.contains(ext))) return true;
+    return false;
+  }
+
+  Future<void> _onTap(BuildContext context) async {
+    final url = video.videoUrl.trim();
+    if (url.isEmpty) return;
+
+    if (!_isRealVideo(url)) {
+      final uri = Uri.tryParse(url);
+      if (uri != null && await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+      return; 
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => VideoDetailPage(video: video)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final starCount = video.difficulty.index + 1;
     final formattedDate = DateFormat.yMd(Localizations.localeOf(context).toString()).format(video.createdAt);
+    
+    final bool isVideo = _isRealVideo(video.videoUrl);
 
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => VideoDetailPage(video: video)),
-      ),
+      onTap: () => _onTap(context),
       child: Container(
+        width: double.infinity, // 关键修复：确保宽度占满
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
@@ -316,9 +352,10 @@ class _CarouselItem extends StatelessWidget {
           ),
         ),
         child: Container(
+          width: double.infinity, // 关键修复：确保宽度占满
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
+            gradient: isVideo ? LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
@@ -327,21 +364,20 @@ class _CarouselItem extends StatelessWidget {
                 Colors.black.withOpacity(0.85)
               ],
               stops: const [0.0, 0.4, 1.0],
-            ),
+            ) : null,
           ),
           padding: const EdgeInsets.all(20),
-          child: Column(
+          child: isVideo ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                video.title,
+              TranslatedText(
+                text: video.title,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 6),
               Text(
@@ -366,7 +402,7 @@ class _CarouselItem extends StatelessWidget {
                 ],
               ),
             ],
-          ),
+          ) : const SizedBox.shrink(),
         ),
       ),
     );
@@ -395,10 +431,9 @@ class _VideoListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final starCount = video.difficulty.index + 1;
-    final formattedViews = NumberFormat('#,###').format(video.viewCount);
     
     final locale = Localizations.localeOf(context).languageCode;
-    final timeAgo = timeago.format(video.createdAt, locale: locale);
+    final timeAgoText = timeago.format(video.createdAt, locale: locale);
 
     // Get localized views string
     final viewsSuffix = l10n.videoViews(video.viewCount, "").split("•").first.trim();
@@ -430,14 +465,13 @@ class _VideoListCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      video.title,
+                    TranslatedText(
+                      text: video.title,
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '$timeAgo · $viewsSuffix',
+                      '$timeAgoText · $viewsSuffix',
                       style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 12),
                     ),
                     Row(

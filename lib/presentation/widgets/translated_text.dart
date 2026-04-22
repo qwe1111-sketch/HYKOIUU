@@ -5,8 +5,16 @@ import 'package:sport_flutter/services/translation_service.dart';
 class TranslatedText extends StatefulWidget {
   final String text;
   final TextStyle style;
+  final int? maxLines;
+  final TextAlign? textAlign;
 
-  const TranslatedText({super.key, required this.text, required this.style});
+  const TranslatedText({
+    super.key, 
+    required this.text, 
+    required this.style,
+    this.maxLines,
+    this.textAlign,
+  });
 
   @override
   State<TranslatedText> createState() => _TranslatedTextState();
@@ -24,14 +32,23 @@ class _TranslatedTextState extends State<TranslatedText> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // The key on the widget ensures this State object is new when the locale or text changes.
-    // We only need to translate once when the dependencies are first available.
-    if (!_didTranslate) {
+  void didUpdateWidget(covariant TranslatedText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) {
+      _didTranslate = false;
+      _translatedText = widget.text;
+      // Trigger translation if the text changed
       _didTranslate = true;
       _translateText();
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Re-translate if the locale changed
+    _didTranslate = true;
+    _translateText();
   }
 
   Future<void> _translateText() async {
@@ -40,8 +57,16 @@ class _TranslatedTextState extends State<TranslatedText> {
 
     final languageCode = Localizations.localeOf(context).languageCode;
     
-    // No need to translate if the target language is Chinese (or the base language of the app).
-    if (languageCode == 'zh') {
+    // Check if the source text contains any Chinese characters.
+    // If it's already Chinese and the target is also Chinese, don't translate.
+    bool containsChinese(String text) {
+      return RegExp(r'[\u4e00-\u9fa5]').hasMatch(text);
+    }
+
+    if (languageCode == 'zh' && containsChinese(widget.text)) {
+        setState(() {
+            _translatedText = widget.text;
+        });
         return;
     }
 
@@ -54,8 +79,6 @@ class _TranslatedTextState extends State<TranslatedText> {
         });
       }
     } catch (e) {
-      // If translation fails, we just show the original text.
-      // The error is already logged by the service.
       if (mounted) {
           setState(() {
               _translatedText = widget.text;
@@ -69,8 +92,9 @@ class _TranslatedTextState extends State<TranslatedText> {
     return Text(
       _translatedText,
       style: widget.style,
-      maxLines: 1,
+      maxLines: widget.maxLines,
       overflow: TextOverflow.ellipsis,
+      textAlign: widget.textAlign,
     );
   }
 }
