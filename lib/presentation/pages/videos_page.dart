@@ -125,9 +125,14 @@ class _VideosPageState extends State<VideosPage> {
                 SizedBox(height: topPadding + 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    l10n.loginWelcomeTitle,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                  child: SvgPicture.asset(
+                    'assets/images/login/logo.svg',
+                    height: 32,
+                    fit: BoxFit.contain,
+                    placeholderBuilder: (context) => Text(
+                      l10n.appTitle,
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

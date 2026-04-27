@@ -40,6 +40,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCustomBottomNav(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final screenWidth = MediaQuery.of(context).size.width;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    
+    // 如果没有系统底部间距（旧款手机），给一个 15 像素的基础边距
+    // 如果有系统底部间距（如 iPhone 15），则只需微调 5 像素，防止太靠下，
+    // 这样总的高度看起来就会很和谐，不会由于 SafeArea 叠加 margin 显得过高。
+    final double extraMargin = bottomPadding > 0 ? 5 : 15;
+    
     final navWidth = screenWidth - 40; 
     final tabAreaWidth = navWidth / 3;
 
@@ -52,10 +59,12 @@ class _HomePageState extends State<HomePage> {
     double rawLeft = (_selectedIndex * tabAreaWidth) + (tabAreaWidth - sliderWidth) / 2;
     double sliderLeft = rawLeft.clamp(4.0, navWidth - sliderWidth - 4.0);
 
-    return SafeArea(
+    return Container(
+      // 移除原有的 SafeArea，改用内部 padding 精确控制位置
+      padding: EdgeInsets.only(bottom: bottomPadding + extraMargin),
       child: Container(
         height: 68,
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 15),
+        margin: const EdgeInsets.symmetric(horizontal: 20),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -119,7 +128,6 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center, 
           children: [
-            // 核心修复：增加 placeholderBuilder，防止资源缺失导致崩溃
             SvgPicture.asset(
               assetPath,
               width: 24,

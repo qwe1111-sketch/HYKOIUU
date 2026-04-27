@@ -103,19 +103,19 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 120),
+                              const SizedBox(height: 110),
                               Center(
                                 child: Column(
                                   children: [
-                                    Text(
-                                      l10n.loginWelcomeTitle,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    // 渲染 Logo 图标，移除 colorFilter 使用原始颜色
+                                    SvgPicture.asset(
+                                      'assets/images/login/logo.svg',
+                                      height: 70,
+                                      fit: BoxFit.contain,
+                                      // placeholderBuilder 以防万一文件仍无法读取，会显示红色警告（仅用于调试）
+                                      placeholderBuilder: (context) => const Icon(Icons.warning, color: Colors.amber),
                                     ),
-                                    const SizedBox(height: 12),
+                                    const SizedBox(height: 20),
                                     Text(
                                       l10n.loginWelcomeSubtitle,
                                       textAlign: TextAlign.center,
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 60),
+                              const SizedBox(height: 50),
                               Form(
                                 key: _formKey,
                                 child: Column(
