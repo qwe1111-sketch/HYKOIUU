@@ -19,9 +19,9 @@ import 'package:sport_flutter/presentation/bloc/video_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/video_event.dart';
 import 'package:sport_flutter/presentation/bloc/video_state.dart';
 import 'package:sport_flutter/presentation/widgets/comment_widgets.dart';
+import 'package:sport_flutter/presentation/widgets/translated_text.dart';
 import 'package:sport_flutter/presentation/widgets/video_intro_panel.dart';
 import 'package:sport_flutter/presentation/widgets/video_player_widget.dart';
-import 'package:sport_flutter/services/translation_service.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -54,15 +54,10 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
 
   final String _apiBaseUrl = AuthRemoteDataSourceImpl.getBaseApiUrl();
 
-  String _translatedTitle = "";
-  String _translatedDesc = "";
-
   @override
   void initState() {
     super.initState();
     _currentVideo = widget.video;
-    _translatedTitle = _currentVideo.title;
-    _translatedDesc = _currentVideo.description ?? '';
     _commentBloc = CommentBloc();
     _initializeVideoPlayerFuture = _initializePlayer(_currentVideo.videoUrl);
     
@@ -103,9 +98,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
           _isFavorited = fullVideo.isFavorited;
         });
         
-        final currentLocale = Localizations.localeOf(context).languageCode;
-        await _translateContent(currentLocale);
-
         if (mounted) {
           context.read<VideoBloc>().add(FetchVideosByDifficulty(_currentVideo.difficulty));
           await _fetchInteractiveStatus();
@@ -128,43 +120,6 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  Future<void> _translateContent(String toLang) async {
-    if (toLang == 'zh') {
-      if (mounted) {
-        setState(() {
-          _translatedTitle = _currentVideo.title;
-          _translatedDesc = _currentVideo.description ?? '';
-        });
-      }
-      return;
-    }
-
-    try {
-      final translationService = context.read<TranslationService>();
-      final titleTranslation = translationService.translate(_currentVideo.title, toLang);
-      final descTranslation = _currentVideo.description?.isNotEmpty == true
-          ? translationService.translate(_currentVideo.description!, toLang)
-          : Future.value(_currentVideo.description ?? '');
-
-      final results = await Future.wait([titleTranslation, descTranslation]);
-
-      if (mounted) {
-        setState(() {
-          _translatedTitle = results[0];
-          _translatedDesc = results[1];
-        });
-      }
-    } catch (e) {
-      debugPrint("翻译失败：$e");
-      if (mounted) {
-        setState(() {
-          _translatedTitle = _currentVideo.title;
-          _translatedDesc = _currentVideo.description ?? '';
-        });
       }
     }
   }
@@ -439,10 +394,9 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         Expanded(
-                          child: Text(
-                            _translatedTitle,
+                          child: TranslatedText(
+                            text: _currentVideo.title,
                             style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 48), 
@@ -489,7 +443,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
                                   recommendedVideos = state.videos;
                                 }
                                 return VideoIntroPanel(
-                                  currentVideo: _currentVideo.copyWith(title: _translatedTitle, description: _translatedDesc),
+                                  currentVideo: _currentVideo,
                                   recommendedVideos: recommendedVideos,
                                   isLiked: _isLiked,
                                   isDisliked: _isDisliked,

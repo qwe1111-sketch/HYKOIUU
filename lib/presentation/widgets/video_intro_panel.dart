@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_flutter/domain/entities/video.dart';
+import 'package:sport_flutter/domain/repositories/video_repository.dart';
 import 'package:sport_flutter/l10n/app_localizations.dart';
 import 'package:sport_flutter/presentation/widgets/video_action_buttons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sport_flutter/domain/repositories/video_repository.dart';
+import 'package:sport_flutter/presentation/widgets/translated_text.dart';
 
 class VideoIntroPanel extends StatefulWidget {
   final Video currentVideo;
@@ -53,8 +54,8 @@ class _VideoIntroPanelState extends State<VideoIntroPanel> {
               children: [
                 _buildAuthorInfo(context),
                 const SizedBox(height: 16),
-                Text(
-                  widget.currentVideo.title,
+                TranslatedText(
+                  text: widget.currentVideo.title,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -119,49 +120,26 @@ class _VideoIntroPanelState extends State<VideoIntroPanel> {
     final textStyle = TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14);
     final l10n = AppLocalizations.of(context)!;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final textSpan = TextSpan(text: description, style: textStyle);
-        final textPainter = TextPainter(
-          text: textSpan,
-          maxLines: 2,
-          textDirection: TextDirection.ltr,
-        );
-        textPainter.layout(maxWidth: constraints.maxWidth);
-
-        if (textPainter.didExceedMaxLines) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Divider(height: 32, color: Colors.white12),
-              Text(
-                description,
-                style: textStyle,
-                maxLines: _isExpanded ? null : 2,
-                overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-              ),
-              GestureDetector(
-                onTap: () => setState(() => _isExpanded = !_isExpanded),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    _isExpanded ? l10n.showLess : l10n.showMore,
-                    style: const TextStyle(color: Color(0xFFCCFF00), fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
-          );
-        } else {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Divider(height: 32, color: Colors.white12),
-              Text(description, style: textStyle),
-            ],
-          );
-        }
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(height: 32, color: Colors.white12),
+        TranslatedText(
+          text: description,
+          style: textStyle,
+          maxLines: _isExpanded ? null : 2,
+        ),
+        GestureDetector(
+          onTap: () => setState(() => _isExpanded = !_isExpanded),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              _isExpanded ? l10n.showLess : l10n.showMore,
+              style: const TextStyle(color: Color(0xFFCCFF00), fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -234,15 +212,14 @@ class _VideoIntroPanelState extends State<VideoIntroPanel> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      video.title,
+                    TranslatedText(
+                      text: video.title,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -256,7 +233,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel> {
                         const SizedBox(width: 4),
                         Text(
                           _getDifficultyText(context, video.difficulty),
-                          style: TextStyle(color: Colors.white30, fontSize: 11),
+                          style: const TextStyle(color: Colors.white30, fontSize: 11),
                         ),
                       ],
                     ),
@@ -294,7 +271,7 @@ class _VideoIntroPanelState extends State<VideoIntroPanel> {
         (index) => Padding(
           padding: const EdgeInsets.only(right: 1.0),
           child: SvgPicture.asset(
-            'assets/images/home/难度3.svg', // Assuming this is the star icon
+            'assets/images/home/难度3.svg',
             width: 12,
             height: 12,
             colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.4), BlendMode.srcIn),

@@ -126,9 +126,11 @@ class _VideosPageState extends State<VideosPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: SvgPicture.asset(
-                    'assets/images/login/logo.svg',
+                    'assets/images/login/app_logo.svg',
                     height: 32,
                     fit: BoxFit.contain,
+                    // 强制使用白色滤镜
+                    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                     placeholderBuilder: (context) => Text(
                       l10n.appTitle,
                       style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),

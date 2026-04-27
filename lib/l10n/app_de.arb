@@ -164,5 +164,9 @@
   "signUp": "Registrieren",
   "enterTitleHint": "Bitte Titel eingeben",
   "enterContentHint": "Bitte Inhalt eingeben",
-  "save": "Speichern"
+  "save": "Speichern",
+  "deviceIncompatible": "Ihr Gerät kann dieses hochauflösende Format nicht dekodieren",
+  "resourceError": "Video kann vorübergehend nicht abgespielt werden, bitte versuchen Sie es später erneut",
+  "networkError": "Instabile Netzwerkverbindung, bitte überprüfen Sie Ihre Verbindung",
+  "videoLoadFailed": "Video konnte nicht geladen werden"
 }

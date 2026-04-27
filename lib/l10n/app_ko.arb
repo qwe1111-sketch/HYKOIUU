@@ -165,5 +165,9 @@
   "signUp": "회원가입",
   "enterTitleHint": "제목을 입력해주세요",
   "enterContentHint": "내용을 입력해주세요",
-  "save": "저장"
+  "save": "저장",
+  "deviceIncompatible": "기기에서 이 고화질 형식을 디코딩할 수 없습니다.",
+  "resourceError": "비디오를 일시적으로 재생할 수 없습니다. 나중에 다시 시도해 주세요.",
+  "networkError": "네트워크 연결이 불안정합니다. 연결을 확인해 주세요.",
+  "videoLoadFailed": "비디오를 로드하지 못했습니다."
 }

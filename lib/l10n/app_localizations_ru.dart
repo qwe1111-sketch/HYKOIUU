@@ -450,4 +450,18 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get save => 'Сохранить';
+
+  @override
+  String get deviceIncompatible =>
+      'Ваше устройство не может декодировать этот формат высокой четкости';
+
+  @override
+  String get resourceError => 'Видео временно недоступно, попробуйте позже';
+
+  @override
+  String get networkError =>
+      'Нестабильное сетевое соединение, проверьте подключение';
+
+  @override
+  String get videoLoadFailed => 'Не удалось загрузить видео';
 }

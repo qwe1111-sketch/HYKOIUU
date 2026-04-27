@@ -428,4 +428,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get save => '저장';
+
+  @override
+  String get deviceIncompatible => '기기에서 이 고화질 형식을 디코딩할 수 없습니다.';
+
+  @override
+  String get resourceError => '비디오를 일시적으로 재생할 수 없습니다. 나중에 다시 시도해 주세요.';
+
+  @override
+  String get networkError => '네트워크 연결이 불안정합니다. 연결을 확인해 주세요.';
+
+  @override
+  String get videoLoadFailed => '비디오를 로드하지 못했습니다.';
 }

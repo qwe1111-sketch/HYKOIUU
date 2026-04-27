@@ -107,12 +107,12 @@ class _LoginPageState extends State<LoginPage> {
                               Center(
                                 child: Column(
                                   children: [
-                                    // 渲染 Logo 图标，移除 colorFilter 使用原始颜色
+                                    // 显式强制为白色，防止某些环境下的默认渲染问题
                                     SvgPicture.asset(
-                                      'assets/images/login/logo.svg',
+                                      'assets/images/login/app_logo.svg',
                                       height: 70,
                                       fit: BoxFit.contain,
-                                      // placeholderBuilder 以防万一文件仍无法读取，会显示红色警告（仅用于调试）
+                                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                                       placeholderBuilder: (context) => const Icon(Icons.warning, color: Colors.amber),
                                     ),
                                     const SizedBox(height: 20),

@@ -473,7 +473,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyContent.
   ///
   /// In en, this message translates to:
-  /// **'This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You. We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.\n\n**Information Collection and Use**\n\n**Types of Data Collected**\n*   **Personal Data:** While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to: Email address, Username, and Profile Picture.\n*   **Usage Data:** Usage Data is collected automatically when using the Service. This may include information such as Your device\'s Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.\n*   **User-Generated Content:** We collect the content you create on our Service, which includes videos and images you upload, comments you post, likes, and favorites.\n\n**Use of Your Personal Data**\nThe Company may use Personal Data for the following purposes:\n*   To provide and maintain our Service, including to monitor the usage of our Service.\n*   To manage Your Account: to manage Your registration as a user of the Service.\n*   To contact You: To contact You by email regarding updates or informative communications related to the functionalities, products or contracted services.\n*   To provide You with news, special offers and general information about other goods, services and events which we offer.\n*   To manage Your requests: To attend and manage Your requests to Us.\n\n**Sharing Your Information**\nWe do not sell your personal information. We may share your information with third-party service providers who perform services on our behalf, such as hosting services and analytics.'**
+  /// **'This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You. We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.\n\n**Information Collection and Use**\n\n**Types of Data Collected**\n*   **Personal Data:** While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to: Email address, Username, and Profile Picture.\n*   **Usage Data:** Usage Data is collected automatically when using the Service. This may include information such as Your device\'s Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that You visit, the time and date of Your visit, the time spent on those pages, unique device identifiers and other diagnostic data.\n*   **User-Generated Content:** We collect the content you create on our Service, which includes videos and images you upload, comments you post, likes, and favorites.\n\\n**Use of Your Personal Data**\nThe Company may use Personal Data for the following purposes:\\n*   To provide and maintain our Service, including to monitor the usage of our Service.\\n*   To manage Your Account: to manage Your registration as a user of the Service.\\n*   To contact You: To contact You by email regarding updates or informative communications related to the functionalities, products or contracted services.\\n*   To provide You with news, special offers and general information about other goods, services and events which we offer.\\n*   To manage Your requests: To attend and manage Your requests to Us.\\n\\n**Sharing Your Information**\\nWe do not sell your personal information. We may share your information with third-party service providers who perform services on our behalf, such as hosting services and analytics.'**
   String get privacyPolicyContent;
 
   /// No description provided for @introduction.
@@ -793,6 +793,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
+
+  /// No description provided for @deviceIncompatible.
+  ///
+  /// In en, this message translates to:
+  /// **'Your device cannot decode this high-definition format'**
+  String get deviceIncompatible;
+
+  /// No description provided for @resourceError.
+  ///
+  /// In en, this message translates to:
+  /// **'Video cannot be played temporarily, please try again later'**
+  String get resourceError;
+
+  /// No description provided for @networkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unstable network, please check your connection'**
+  String get networkError;
+
+  /// No description provided for @videoLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load video'**
+  String get videoLoadFailed;
 }
 
 class _AppLocalizationsDelegate

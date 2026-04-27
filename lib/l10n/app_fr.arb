@@ -164,5 +164,9 @@
   "signUp": "S'inscrire",
   "enterTitleHint": "Veuillez entrer le titre",
   "enterContentHint": "Veuillez fournir le contenu",
-  "save": "Enregistrer"
+  "save": "Enregistrer",
+  "deviceIncompatible": "Votre appareil ne peut pas décoder ce format haute définition",
+  "resourceError": "La vidéo ne peut pas être lue pour le moment, veuillez réessayer plus tard",
+  "networkError": "Connexion réseau instable, veuillez vérifier votre connexion",
+  "videoLoadFailed": "Échec du chargement de la vidéo"
 }

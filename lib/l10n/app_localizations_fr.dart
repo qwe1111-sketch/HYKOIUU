@@ -438,4 +438,19 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get save => 'Enregistrer';
+
+  @override
+  String get deviceIncompatible =>
+      'Votre appareil ne peut pas décoder ce format haute définition';
+
+  @override
+  String get resourceError =>
+      'La vidéo ne peut pas être lue pour le moment, veuillez réessayer plus tard';
+
+  @override
+  String get networkError =>
+      'Connexion réseau instable, veuillez vérifier votre connexion';
+
+  @override
+  String get videoLoadFailed => 'Échec du chargement de la vidéo';
 }

@@ -74,24 +74,59 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     }
   }
 
+  // 判定是否为外部原因并返回本地化消息
+  String _getFriendlyErrorMessage(BuildContext context, String? error) {
+    final l10n = AppLocalizations.of(context)!;
+    if (error == null) return l10n.videoLoadFailed;
+    
+    final lowerError = error.toLowerCase();
+    
+    // 1. 硬件/解码不兼容
+    if (lowerError.contains("hevc") || 
+        lowerError.contains("h.265") || 
+        lowerError.contains("mediacodec") || 
+        lowerError.contains("exceeds_capabilities")) {
+      return l10n.deviceIncompatible;
+    }
+    
+    // 2. OSS问题或权限限制
+    if (lowerError.contains("403") || 
+        lowerError.contains("denied") || 
+        lowerError.contains("disable") || 
+        lowerError.contains("-12660") ||
+        lowerError.contains("permission")) {
+      return l10n.resourceError;
+    }
+    
+    // 3. 网络问题
+    if (lowerError.contains("timeout") || lowerError.contains("network")) {
+      return l10n.networkError;
+    }
+
+    return l10n.videoLoadFailed;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final controller = widget.controller;
 
     Widget playerContent;
     if (controller.value.hasError) {
       playerContent = Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white, size: 48),
-            const SizedBox(height: 8),
-            Text(
-              l10n.videoLoadError,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, color: Color(0xFFCCFF00), size: 48),
+              const SizedBox(height: 16),
+              Text(
+                _getFriendlyErrorMessage(context, controller.value.errorDescription),
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
         ),
       );
     } else if (controller.value.isInitialized) {
@@ -195,7 +230,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                               widget.controller,
                               allowScrubbing: true,
                               colors: VideoProgressColors(
-                                playedColor: const Color(0xFFCCFF00), // 修改为荧光绿
+                                playedColor: const Color(0xFFCCFF00),
                                 bufferedColor: Colors.white.withOpacity(0.3),
                                 backgroundColor: Colors.white.withOpacity(0.1),
                               ),
@@ -236,7 +271,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
         _startHideTimer();
         widget.controller.setPlaybackSpeed(speed);
       },
-      color: const Color(0xFF1C1C1E), // 弹窗背景色
+      color: const Color(0xFF1C1C1E),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       itemBuilder: (context) => [0.5, 1.0, 1.5, 2.0]
           .map((speed) => PopupMenuItem<double>(
@@ -244,7 +279,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                 child: Text(
                   '${speed}x',
                   style: TextStyle(
-                    color: speed == currentSpeed ? const Color(0xFFCCFF00) : Colors.white, // 选中项为荧光绿
+                    color: speed == currentSpeed ? const Color(0xFFCCFF00) : Colors.white,
                     fontWeight: speed == currentSpeed ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),

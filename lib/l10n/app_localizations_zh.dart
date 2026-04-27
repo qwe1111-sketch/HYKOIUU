@@ -424,4 +424,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get save => '保存';
+
+  @override
+  String get deviceIncompatible => '您的设备暂时无法解码此高清格式';
+
+  @override
+  String get resourceError => '视频暂时无法播放，请稍后再试';
+
+  @override
+  String get networkError => '网络连接不稳定，请检查网络';
+
+  @override
+  String get videoLoadFailed => '视频加载失败';
 }

@@ -190,5 +190,9 @@
   "signUp": "注册",
   "enterTitleHint": "请输入标题",
   "enterContentHint": "请输入内容",
-  "save": "保存"
+  "save": "保存",
+  "deviceIncompatible": "您的设备暂时无法解码此高清格式",
+  "resourceError": "视频暂时无法播放，请稍后再试",
+  "networkError": "网络连接不稳定，请检查网络",
+  "videoLoadFailed": "视频加载失败"
 }
