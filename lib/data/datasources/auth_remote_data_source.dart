@@ -2,27 +2,45 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sport_flutter/data/models/user_model.dart';
+import 'package:sport_flutter/config/app_config.dart';
 
 abstract class AuthRemoteDataSource {
   Future<String> login(String username, String password);
-  Future<void> register(String username, String email, String password, String verificationCode);
+  Future<void> register(
+    String username,
+    String email,
+    String password,
+    String verificationCode,
+    String invitationCode,
+  );
   Future<void> sendVerificationCode(String email);
   Future<void> sendPasswordResetCode(String email);
   Future<void> resetPassword(String email, String code, String newPassword);
   Future<void> forgotPasswordSendCode(String username, String email);
-  Future<void> forgotPasswordReset(String username, String email, String code, String newPassword);
+  Future<void> forgotPasswordReset(
+    String username,
+    String email,
+    String code,
+    String newPassword,
+  );
   Future<UserModel> getUserProfile();
-  Future<UserModel> updateProfile({String? username, String? avatarUrl, String? bio});
+  Future<UserModel> updateProfile({
+    String? username,
+    String? avatarUrl,
+    String? bio,
+  });
   Future<void> deleteAccount();
+  Future<bool> checkUsername(String username);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final http.Client client;
-  static const String _baseUrl = 'https://hykoiuu.hykoiuu.com/api/auth';
 
   AuthRemoteDataSourceImpl({required this.client});
 
-  static String getBaseApiUrl() => _baseUrl.substring(0, _baseUrl.lastIndexOf('/api')) + '/api';
+  String get _baseUrl => AppConfig.authBaseUrl;
+
+  static String getBaseApiUrl() => AppConfig.apiBaseUrl;
 
   Future<Map<String, String>> _getAuthHeaders() async {
     final prefs = await SharedPreferences.getInstance();
@@ -34,21 +52,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   Exception _handleError(http.Response response) {
-    final path = response.request?.url.path;
-    if (path != null &&
-        (path.endsWith('/send-code') ||
-            path.endsWith('/send-reset-code') ||
-            path.endsWith('/forgot-password/send-code'))) {
-      return Exception('验证码发送失败，请稍后重试。');
-    }
     try {
       final errorBody = jsonDecode(response.body);
       final errorMessage =
-          errorBody['error'] ?? errorBody['message'] ?? 'An unknown error occurred';
+          errorBody['error'] ??
+          errorBody['message'] ??
+          'An unknown error occurred';
       return Exception(errorMessage);
     } catch (e) {
       return Exception(
-          'Failed to connect to the server. Status code: ${response.statusCode}');
+        'Failed to connect to the server. Status code: ${response.statusCode}',
+      );
     }
   }
 
@@ -68,7 +82,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> register(String username, String email, String password, String verificationCode) async {
+  Future<void> register(
+    String username,
+    String email,
+    String password,
+    String verificationCode,
+    String invitationCode,
+  ) async {
     final response = await client.post(
       Uri.parse('$_baseUrl/register'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -77,6 +97,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'email': email,
         'password': password,
         'code': verificationCode,
+        'invitationCode': invitationCode,
       }),
     );
     if (response.statusCode != 201) {
@@ -110,7 +131,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> resetPassword(String email, String code, String newPassword) async {
+  Future<void> resetPassword(
+    String email,
+    String code,
+    String newPassword,
+  ) async {
     final headers = await _getAuthHeaders();
     final response = await client.post(
       Uri.parse('$_baseUrl/reset-password'),
@@ -139,7 +164,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> forgotPasswordReset(String username, String email, String code, String newPassword) async {
+  Future<void> forgotPasswordReset(
+    String username,
+    String email,
+    String code,
+    String newPassword,
+  ) async {
     final response = await client.post(
       Uri.parse('$_baseUrl/forgot-password/reset'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
@@ -170,7 +200,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> updateProfile({String? username, String? avatarUrl, String? bio}) async {
+  Future<UserModel> updateProfile({
+    String? username,
+    String? avatarUrl,
+    String? bio,
+  }) async {
     final headers = await _getAuthHeaders();
     final body = <String, dynamic>{};
     if (username != null) body['username'] = username;
@@ -200,5 +234,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (response.statusCode != 200) {
       throw _handleError(response);
     }
+  }
+
+  @override
+  Future<bool> checkUsername(String username) async {
+    final response = await client.get(
+      Uri.parse(
+        '$_baseUrl/check-username?username=${Uri.encodeComponent(username)}',
+      ),
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      return data['exists'] == true;
+    }
+    return false;
   }
 }

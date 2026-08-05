@@ -216,6 +216,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get passwordTooShort => '비밀번호는 최소 6자 이상이어야 합니다';
 
   @override
+  String get passwordLengthError => '비밀번호는 6-20자여야 합니다';
+
+  @override
+  String get passwordInvalidChars =>
+      '비밀번호는 영문, 숫자 및 !@#\$%^&*()-+=._ 만 사용할 수 있습니다';
+
+  @override
   String get verificationCode => '인증코드';
 
   @override
@@ -335,6 +342,18 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => '잘못된 초대 코드입니다';
+
+  @override
+  String get usernameAlreadyExists => '사용자 이름이 이미 존재합니다';
+
+  @override
+  String get usernameLengthError => '사용자 이름은 2-20자여야 합니다';
+
+  @override
+  String get usernameInvalidChars => '사용자 이름은 영문, 숫자, 밑줄, 중국어만 가능합니다';
+
+  @override
+  String get emailAlreadyExists => '이미 사용 중인 이메일입니다';
 
   @override
   String get pleaseRequestVerificationCodeFirst => '먼저 인증코드를 요청해주세요';

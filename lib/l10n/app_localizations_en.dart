@@ -216,6 +216,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordTooShort => 'Password must be at least 6 characters';
 
   @override
+  String get passwordLengthError => 'Password must be 6-20 characters';
+
+  @override
+  String get passwordInvalidChars =>
+      'Password can only contain letters, numbers and !@#\$%^&*()-+=._';
+
+  @override
   String get verificationCode => 'Verification Code';
 
   @override
@@ -337,6 +344,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => 'Incorrect invitation code';
+
+  @override
+  String get usernameAlreadyExists => 'Username already exists';
+
+  @override
+  String get usernameLengthError => 'Username must be 2-20 characters';
+
+  @override
+  String get usernameInvalidChars =>
+      'Username can only contain letters, numbers, underscores, or Chinese';
+
+  @override
+  String get emailAlreadyExists => 'Email is already in use';
 
   @override
   String get pleaseRequestVerificationCodeFirst =>

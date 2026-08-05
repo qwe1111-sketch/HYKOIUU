@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sport_flutter/domain/entities/user.dart';
+import 'package:sport_flutter/domain/usecases/check_username.dart';
 import 'package:sport_flutter/domain/usecases/delete_account.dart';
 import 'package:sport_flutter/domain/usecases/forgot_password_reset.dart';
 import 'package:sport_flutter/domain/usecases/forgot_password_send_code.dart';
@@ -34,8 +35,11 @@ class AuthLoading extends AuthState {
 class ResettingPasswordInProgress extends AuthState {}
 
 class AuthCodeSent extends AuthState {}
+
 class PasswordResetSuccess extends AuthState {}
+
 class ForgotPasswordCodeSent extends AuthState {}
+
 class ForgotPasswordSuccess extends AuthState {}
 
 class AuthAuthenticated extends AuthState {
@@ -44,7 +48,9 @@ class AuthAuthenticated extends AuthState {
   @override
   List<Object?> get props => [user];
 }
+
 class AuthRegistrationSuccess extends AuthState {}
+
 class AuthUnauthenticated extends AuthState {}
 
 class AuthError extends AuthState {
@@ -106,7 +112,12 @@ class ForgotPasswordResetEvent extends AuthEvent {
   final String code;
   final String newPassword;
 
-  const ForgotPasswordResetEvent(this.username, this.email, this.code, this.newPassword);
+  const ForgotPasswordResetEvent(
+    this.username,
+    this.email,
+    this.code,
+    this.newPassword,
+  );
 
   @override
   List<Object?> get props => [username, email, code, newPassword];
@@ -117,9 +128,16 @@ class RegisterEvent extends AuthEvent {
   final String email;
   final String password;
   final String code;
-  const RegisterEvent(this.username, this.email, this.password, this.code);
+  final String invitationCode;
+  const RegisterEvent(
+    this.username,
+    this.email,
+    this.password,
+    this.code,
+    this.invitationCode,
+  );
   @override
-  List<Object?> get props => [username, email, password, code];
+  List<Object?> get props => [username, email, password, code, invitationCode];
 }
 
 class LoginEvent extends AuthEvent {
@@ -157,6 +175,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetUserProfile getUserProfileUseCase;
   final UpdateUserProfile updateUserProfileUseCase;
   final DeleteAccount deleteAccountUseCase;
+  final CheckUsername checkUsernameUseCase;
 
   bool _isCodeSentForRegistration = false;
 
@@ -171,6 +190,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.getUserProfileUseCase,
     required this.updateUserProfileUseCase,
     required this.deleteAccountUseCase,
+    required this.checkUsernameUseCase,
   }) : super(AuthInitial()) {
     on<AppStarted>(_onAppStarted);
     on<SendCodeEvent>(_onSendCode);
@@ -226,7 +246,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onSendPasswordResetCode(SendPasswordResetCodeEvent event, Emitter<AuthState> emit) async {
+  void _onSendPasswordResetCode(
+    SendPasswordResetCodeEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthLoading(loadingType: 'SendCode'));
     try {
       await sendPasswordResetCodeUseCase(event.email);
@@ -236,7 +259,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onResetPassword(ResetPasswordEvent event, Emitter<AuthState> emit) async {
+  void _onResetPassword(
+    ResetPasswordEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(ResettingPasswordInProgress());
     try {
       await resetPasswordUseCase(event.email, event.code, event.newPassword);
@@ -249,20 +275,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onForgotPasswordSendCode(ForgotPasswordSendCodeEvent event, Emitter<AuthState> emit) async {
+  void _onForgotPasswordSendCode(
+    ForgotPasswordSendCodeEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthLoading(loadingType: 'ForgotPasswordSendCode'));
     try {
       await forgotPasswordSendCodeUseCase(event.username, event.email);
       emit(ForgotPasswordCodeSent());
     } catch (e) {
-      emit(AuthError(_extractErrorMessage(e), errorType: 'ForgotPasswordSendCodeError'));
+      emit(
+        AuthError(
+          _extractErrorMessage(e),
+          errorType: 'ForgotPasswordSendCodeError',
+        ),
+      );
     }
   }
 
-  void _onForgotPasswordReset(ForgotPasswordResetEvent event, Emitter<AuthState> emit) async {
+  void _onForgotPasswordReset(
+    ForgotPasswordResetEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthLoading(loadingType: 'ForgotPasswordReset'));
     try {
-      await forgotPasswordResetUseCase(event.username, event.email, event.code, event.newPassword);
+      await forgotPasswordResetUseCase(
+        event.username,
+        event.email,
+        event.code,
+        event.newPassword,
+      );
       emit(ForgotPasswordSuccess());
     } catch (e) {
       emit(AuthError(_extractErrorMessage(e)));
@@ -276,7 +318,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     emit(const AuthLoading());
     try {
-      await registerUseCase(event.username, event.email, event.password, event.code);
+      await registerUseCase(
+        event.username,
+        event.email,
+        event.password,
+        event.code,
+        event.invitationCode,
+      );
       _isCodeSentForRegistration = false;
       emit(AuthRegistrationSuccess());
     } catch (e) {
@@ -303,7 +351,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthUnauthenticated());
   }
 
-  void _onDeleteAccount(DeleteAccountEvent event, Emitter<AuthState> emit) async {
+  void _onDeleteAccount(
+    DeleteAccountEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(const AuthLoading());
     try {
       await deleteAccountUseCase();
@@ -315,7 +366,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onUpdateProfile(UpdateProfileEvent event, Emitter<AuthState> emit) async {
+  void _onUpdateProfile(
+    UpdateProfileEvent event,
+    Emitter<AuthState> emit,
+  ) async {
+    final currentUser = state is AuthAuthenticated
+        ? (state as AuthAuthenticated).user
+        : null;
     emit(const AuthLoading());
     try {
       final updatedUser = await updateUserProfileUseCase(
@@ -326,6 +383,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthAuthenticated(user: updatedUser));
     } catch (e) {
       emit(AuthError(_extractErrorMessage(e)));
+      // 失败后恢复为已登录状态，避免"我的"页面一直显示加载
+      if (currentUser != null) {
+        emit(AuthAuthenticated(user: currentUser));
+      }
     }
   }
 }

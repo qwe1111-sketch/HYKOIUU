@@ -398,6 +398,18 @@ abstract class AppLocalizations {
   /// **'Password must be at least 6 characters'**
   String get passwordTooShort;
 
+  /// No description provided for @passwordLengthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be 6-20 characters'**
+  String get passwordLengthError;
+
+  /// No description provided for @passwordInvalidChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Password can only contain letters, numbers and !@#\$%^&*()-+=._'**
+  String get passwordInvalidChars;
+
   /// No description provided for @verificationCode.
   ///
   /// In en, this message translates to:
@@ -619,6 +631,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Incorrect invitation code'**
   String get incorrectInvitationCode;
+
+  /// No description provided for @usernameAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Username already exists'**
+  String get usernameAlreadyExists;
+
+  /// No description provided for @usernameLengthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Username must be 2-20 characters'**
+  String get usernameLengthError;
+
+  /// No description provided for @usernameInvalidChars.
+  ///
+  /// In en, this message translates to:
+  /// **'Username can only contain letters, numbers, underscores, or Chinese'**
+  String get usernameInvalidChars;
+
+  /// No description provided for @emailAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is already in use'**
+  String get emailAlreadyExists;
 
   /// No description provided for @pleaseRequestVerificationCodeFirst.
   ///

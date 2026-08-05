@@ -17,17 +17,24 @@ class LoginEvent extends AuthEvent {
   List<Object> get props => [username, password];
 }
 
-// Updated RegisterEvent to include the code
+// Updated RegisterEvent to include the code and invitationCode
 class RegisterEvent extends AuthEvent {
   final String username;
   final String password;
   final String email;
   final String code;
+  final String invitationCode;
 
-  const RegisterEvent({required this.username, required this.password, required this.email, required this.code});
+  const RegisterEvent({
+    required this.username,
+    required this.password,
+    required this.email,
+    required this.code,
+    required this.invitationCode,
+  });
 
   @override
-  List<Object> get props => [username, password, email, code];
+  List<Object> get props => [username, password, email, code, invitationCode];
 }
 
 // New event to trigger sending the code

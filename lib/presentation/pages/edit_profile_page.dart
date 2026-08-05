@@ -25,6 +25,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late final TextEditingController _bioController;
   File? _avatarImage;
   bool _isFirstLoad = true;
+  bool _isUpdating = false;
 
   @override
   void initState() {
@@ -39,7 +40,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_isFirstLoad) {
       final l10n = AppLocalizations.of(context)!;
       // 如果数据库里的 bio 是空的，或者等于那个默认的中文句子，我们就显示本地化的默认值
-      if (_bioController.text.isEmpty || _bioController.text == '这个人很懒，什么都没有留下。') {
+      if (_bioController.text.isEmpty ||
+          _bioController.text == '这个人很懒，什么都没有留下。') {
         _bioController.text = l10n.defaultBio;
       }
       _isFirstLoad = false;
@@ -73,7 +75,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.1),
+                        ),
                       ),
                       child: Column(
                         children: [
@@ -87,12 +91,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               alignment: Alignment.center,
                               child: Text(
-                                l10n.selectPicturesFromAlbum.replaceAll(RegExp(r'.*?相册'), '拍照').replaceAll('Select pictures from album', 'Take a Photo'),
-                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),
+                                l10n.selectPicturesFromAlbum
+                                    .replaceAll(RegExp(r'.*?相册'), '拍照')
+                                    .replaceAll(
+                                      'Select pictures from album',
+                                      'Take a Photo',
+                                    ),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
-                          const Divider(color: Colors.white10, height: 1, indent: 0, endIndent: 0),
+                          const Divider(
+                            color: Colors.white10,
+                            height: 1,
+                            indent: 0,
+                            endIndent: 0,
+                          ),
                           InkWell(
                             onTap: () {
                               Navigator.of(context).pop();
@@ -104,7 +122,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               alignment: Alignment.center,
                               child: Text(
                                 l10n.selectPicturesFromAlbum,
-                                style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           ),
@@ -127,7 +149,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.1),
+                          ),
                         ),
                         child: Text(
                           l10n.cancel,
@@ -166,138 +190,171 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_avatarImage != null) {
       final ossService = context.read<OssUploadService>();
       try {
-        final uploadedUrl = await ossService.uploadFile(_avatarImage!, uploadPath: 'videos/avatars');
+        final uploadedUrl = await ossService.uploadFile(
+          _avatarImage!,
+          uploadPath: 'videos/avatars',
+        );
         avatarUrl = uploadedUrl;
       } catch (e) {
         if (mounted) {
           // Localized avatar upload failure message
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${l10n.appTitle} ${l10n.error}: $e')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${l10n.appTitle} ${l10n.error}: $e')),
+          );
         }
         return;
       }
     }
 
-    authBloc.add(UpdateProfileEvent(
-      username: _usernameController.text,
-      bio: _bioController.text,
-      avatarUrl: avatarUrl,
-    ));
-
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
+    authBloc.add(
+      UpdateProfileEvent(
+        username: _usernameController.text,
+        bio: _bioController.text,
+        avatarUrl: avatarUrl,
+      ),
+    );
+    setState(() => _isUpdating = true);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          // 1. 全局底层背景图
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 350,
-            child: Image.asset(
-              'assets/images/community/top.png',
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-            ),
-          ),
-          // 2. 黑色渐变遮罩
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 350,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withOpacity(0.1),
-                    Colors.black.withOpacity(0.5),
-                    Colors.black,
-                  ],
-                  stops: const [0.0, 0.7, 1.0],
-                ),
+    return BlocListener<AuthBloc, AuthState>(
+      listenWhen: (previous, current) => _isUpdating,
+      listener: (context, state) {
+        if (state is AuthError) {
+          setState(() => _isUpdating = false);
+          String message;
+          switch (state.message) {
+            case 'usernameAlreadyExists':
+              message = l10n.usernameAlreadyExists;
+              break;
+            default:
+              message = state.message;
+          }
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
+          );
+        } else if (state is AuthAuthenticated) {
+          setState(() => _isUpdating = false);
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            // 1. 全局底层背景图
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 350,
+              child: Image.asset(
+                'assets/images/community/top.png',
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
-          ),
-          // 3. 内容层
-          Column(
-            children: [
-              // 自定义 AppBar
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      Text(
-                        l10n.editProfile,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            // 2. 黑色渐变遮罩
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 350,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.1),
+                      Colors.black.withOpacity(0.5),
+                      Colors.black,
                     ],
+                    stops: const [0.0, 0.7, 1.0],
                   ),
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      _buildAvatarSection(),
-                      const SizedBox(height: 40),
-                      Center(
-                        child: Text(
-                          l10n.username,
+            ),
+            // 3. 内容层
+            Column(
+              children: [
+                // 自定义 AppBar
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        Text(
+                          l10n.editProfile,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      _buildTextField(_usernameController),
-                      const SizedBox(height: 24),
-                      Center(
-                        child: Text(
-                          l10n.introduction,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      _buildTextField(_bioController, maxLines: 5),
-                      const SizedBox(height: 40),
-                      _buildSaveButton(l10n),
-                      const SizedBox(height: 40),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        _buildAvatarSection(),
+                        const SizedBox(height: 40),
+                        Center(
+                          child: Text(
+                            l10n.username,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildTextField(_usernameController),
+                        const SizedBox(height: 24),
+                        Center(
+                          child: Text(
+                            l10n.introduction,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _buildTextField(_bioController, maxLines: 5),
+                        const SizedBox(height: 40),
+                        _buildSaveButton(l10n),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -306,7 +363,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     ImageProvider? backgroundImage;
     if (_avatarImage != null) {
       backgroundImage = FileImage(_avatarImage!);
-    } else if (widget.user.avatarUrl != null && widget.user.avatarUrl!.isNotEmpty) {
+    } else if (widget.user.avatarUrl != null &&
+        widget.user.avatarUrl!.isNotEmpty) {
       backgroundImage = CachedNetworkImageProvider(widget.user.avatarUrl!);
     }
 
@@ -321,15 +379,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
               shape: BoxShape.circle,
               border: Border.all(color: const Color(0xFFCCFF00), width: 2.0),
               image: backgroundImage != null
-                  ? DecorationImage(
-                      image: backgroundImage,
-                      fit: BoxFit.cover,
-                    )
+                  ? DecorationImage(image: backgroundImage, fit: BoxFit.cover)
                   : null,
               color: Colors.white10,
             ),
             child: backgroundImage == null
-                ? const Icon(Iconsax.profile_circle, size: 60, color: Colors.white24)
+                ? const Icon(
+                    Iconsax.profile_circle,
+                    size: 60,
+                    color: Colors.white24,
+                  )
                 : null,
           ),
           GestureDetector(
@@ -340,9 +399,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 color: Color(0xFFCCFF00),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.photo_camera, size: 22, color: Colors.black),
+              child: const Icon(
+                Icons.photo_camera,
+                size: 22,
+                color: Colors.black,
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -361,10 +424,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white.withOpacity(0.1),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+              borderSide: BorderSide(
+                color: Colors.white.withOpacity(0.1),
+                width: 1,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
@@ -381,19 +450,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: _saveProfile,
+        onPressed: _isUpdating ? null : _saveProfile,
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFCCFF00),
           foregroundColor: Colors.black,
+          disabledBackgroundColor: const Color(0xFFCCFF00).withOpacity(0.5),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28),
           ),
           elevation: 0,
         ),
-        child: Text(
-          l10n.save,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        child: _isUpdating
+            ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                l10n.save,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
     );
   }

@@ -219,6 +219,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Das Passwort muss mindestens 6 Zeichen lang sein';
 
   @override
+  String get passwordLengthError => 'Das Passwort muss 6-20 Zeichen lang sein';
+
+  @override
+  String get passwordInvalidChars =>
+      'Das Passwort darf nur Buchstaben, Zahlen und !@#\$%^&*()-+=._ enthalten';
+
+  @override
   String get verificationCode => 'Verifizierungscode';
 
   @override
@@ -343,6 +350,20 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => 'Falscher Einladungscode';
+
+  @override
+  String get usernameAlreadyExists => 'Benutzername bereits vergeben';
+
+  @override
+  String get usernameLengthError =>
+      'Der Benutzername muss 2-20 Zeichen lang sein';
+
+  @override
+  String get usernameInvalidChars =>
+      'Der Benutzername darf nur Buchstaben, Zahlen, Unterstriche oder Chinesisch enthalten';
+
+  @override
+  String get emailAlreadyExists => 'E-Mail wird bereits verwendet';
 
   @override
   String get pleaseRequestVerificationCodeFirst =>

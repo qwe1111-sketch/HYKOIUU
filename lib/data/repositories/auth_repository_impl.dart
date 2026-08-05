@@ -13,8 +13,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> register(String username, String email, String password, String verificationCode) {
-    return remoteDataSource.register(username, email, password, verificationCode);
+  Future<void> register(
+    String username,
+    String email,
+    String password,
+    String verificationCode,
+    String invitationCode,
+  ) {
+    return remoteDataSource.register(
+      username,
+      email,
+      password,
+      verificationCode,
+      invitationCode,
+    );
   }
 
   @override
@@ -38,8 +50,18 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> forgotPasswordReset(String username, String email, String code, String newPassword) {
-    return remoteDataSource.forgotPasswordReset(username, email, code, newPassword);
+  Future<void> forgotPasswordReset(
+    String username,
+    String email,
+    String code,
+    String newPassword,
+  ) {
+    return remoteDataSource.forgotPasswordReset(
+      username,
+      email,
+      code,
+      newPassword,
+    );
   }
 
   @override
@@ -48,7 +70,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<User> updateProfile({String? username, String? avatarUrl, String? bio}) {
+  Future<User> updateProfile({
+    String? username,
+    String? avatarUrl,
+    String? bio,
+  }) {
     return remoteDataSource.updateProfile(
       username: username,
       avatarUrl: avatarUrl,
@@ -59,5 +85,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> deleteAccount() {
     return remoteDataSource.deleteAccount();
+  }
+
+  @override
+  Future<bool> checkUsername(String username) {
+    return remoteDataSource.checkUsername(username);
   }
 }

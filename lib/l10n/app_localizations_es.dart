@@ -220,6 +220,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'La contraseña debe tener al menos 6 caracteres';
 
   @override
+  String get passwordLengthError =>
+      'La contraseña debe tener entre 6 y 20 caracteres';
+
+  @override
+  String get passwordInvalidChars =>
+      'La contraseña solo puede contener letras, números y !@#\$%^&*()-+=._';
+
+  @override
   String get verificationCode => 'Código de verificación';
 
   @override
@@ -343,6 +351,20 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => 'Código de invitación incorrecto';
+
+  @override
+  String get usernameAlreadyExists => 'El nombre de usuario ya existe';
+
+  @override
+  String get usernameLengthError =>
+      'El nombre de usuario debe tener de 2 a 20 caracteres';
+
+  @override
+  String get usernameInvalidChars =>
+      'El nombre de usuario solo puede contener letras, números, guiones bajos o chino';
+
+  @override
+  String get emailAlreadyExists => 'El correo electrónico ya está en uso';
 
   @override
   String get pleaseRequestVerificationCodeFirst =>

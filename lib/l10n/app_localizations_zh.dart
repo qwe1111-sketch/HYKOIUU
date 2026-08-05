@@ -215,6 +215,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get passwordTooShort => '密码必须至少为 6 个字符';
 
   @override
+  String get passwordLengthError => '密码长度需为6-20个字符';
+
+  @override
+  String get passwordInvalidChars => '密码只能包含字母、数字和 !@#\$%^&*()-+=._';
+
+  @override
   String get verificationCode => '验证码';
 
   @override
@@ -333,6 +339,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => '邀请码不正确';
+
+  @override
+  String get usernameAlreadyExists => '用户名已存在';
+
+  @override
+  String get usernameLengthError => '用户名长度需为2-20个字符';
+
+  @override
+  String get usernameInvalidChars => '用户名只能包含字母、数字、下划线或中文';
+
+  @override
+  String get emailAlreadyExists => '邮箱已被注册';
 
   @override
   String get pleaseRequestVerificationCodeFirst => '请先获取验证码';

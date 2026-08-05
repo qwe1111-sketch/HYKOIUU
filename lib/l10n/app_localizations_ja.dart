@@ -216,6 +216,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get passwordTooShort => 'パスワードは最低6文字以上です';
 
   @override
+  String get passwordLengthError => 'パスワードは6〜20文字で入力してください';
+
+  @override
+  String get passwordInvalidChars => 'パスワードは英数字と !@#\$%^&*()-+=._ のみ使用できます';
+
+  @override
   String get verificationCode => '確認コード';
 
   @override
@@ -335,6 +341,18 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => '不正な招待コードです';
+
+  @override
+  String get usernameAlreadyExists => 'ユーザー名はすでに存在します';
+
+  @override
+  String get usernameLengthError => 'ユーザー名は2〜20文字で入力してください';
+
+  @override
+  String get usernameInvalidChars => 'ユーザー名には英数字、アンダースコア、中国語のみ使用できます';
+
+  @override
+  String get emailAlreadyExists => 'メールアドレスはすでに登録されています';
 
   @override
   String get pleaseRequestVerificationCodeFirst => 'まず確認コードを要求してください';

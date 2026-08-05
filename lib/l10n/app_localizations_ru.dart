@@ -232,6 +232,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get passwordTooShort => 'Пароль должен содержать не менее 6 символов';
 
   @override
+  String get passwordLengthError =>
+      'Пароль должен содержать от 6 до 20 символов';
+
+  @override
+  String get passwordInvalidChars =>
+      'Пароль может содержать только буквы, цифры и !@#\$%^&*()-+=._';
+
+  @override
   String get verificationCode => 'Код подтверждения';
 
   @override
@@ -354,6 +362,20 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get incorrectInvitationCode => 'Неверный пригласительный код';
+
+  @override
+  String get usernameAlreadyExists => 'Имя пользователя уже существует';
+
+  @override
+  String get usernameLengthError =>
+      'Имя пользователя должно содержать 2-20 символов';
+
+  @override
+  String get usernameInvalidChars =>
+      'Имя пользователя может содержать только буквы, цифры, подчёркивания или китайские символы';
+
+  @override
+  String get emailAlreadyExists => 'Электронная почта уже используется';
 
   @override
   String get pleaseRequestVerificationCodeFirst =>
