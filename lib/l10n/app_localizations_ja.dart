@@ -424,7 +424,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get enterPasswordHint => 'パスワードを入力してください';
 
   @override
-  String get enterInvitationCodeHint => '招待コードを入力してください';
+  String get enterInvitationCodeHint => '招待コードを入力してください（任意）';
 
   @override
   String get loginWelcomeTitle => 'HYKOIUU';

@@ -189,7 +189,7 @@
   "enterEmailHint": "请输入电子邮箱",
   "enterCodeHint": "请输入验证码",
   "enterPasswordHint": "请输入密码",
-  "enterInvitationCodeHint": "请输入邀请码",
+  "enterInvitationCodeHint": "请输入邀请码(选填)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "让我们踏上学习足球的旅程",
   "noAccount": "没有账号？ ",

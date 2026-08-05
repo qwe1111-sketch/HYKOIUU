@@ -449,7 +449,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get enterPasswordHint => 'Введите пароль';
 
   @override
-  String get enterInvitationCodeHint => 'Введите пригласительный код';
+  String get enterInvitationCodeHint =>
+      'Введите пригласительный код (Необязательно)';
 
   @override
   String get loginWelcomeTitle => 'HYKOIUU';

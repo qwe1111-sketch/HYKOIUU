@@ -436,7 +436,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get enterPasswordHint => 'Enter the Password';
 
   @override
-  String get enterInvitationCodeHint => 'Einladungscode eingeben';
+  String get enterInvitationCodeHint => 'Einladungscode eingeben (Optional)';
 
   @override
   String get loginWelcomeTitle => 'HYKOIUU';

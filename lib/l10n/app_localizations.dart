@@ -785,7 +785,7 @@ abstract class AppLocalizations {
   /// No description provided for @enterInvitationCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'Enter the Invitation Code'**
+  /// **'Enter the Invitation Code (Optional)'**
   String get enterInvitationCodeHint;
 
   /// No description provided for @loginWelcomeTitle.

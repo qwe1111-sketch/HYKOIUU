@@ -189,7 +189,7 @@
   "enterEmailHint": "Введите эл. почту",
   "enterCodeHint": "Введите код подтверждения",
   "enterPasswordHint": "Введите пароль",
-  "enterInvitationCodeHint": "Введите пригласительный код",
+  "enterInvitationCodeHint": "Введите пригласительный код (Необязательно)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "Давайте отправимся в путешествие по изучению\nфутбола",
   "noAccount": "Нет аккаунта? ",

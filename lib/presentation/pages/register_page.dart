@@ -377,7 +377,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 if (value.length < 6 || value.length > 20) {
                                   return l10n.passwordLengthError;
                                 }
-                                if (!RegExp(r'^[\w!@#$%^&*()\-+=.]+$').hasMatch(value)) {
+                                if (!RegExp(
+                                  r'^[\w!@#$%^&*()\-+=.]+$',
+                                ).hasMatch(value)) {
                                   return l10n.passwordInvalidChars;
                                 }
                                 return null;
@@ -596,17 +598,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildUsernameStatusIcon() {
     if (_isCheckingUsername) {
-      return Padding(
-        padding: const EdgeInsets.only(right: 12.0),
-        child: const SizedBox(
-          width: 20,
-          height: 20,
-          child: CircularProgressIndicator(
-            color: Color(0xFFCCFF00),
-            strokeWidth: 2,
-          ),
-        ),
-      );
+      return const SizedBox.shrink();
     }
     if (_usernameExists == true) {
       return Padding(

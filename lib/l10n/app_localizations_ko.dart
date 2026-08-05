@@ -425,7 +425,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get enterPasswordHint => '비밀번호를 입력하세요';
 
   @override
-  String get enterInvitationCodeHint => '초대 코드를 입력하세요';
+  String get enterInvitationCodeHint => '초대 코드를 입력하세요 (선택 사항)';
 
   @override
   String get loginWelcomeTitle => 'HYKOIUU';

@@ -164,7 +164,7 @@
   "enterEmailHint": "이메일을 입력하세요",
   "enterCodeHint": "인증코드를 입력하세요",
   "enterPasswordHint": "비밀번호를 입력하세요",
-  "enterInvitationCodeHint": "초대 코드를 입력하세요",
+  "enterInvitationCodeHint": "초대 코드를 입력하세요 (선택 사항)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "축구에 대해 배우는 여행을 시작해 봅시다",
   "noAccount": "계정이 없으신가요? ",

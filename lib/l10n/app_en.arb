@@ -189,7 +189,7 @@
   "enterEmailHint": "Enter the Email",
   "enterCodeHint": "Enter the Verification Code",
   "enterPasswordHint": "Enter the Password",
-  "enterInvitationCodeHint": "Enter the Invitation Code",
+  "enterInvitationCodeHint": "Enter the Invitation Code (Optional)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "Let's embark on the journey of learning\nabout football",
   "noAccount": "Don't have an account? ",

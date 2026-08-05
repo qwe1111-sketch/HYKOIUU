@@ -170,7 +170,7 @@
   "enterEmailHint": "メールアドレスを入力してください",
   "enterCodeHint": "確認コードを入力してください",
   "enterPasswordHint": "パスワードを入力してください",
-  "enterInvitationCodeHint": "招待コードを入力してください",
+  "enterInvitationCodeHint": "招待コードを入力してください（任意）",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "フットボールについて学ぶ旅に出かけましょう",
   "noAccount": "アカウントをお持ちでないですか？ ",

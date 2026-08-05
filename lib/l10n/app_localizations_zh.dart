@@ -420,7 +420,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enterPasswordHint => '请输入密码';
 
   @override
-  String get enterInvitationCodeHint => '请输入邀请码';
+  String get enterInvitationCodeHint => '请输入邀请码(选填)';
 
   @override
   String get loginWelcomeTitle => 'HYKOIUU';

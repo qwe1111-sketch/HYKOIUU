@@ -163,7 +163,7 @@
   "enterEmailHint": "Entrez l'adresse e-mail",
   "enterCodeHint": "Entrez le code de vérification",
   "passwordHint": "Entrez le mot de passe",
-  "enterInvitationCodeHint": "Entrez le code d'invitation",
+  "enterInvitationCodeHint": "Entrez le code d'invitation (Optionnel)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "Commençons le voyage d'apprentissage\ndu football",
   "noAccount": "Pas de compte ? ",

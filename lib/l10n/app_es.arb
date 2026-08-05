@@ -163,7 +163,7 @@
   "enterEmailHint": "Ingresa el correo electrónico",
   "enterCodeHint": "Ingresa el código de verificación",
   "enterPasswordHint": "Ingresa la contraseña",
-  "enterInvitationCodeHint": "Ingresa el código de invitación",
+  "enterInvitationCodeHint": "Ingresa el código de invitación (Opcional)",
   "loginWelcomeTitle": "HYKOIUU",
   "loginWelcomeSubtitle": "Embarquémonos en el viaje de aprender\nsobre el fútbol",
   "noAccount": "¿No tienes una cuenta? ",
