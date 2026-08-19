@@ -116,6 +116,12 @@ abstract class AppLocalizations {
   /// **'HYKOIUU'**
   String get appTitle;
 
+  /// No description provided for @allTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'All Types'**
+  String get allTypes;
+
   /// No description provided for @upNext.
   ///
   /// In en, this message translates to:
@@ -853,6 +859,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load video'**
   String get videoLoadFailed;
+
+  /// No description provided for @videoFootball.
+  ///
+  /// In en, this message translates to:
+  /// **'Football'**
+  String get videoFootball;
+
+  /// No description provided for @videoVolleyball.
+  ///
+  /// In en, this message translates to:
+  /// **'Volleyball'**
+  String get videoVolleyball;
+
+  /// No description provided for @videoRugby.
+  ///
+  /// In en, this message translates to:
+  /// **'Rugby'**
+  String get videoRugby;
+
+  /// No description provided for @videoBaseball.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseball'**
+  String get videoBaseball;
+
+  /// No description provided for @videoBasketball.
+  ///
+  /// In en, this message translates to:
+  /// **'Basketball'**
+  String get videoBasketball;
+
+  /// No description provided for @videoBadminton.
+  ///
+  /// In en, this message translates to:
+  /// **'Badminton'**
+  String get videoBadminton;
+
+  /// No description provided for @videoSnooker.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooker'**
+  String get videoSnooker;
+
+  /// No description provided for @videoTennis.
+  ///
+  /// In en, this message translates to:
+  /// **'Tennis'**
+  String get videoTennis;
 }
 
 class _AppLocalizationsDelegate

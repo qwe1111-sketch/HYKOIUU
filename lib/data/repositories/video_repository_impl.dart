@@ -15,8 +15,12 @@ class VideoRepositoryImpl implements VideoRepository {
   @override
   Future<List<Video>> getVideos({
     required Difficulty difficulty,
+    int? typeId,
   }) async {
-    return await remoteDataSource.getVideos(difficulty: difficulty);
+    return await remoteDataSource.getVideos(
+      difficulty: difficulty,
+      typeId: typeId,
+    );
   }
 
   @override
@@ -35,7 +39,12 @@ class VideoRepositoryImpl implements VideoRepository {
   }
 
   @override
-  Future<List<Video>> getRecommendedVideos() async {
-    return await remoteDataSource.getRecommendedVideos();
+  Future<List<Video>> getRecommendedVideos({int? typeId}) async {
+    return await remoteDataSource.getRecommendedVideos(typeId: typeId);
+  }
+
+  @override
+  Future<List<dynamic>> getVideoTypes() async {
+    return await remoteDataSource.getVideoTypes();
   }
 }

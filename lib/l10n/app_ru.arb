@@ -1,5 +1,6 @@
 {
   "appTitle": "HYKOIUU",
+  "allTypes": "Все типы",
   "upNext": "Далее",
   "videoViews": "{count, plural, =0{Нет просмотров} one{{count} просмотр} few{{count} просмотра} many{{count} просмотров} other{{count} просмотров}} • {date}",
   "@videoViews": {
@@ -200,5 +201,13 @@
   "deviceIncompatible": "Ваше устройство не может декодировать этот формат высокой четкости",
   "resourceError": "Видео временно недоступно, попробуйте позже",
   "networkError": "Нестабильное сетевое соединение, проверьте подключение",
-  "videoLoadFailed": "Не удалось загрузить видео"
+  "videoLoadFailed": "Не удалось загрузить видео",
+  "videoFootball": "Футбол",
+  "videoVolleyball": "Волейбол",
+  "videoRugby": "Регби",
+  "videoBaseball": "Бейсбол",
+  "videoBasketball": "Баскетбол",
+  "videoBadminton": "Бадминтон",
+  "videoSnooker": "Снукер",
+  "videoTennis": "Теннис"
 }

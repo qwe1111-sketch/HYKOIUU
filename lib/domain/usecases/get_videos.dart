@@ -6,7 +6,7 @@ class GetVideos {
 
   GetVideos(this.repository);
 
-  Future<List<Video>> call({required Difficulty difficulty}) {
-    return repository.getVideos(difficulty: difficulty);
+  Future<List<Video>> call({required Difficulty difficulty, int? typeId}) {
+    return repository.getVideos(difficulty: difficulty, typeId: typeId);
   }
 }

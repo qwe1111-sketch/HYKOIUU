@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>My Posts@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="首页（菜单弹出）" transform="translate(-28, -530)" stroke="#FFFFFF" stroke-width="1.5">
+            <g id="编组-12备份-3" transform="translate(28, 528)">
+                <g id="My-Posts" transform="translate(0, 2)">
+                    <g id="编组" transform="translate(1, 1)">
+                        <path d="M8,16 C12.41828,16 16,12.41828 16,8 C16,3.58172 12.41828,0 8,0 C3.58172,0 0,3.58172 0,8 C0,12.41828 3.58172,16 8,16 Z" id="路径"></path>
+                        <path d="M8,0 C7.95964,2.66728 7.30476,4.66784 6.03536,6.00176 C4.76592,7.33564 2.75412,8.00284 0,8.00332" id="路径"></path>
+                        <path d="M15.98728,8.40208 C13.38228,8.2234 11.3918,8.7802 10.0158,10.07248 C8.63976,11.36476 7.96824,13.3406 8.00116,15.99996" id="路径"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

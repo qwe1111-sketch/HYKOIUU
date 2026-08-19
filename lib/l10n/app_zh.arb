@@ -1,5 +1,6 @@
 {
   "appTitle": "HYKOIUU",
+  "allTypes": "全部类型",
   "upNext": "接下来播放",
   "videoViews": "{count, plural, =0{无观看} other{{count} 次观看}} • {date}",
   "@videoViews": {
@@ -200,5 +201,13 @@
   "deviceIncompatible": "您的设备暂时无法解码此高清格式",
   "resourceError": "视频暂时无法播放，请稍后再试",
   "networkError": "网络连接不稳定，请检查网络",
-  "videoLoadFailed": "视频加载失败"
+  "videoLoadFailed": "视频加载失败",
+  "videoFootball": "足球",
+  "videoVolleyball": "排球",
+  "videoRugby": "橄榄球",
+  "videoBaseball": "棒球",
+  "videoBasketball": "篮球",
+  "videoBadminton": "羽毛球",
+  "videoSnooker": "斯诺克",
+  "videoTennis": "网球"
 }

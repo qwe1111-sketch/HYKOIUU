@@ -10,18 +10,21 @@ abstract class VideoRemoteDataSource {
   Future<VideoModel> getVideoById(int id);
   Future<List<VideoModel>> getVideos({
     required Difficulty difficulty,
+    int? typeId,
   });
   Future<void> favoriteVideo(int videoId);
   Future<void> unfavoriteVideo(int videoId);
   Future<List<VideoModel>> getFavoriteVideos();
-  Future<List<VideoModel>> getRecommendedVideos();
+  Future<List<VideoModel>> getRecommendedVideos({int? typeId});
+  Future<List<dynamic>> getVideoTypes();
 }
 
 class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
   final http.Client client;
   final String _baseUrl;
 
-  VideoRemoteDataSourceImpl({required this.client}) : _baseUrl = AuthRemoteDataSourceImpl.getBaseApiUrl();
+  VideoRemoteDataSourceImpl({required this.client})
+    : _baseUrl = AuthRemoteDataSourceImpl.getBaseApiUrl();
 
   Future<Map<String, String>> _getAuthHeaders() async {
     final prefs = await SharedPreferences.getInstance();
@@ -52,10 +55,20 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
   @override
   Future<List<VideoModel>> getVideos({
     required Difficulty difficulty,
+    int? typeId,
   }) async {
     final headers = await _getAuthHeaders();
+
+    // Build URL with optional typeId parameter
+    final StringBuffer urlBuffer = StringBuffer(
+      '$_baseUrl/videos?difficulty=${difficulty.name}&limit=100',
+    );
+    if (typeId != null) {
+      urlBuffer.write('&type_id=$typeId');
+    }
+
     final response = await client.get(
-      Uri.parse('$_baseUrl/videos?difficulty=${difficulty.name}&limit=100'),
+      Uri.parse(urlBuffer.toString()),
       headers: headers,
     );
 
@@ -78,7 +91,9 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
       headers: headers,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to favorite video. Status: ${response.statusCode}, Body: ${response.body}');
+      throw Exception(
+        'Failed to favorite video. Status: ${response.statusCode}, Body: ${response.body}',
+      );
     }
   }
 
@@ -90,7 +105,9 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
       headers: headers,
     );
     if (response.statusCode != 200) {
-      throw Exception('Failed to unfavorite video. Status: ${response.statusCode}, Body: ${response.body}');
+      throw Exception(
+        'Failed to unfavorite video. Status: ${response.statusCode}, Body: ${response.body}',
+      );
     }
   }
 
@@ -108,14 +125,22 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
       final List<dynamic> videoList = json.decode(response.body);
       return videoList.map((json) => VideoModel.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load favorite videos. Status: ${response.statusCode}, Body: ${response.body}');
+      throw Exception(
+        'Failed to load favorite videos. Status: ${response.statusCode}, Body: ${response.body}',
+      );
     }
   }
 
   @override
-  Future<List<VideoModel>> getRecommendedVideos() async {
+  Future<List<VideoModel>> getRecommendedVideos({int? typeId}) async {
+    final headers = await _getAuthHeaders();
+    final StringBuffer urlBuffer = StringBuffer('$_baseUrl/videos/recommended');
+    if (typeId != null) {
+      urlBuffer.write('?type_id=$typeId');
+    }
     final response = await client.get(
-      Uri.parse('$_baseUrl/videos/recommended'),
+      Uri.parse(urlBuffer.toString()),
+      headers: headers,
     );
 
     print('GET /videos/recommended RAW RESPONSE: ${response.body}');
@@ -124,7 +149,26 @@ class VideoRemoteDataSourceImpl implements VideoRemoteDataSource {
       final List<dynamic> videoList = json.decode(response.body);
       return videoList.map((json) => VideoModel.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to load recommended videos. Status: ${response.statusCode}, Body: ${response.body}');
+      throw Exception(
+        'Failed to load recommended videos. Status: ${response.statusCode}, Body: ${response.body}',
+      );
+    }
+  }
+
+  @override
+  Future<List<dynamic>> getVideoTypes() async {
+    final headers = await _getAuthHeaders();
+    final response = await client.get(
+      Uri.parse('$_baseUrl/videos/types'),
+      headers: headers,
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body) as List<dynamic>;
+    } else {
+      throw Exception(
+        'Failed to load video types. Status: ${response.statusCode}, Body: ${response.body}',
+      );
     }
   }
 }

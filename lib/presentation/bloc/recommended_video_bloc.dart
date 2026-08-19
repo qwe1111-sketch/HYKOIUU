@@ -13,11 +13,12 @@ abstract class RecommendedVideoEvent extends Equatable {
 
 class FetchRecommendedVideos extends RecommendedVideoEvent {
   final bool isRefresh;
+  final int? typeId;
 
-  const FetchRecommendedVideos({this.isRefresh = false});
+  const FetchRecommendedVideos({this.isRefresh = false, this.typeId});
 
   @override
-  List<Object> get props => [isRefresh];
+  List<Object> get props => [isRefresh, typeId ?? 0];
 }
 
 // States
@@ -51,10 +52,12 @@ class RecommendedVideoError extends RecommendedVideoState {
 }
 
 // Bloc
-class RecommendedVideoBloc extends Bloc<RecommendedVideoEvent, RecommendedVideoState> {
+class RecommendedVideoBloc
+    extends Bloc<RecommendedVideoEvent, RecommendedVideoState> {
   final GetRecommendedVideos getRecommendedVideos;
 
-  RecommendedVideoBloc({required this.getRecommendedVideos}) : super(RecommendedVideoInitial()) {
+  RecommendedVideoBloc({required this.getRecommendedVideos})
+    : super(RecommendedVideoInitial()) {
     on<FetchRecommendedVideos>(_onFetchRecommendedVideos);
   }
 
@@ -63,13 +66,15 @@ class RecommendedVideoBloc extends Bloc<RecommendedVideoEvent, RecommendedVideoS
     Emitter<RecommendedVideoState> emit,
   ) async {
     // Only fetch videos if the list is not already loaded, unless a refresh is forced.
+    // Also force fetch if typeId changes
     final isLoaded = state is RecommendedVideoLoaded;
-    if (!isLoaded || event.isRefresh) {
-      if (!isLoaded) { // Show loading only on initial load
+    if (!isLoaded || event.isRefresh || event.typeId != null) {
+      if (!isLoaded) {
+        // Show loading only on initial load
         emit(RecommendedVideoLoading());
-      } 
+      }
       try {
-        final videos = await getRecommendedVideos();
+        final videos = await getRecommendedVideos(typeId: event.typeId);
         emit(RecommendedVideoLoaded(videos));
       } catch (e) {
         emit(RecommendedVideoError(e.toString()));

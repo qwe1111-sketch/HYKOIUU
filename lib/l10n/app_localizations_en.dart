@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'HYKOIUU';
 
   @override
+  String get allTypes => 'All Types';
+
+  @override
   String get upNext => 'Up Next';
 
   @override
@@ -466,4 +469,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get videoLoadFailed => 'Failed to load video';
+
+  @override
+  String get videoFootball => 'Football';
+
+  @override
+  String get videoVolleyball => 'Volleyball';
+
+  @override
+  String get videoRugby => 'Rugby';
+
+  @override
+  String get videoBaseball => 'Baseball';
+
+  @override
+  String get videoBasketball => 'Basketball';
+
+  @override
+  String get videoBadminton => 'Badminton';
+
+  @override
+  String get videoSnooker => 'Snooker';
+
+  @override
+  String get videoTennis => 'Tennis';
 }

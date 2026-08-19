@@ -12,6 +12,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appTitle => 'HYKOIUU';
 
   @override
+  String get allTypes => '全部类型';
+
+  @override
   String get upNext => '接下来播放';
 
   @override
@@ -454,4 +457,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get videoLoadFailed => '视频加载失败';
+
+  @override
+  String get videoFootball => '足球';
+
+  @override
+  String get videoVolleyball => '排球';
+
+  @override
+  String get videoRugby => '橄榄球';
+
+  @override
+  String get videoBaseball => '棒球';
+
+  @override
+  String get videoBasketball => '篮球';
+
+  @override
+  String get videoBadminton => '羽毛球';
+
+  @override
+  String get videoSnooker => '斯诺克';
+
+  @override
+  String get videoTennis => '网球';
 }

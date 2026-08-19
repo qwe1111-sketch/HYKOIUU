@@ -1,5 +1,6 @@
 {
   "appTitle": "HYKOIUU",
+  "allTypes": "Tous les types",
   "upNext": "Suivant",
   "videoViews": "{count, plural, =0{Aucune vue} =1{1 vue} other{{count} vues}} • {date}",
   "@videoViews": {
@@ -174,5 +175,13 @@
   "deviceIncompatible": "Votre appareil ne peut pas décoder ce format haute définition",
   "resourceError": "La vidéo ne peut pas être lue pour le moment, veuillez réessayer plus tard",
   "networkError": "Connexion réseau instable, veuillez vérifier votre connexion",
-  "videoLoadFailed": "Échec du chargement de la vidéo"
+  "videoLoadFailed": "Échec du chargement de la vidéo",
+  "videoFootball": "Football",
+  "videoVolleyball": "Volleyball",
+  "videoRugby": "Rugby",
+  "videoBaseball": "Baseball",
+  "videoBasketball": "Basketball",
+  "videoBadminton": "Badminton",
+  "videoSnooker": "Snooker",
+  "videoTennis": "Tennis"
 }

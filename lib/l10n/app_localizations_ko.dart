@@ -12,6 +12,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get appTitle => 'HYKOIUU';
 
   @override
+  String get allTypes => '모든 유형';
+
+  @override
   String get upNext => '다음';
 
   @override
@@ -459,4 +462,28 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get videoLoadFailed => '비디오를 로드하지 못했습니다.';
+
+  @override
+  String get videoFootball => '축구';
+
+  @override
+  String get videoVolleyball => '배구';
+
+  @override
+  String get videoRugby => '럭비';
+
+  @override
+  String get videoBaseball => '야구';
+
+  @override
+  String get videoBasketball => '농구';
+
+  @override
+  String get videoBadminton => '배드민턴';
+
+  @override
+  String get videoSnooker => '스누커';
+
+  @override
+  String get videoTennis => '테니스';
 }

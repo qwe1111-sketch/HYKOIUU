@@ -6,7 +6,7 @@ class GetRecommendedVideos {
 
   GetRecommendedVideos(this.repository);
 
-  Future<List<Video>> call() async {
-    return await repository.getRecommendedVideos();
+  Future<List<Video>> call({int? typeId}) async {
+    return await repository.getRecommendedVideos(typeId: typeId);
   }
 }

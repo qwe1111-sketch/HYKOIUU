@@ -15,6 +15,7 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
   final CacheManager cacheManager;
 
   Difficulty _currentDifficulty = Difficulty.Easy;
+  int? _currentTypeId;
   List<Video> _videos = [];
   final Map<int, double> _visibilityMap = {};
 
@@ -31,7 +32,17 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     on<UpdateVideoVisibility>(_onUpdateVideoVisibility);
   }
 
-  void _onUpdateVideoVisibility(UpdateVideoVisibility event, Emitter<VideoState> emit) {
+  // Get current typeId
+  int? get currentTypeId => _currentTypeId;
+
+  void setTypeId(int? typeId) {
+    _currentTypeId = typeId;
+  }
+
+  void _onUpdateVideoVisibility(
+    UpdateVideoVisibility event,
+    Emitter<VideoState> emit,
+  ) {
     if (state is VideoLoaded) {
       _visibilityMap[event.videoId] = event.visibleFraction;
 
@@ -69,37 +80,56 @@ class VideoBloc extends Bloc<VideoEvent, VideoState> {
     }
   }
 
-  void _onUpdateFavoriteStatus(UpdateFavoriteStatus event, Emitter<VideoState> emit) {
+  void _onUpdateFavoriteStatus(
+    UpdateFavoriteStatus event,
+    Emitter<VideoState> emit,
+  ) {
     if (state is VideoLoaded) {
       final currentState = state as VideoLoaded;
-      final videoIndex = currentState.videos.indexWhere((v) => v.id == event.videoId);
+      final videoIndex = currentState.videos.indexWhere(
+        (v) => v.id == event.videoId,
+      );
 
       if (videoIndex != -1) {
         final updatedVideos = List<Video>.from(currentState.videos);
         final oldVideo = updatedVideos[videoIndex];
-        updatedVideos[videoIndex] = oldVideo.copyWith(isFavorited: event.isFavorited);
+        updatedVideos[videoIndex] = oldVideo.copyWith(
+          isFavorited: event.isFavorited,
+        );
 
         emit(currentState.copyWith(videos: updatedVideos));
       }
     }
   }
 
-  Future<void> _onFetchVideos(FetchVideos event, Emitter<VideoState> emit) async {
+  Future<void> _onFetchVideos(
+    FetchVideos event,
+    Emitter<VideoState> emit,
+  ) async {
     emit(VideoLoading());
     try {
-      _videos = await getVideos(difficulty: event.difficulty);
-      emit(VideoLoaded(
-        videos: List.of(_videos),
-      ));
+      _currentTypeId = event.typeId;
+      _videos = await getVideos(
+        difficulty: event.difficulty,
+        typeId: event.typeId,
+      );
+      emit(VideoLoaded(videos: List.of(_videos)));
     } catch (e) {
       emit(VideoError('Failed to fetch videos: $e'));
     }
   }
 
-  Future<void> _onFetchVideosByDifficulty(FetchVideosByDifficulty event, Emitter<VideoState> emit) async {
+  Future<void> _onFetchVideosByDifficulty(
+    FetchVideosByDifficulty event,
+    Emitter<VideoState> emit,
+  ) async {
     emit(VideoLoading());
     try {
-      final videos = await getVideos(difficulty: event.difficulty);
+      _currentTypeId = event.typeId;
+      final videos = await getVideos(
+        difficulty: event.difficulty,
+        typeId: event.typeId,
+      );
       emit(VideoLoaded(videos: videos));
     } catch (e) {
       emit(VideoError('Failed to fetch videos by difficulty: $e'));

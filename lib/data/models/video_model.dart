@@ -15,6 +15,8 @@ class VideoModel extends Video {
     required super.createdAt,
     required super.isFavorited,
     required super.difficulty,
+    super.typeId,
+    super.typeName,
   });
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
@@ -48,7 +50,10 @@ class VideoModel extends Video {
     Difficulty parsedDifficulty = Difficulty.Easy;
 
     // --- 核心修复：使用正则表达式精准提取标题中的 LEVEL ---
-    final levelMatch = RegExp(r'LEVEL\s*(\d)', caseSensitive: false).firstMatch(title);
+    final levelMatch = RegExp(
+      r'LEVEL\s*(\d)',
+      caseSensitive: false,
+    ).firstMatch(title);
     if (levelMatch != null) {
       final int? levelNum = int.tryParse(levelMatch.group(1) ?? '');
       if (levelNum != null) {
@@ -64,11 +69,12 @@ class VideoModel extends Video {
       }
     } else {
       // 兜底：尝试从传统字段解析
-      final dynamic difficultyData = json['difficulty'] ?? json['level'] ?? json['Difficulty'];
+      final dynamic difficultyData =
+          json['difficulty'] ?? json['level'] ?? json['Difficulty'];
       if (difficultyData != null) {
         if (difficultyData is int) {
           int index = difficultyData;
-          if (index >= 1 && index <= 4) index -= 1; 
+          if (index >= 1 && index <= 4) index -= 1;
           if (index >= 0 && index < Difficulty.values.length) {
             parsedDifficulty = Difficulty.values[index];
           }
@@ -81,6 +87,10 @@ class VideoModel extends Video {
         }
       }
     }
+
+    // Parse typeId and typeName from JSON
+    final int? typeId = json['type_id'] != null ? json['type_id'] as int : null;
+    final String? typeName = json['type_name'] as String?;
 
     return VideoModel(
       id: json['id'] ?? 0,
@@ -95,6 +105,8 @@ class VideoModel extends Video {
       createdAt: createdAtDate,
       isFavorited: json['isFavorited'] ?? false,
       difficulty: parsedDifficulty,
+      typeId: typeId,
+      typeName: typeName,
     );
   }
 }

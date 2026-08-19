@@ -14,6 +14,8 @@ class Video extends Equatable {
   final DateTime createdAt;
   final bool isFavorited;
   final Difficulty difficulty;
+  final int? typeId;
+  final String? typeName;
 
   const Video({
     required this.id,
@@ -28,6 +30,8 @@ class Video extends Equatable {
     required this.createdAt,
     this.isFavorited = false,
     required this.difficulty,
+    this.typeId,
+    this.typeName,
   });
 
   Video copyWith({
@@ -43,6 +47,8 @@ class Video extends Equatable {
     DateTime? createdAt,
     bool? isFavorited,
     Difficulty? difficulty,
+    int? typeId,
+    String? typeName,
   }) {
     return Video(
       id: id ?? this.id,
@@ -57,9 +63,26 @@ class Video extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       isFavorited: isFavorited ?? this.isFavorited,
       difficulty: difficulty ?? this.difficulty,
+      typeId: typeId ?? this.typeId,
+      typeName: typeName ?? this.typeName,
     );
   }
 
   @override
-  List<Object?> get props => [id, title, description, videoUrl, thumbnailUrl, authorName, userAvatarUrl, viewCount, likeCount, createdAt, isFavorited, difficulty];
+  List<Object?> get props => [
+    id,
+    title,
+    description,
+    videoUrl,
+    thumbnailUrl,
+    authorName,
+    userAvatarUrl,
+    viewCount,
+    likeCount,
+    createdAt,
+    isFavorited,
+    difficulty,
+    typeId,
+    typeName,
+  ];
 }

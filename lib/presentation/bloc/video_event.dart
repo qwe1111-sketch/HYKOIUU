@@ -11,20 +11,22 @@ abstract class VideoEvent extends Equatable {
 class FetchVideos extends VideoEvent {
   final Difficulty difficulty;
   final bool isRefresh;
+  final int? typeId; // Optional type filter
 
-  const FetchVideos(this.difficulty, {this.isRefresh = false});
+  const FetchVideos(this.difficulty, {this.isRefresh = false, this.typeId});
 
   @override
-  List<Object> get props => [difficulty, isRefresh];
+  List<Object> get props => [difficulty, isRefresh, typeId ?? -1];
 }
 
 class FetchVideosByDifficulty extends VideoEvent {
   final Difficulty difficulty;
+  final int? typeId; // Optional type filter
 
-  const FetchVideosByDifficulty(this.difficulty);
+  const FetchVideosByDifficulty(this.difficulty, {this.typeId});
 
   @override
-  List<Object> get props => [difficulty];
+  List<Object> get props => [difficulty, typeId ?? -1];
 }
 
 class PausePlayback extends VideoEvent {

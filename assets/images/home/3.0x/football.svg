@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>My Posts@2x</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="首页（菜单弹出）" transform="translate(-28, -110)" stroke="#AAF218" stroke-width="1.5">
+            <g id="编组-12备份" transform="translate(28, 108)">
+                <g id="My-Posts" transform="translate(0, 2)">
+                    <g id="编组" transform="translate(1, 1)">
+                        <path d="M8,16 C12.41828,16 16,12.41828 16,8 C16,3.58172 12.41828,0 8,0 C3.58172,0 0,3.58172 0,8 C0,12.41828 3.58172,16 8,16 Z" id="路径"></path>
+                        <polyline id="路径" points="10.43704 1 8.02772 2.7436 8.02772 4.48716 11.1254 6.9282 12.84632 6.23076 13.87888 3.44104"></polyline>
+                        <polyline id="路径" points="5.61844 1 8.02772 2.7436 8.02772 4.48716 4.93004 6.9282 3.20912 6.23076 2.176564 3.44104"></polyline>
+                        <polyline id="路径" points="0.8 7.27692 3.20932 6.23076 4.93024 6.9282 5.9628 10.76408 4.93024 12.15896 1.83256 12.15896"></polyline>
+                        <polyline id="路径" points="4.93008 14.59996 4.93008 12.15892 5.96264 10.76408 10.09288 10.76408 11.12544 12.15892 11.12544 14.59996"></polyline>
+                        <polyline id="路径" points="14.2232 12.15896 11.12552 12.15896 10.09296 10.76408 11.12552 6.9282 12.84644 6.23076 15.59996 7.62564"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
