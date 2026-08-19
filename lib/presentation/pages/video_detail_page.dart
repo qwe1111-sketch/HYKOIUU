@@ -99,7 +99,7 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
         });
         
         if (mounted) {
-          context.read<VideoBloc>().add(FetchVideosByDifficulty(_currentVideo.difficulty));
+          context.read<VideoBloc>().add(FetchVideosByDifficulty(_currentVideo.difficulty, typeId: _currentVideo.typeId));
           await _fetchInteractiveStatus();
         }
       }
