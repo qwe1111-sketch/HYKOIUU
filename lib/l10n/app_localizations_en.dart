@@ -349,6 +349,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incorrectInvitationCode => 'Incorrect invitation code';
 
   @override
+  String get invitationCodeInputHint => 'Enter invitation code';
+
+  @override
+  String get invitationCodeTooltip =>
+      'If you have purchased other products, enter the activation code on the product package to view their tutorial videos.';
+
+  @override
+  String get invitationCodeRequired => 'Please enter the invitation code';
+
+  @override
+  String get invitationCodeApplied =>
+      'Invitation code applied! All video types are now unlocked.';
+
+  @override
   String get usernameAlreadyExists => 'Username already exists';
 
   @override

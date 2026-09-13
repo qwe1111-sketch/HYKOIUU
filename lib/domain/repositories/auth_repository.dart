@@ -27,4 +27,5 @@ abstract class AuthRepository {
   });
   Future<void> deleteAccount();
   Future<bool> checkUsername(String username);
+  Future<void> applyInvitationCode(String invitationCode);
 }

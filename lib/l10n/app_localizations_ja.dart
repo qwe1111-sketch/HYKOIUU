@@ -346,6 +346,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get incorrectInvitationCode => '不正な招待コードです';
 
   @override
+  String get invitationCodeInputHint => '招待コードを入力';
+
+  @override
+  String get invitationCodeTooltip =>
+      '他の製品をご購入済みの場合、製品パッケージのアクティベーションコードを入力してチュートリアル動画をご覧いただけます。';
+
+  @override
+  String get invitationCodeRequired => '招待コードを入力してください';
+
+  @override
+  String get invitationCodeApplied => '招待コードが適用されました。すべての動画タイプが解放されました';
+
+  @override
   String get usernameAlreadyExists => 'ユーザー名はすでに存在します';
 
   @override

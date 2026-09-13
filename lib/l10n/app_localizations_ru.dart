@@ -367,6 +367,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get incorrectInvitationCode => 'Неверный пригласительный код';
 
   @override
+  String get invitationCodeInputHint => 'Введите пригласительный код';
+
+  @override
+  String get invitationCodeTooltip =>
+      'Если вы приобрели другие продукты, введите код активации на упаковке продукта, чтобы просмотреть их обучающие видео.';
+
+  @override
+  String get invitationCodeRequired =>
+      'Пожалуйста, введите пригласительный код';
+
+  @override
+  String get invitationCodeApplied =>
+      'Пригласительный код применён! Все типы видео разблокированы.';
+
+  @override
   String get usernameAlreadyExists => 'Имя пользователя уже существует';
 
   @override

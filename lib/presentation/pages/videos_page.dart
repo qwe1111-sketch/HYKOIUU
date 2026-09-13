@@ -147,84 +147,107 @@ class _VideosPageState extends State<VideosPage> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: topPadding + 20),
-                // Top bar: logo perfectly centered, menu button aligned to left
-                SizedBox(
-                  height: 44,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Center the logo using Row for guaranteed screen-center
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/login/app_logo.svg',
-                            height: 32,
-                            fit: BoxFit.contain,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
-                            ),
-                            placeholderBuilder: (context) => Text(
-                              l10n.appTitle,
-                              style: const TextStyle(
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+          RefreshIndicator(
+            color: const Color(0xFFCCFF00),
+            backgroundColor: const Color(0xFF1C1C1E),
+            onRefresh: () async {
+              _currentBloc.add(
+                FetchVideos(
+                  Difficulty.values[_selectedDifficultyIndex],
+                  isRefresh: true,
+                  typeId: _selectedTypeId,
+                ),
+              );
+              if (context.mounted) {
+                context.read<RecommendedVideoBloc>().add(
+                  FetchRecommendedVideos(
+                    typeId: _selectedTypeId,
+                    isRefresh: true,
+                  ),
+                );
+              }
+              await Future.delayed(const Duration(milliseconds: 500));
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: topPadding + 20),
+                  // Top bar: logo perfectly centered, menu button aligned to left
+                  SizedBox(
+                    height: 44,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Center the logo using Row for guaranteed screen-center
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/login/app_logo.svg',
+                              height: 32,
+                              fit: BoxFit.contain,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                              placeholderBuilder: (context) => Text(
+                                l10n.appTitle,
+                                style: const TextStyle(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      // Menu button pinned to the left edge, centered with logo
-                      Positioned(left: 24, child: _buildTypeMenuButton()),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const _HomeCarousel(),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: _buildDifficultySelector(localizedDifficulties),
-                ),
-                const SizedBox(height: 16),
-                BlocProvider.value(
-                  value: _currentBloc,
-                  child: BlocBuilder<VideoBloc, VideoState>(
-                    builder: (context, state) {
-                      if (state is VideoLoaded) {
-                        return ListView.builder(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: state.videos.length,
-                          itemBuilder: (context, index) {
-                            final video = state.videos[index];
-                            // 严格过滤：只有难度枚举匹配的才显示在列表中
-                            if (video.difficulty !=
-                                Difficulty.values[_selectedDifficultyIndex]) {
-                              return const SizedBox.shrink();
-                            }
-                            return _VideoListCard(video: video);
-                          },
-                        );
-                      }
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFFCCFF00),
+                          ],
                         ),
-                      );
-                    },
+                        // Menu button pinned to the left edge, centered with logo
+                        Positioned(left: 24, child: _buildTypeMenuButton()),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  const _HomeCarousel(),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: _buildDifficultySelector(localizedDifficulties),
+                  ),
+                  const SizedBox(height: 16),
+                  BlocProvider.value(
+                    value: _currentBloc,
+                    child: BlocBuilder<VideoBloc, VideoState>(
+                      builder: (context, state) {
+                        if (state is VideoLoaded) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.videos.length,
+                            itemBuilder: (context, index) {
+                              final video = state.videos[index];
+                              // 严格过滤：只有难度枚举匹配的才显示在列表中
+                              if (video.difficulty !=
+                                  Difficulty.values[_selectedDifficultyIndex]) {
+                                return const SizedBox.shrink();
+                              }
+                              return _VideoListCard(video: video);
+                            },
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xFFCCFF00),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

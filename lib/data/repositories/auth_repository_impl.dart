@@ -91,4 +91,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> checkUsername(String username) {
     return remoteDataSource.checkUsername(username);
   }
+
+  @override
+  Future<void> applyInvitationCode(String invitationCode) {
+    return remoteDataSource.applyInvitationCode(invitationCode);
+  }
 }

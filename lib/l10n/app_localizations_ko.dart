@@ -347,6 +347,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get incorrectInvitationCode => '잘못된 초대 코드입니다';
 
   @override
+  String get invitationCodeInputHint => '초대 코드 입력';
+
+  @override
+  String get invitationCodeTooltip =>
+      '다른 제품을 구매하셨다면, 제품 포장의 활성화 코드를 입력하여 튜토리얼 영상을 확인할 수 있습니다.';
+
+  @override
+  String get invitationCodeRequired => '초대 코드를 입력해 주세요';
+
+  @override
+  String get invitationCodeApplied => '초대 코드가 적용되었습니다. 모든 영상 유형이 잠금 해제되었습니다';
+
+  @override
   String get usernameAlreadyExists => '사용자 이름이 이미 존재합니다';
 
   @override

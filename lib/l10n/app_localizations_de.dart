@@ -355,6 +355,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get incorrectInvitationCode => 'Falscher Einladungscode';
 
   @override
+  String get invitationCodeInputHint => 'Einladungscode eingeben';
+
+  @override
+  String get invitationCodeTooltip =>
+      'Wenn Sie andere Produkte gekauft haben, geben Sie den Aktivierungscode auf der Produktverpackung ein, um deren Tutorial-Videos anzusehen.';
+
+  @override
+  String get invitationCodeRequired => 'Bitte Einladungscode eingeben';
+
+  @override
+  String get invitationCodeApplied =>
+      'Einladungscode angewendet! Alle Videotypen sind freigeschaltet.';
+
+  @override
   String get usernameAlreadyExists => 'Benutzername bereits vergeben';
 
   @override

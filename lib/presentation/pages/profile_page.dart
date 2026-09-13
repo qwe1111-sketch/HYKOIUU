@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sport_flutter/domain/entities/user.dart';
+import 'package:sport_flutter/data/repositories/auth_repository_impl.dart';
 import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/locale_bloc.dart';
 import 'package:sport_flutter/presentation/pages/edit_profile_page.dart';
@@ -59,7 +60,7 @@ class ProfilePage extends StatelessWidget {
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: 350, 
+                  height: 350,
                   child: Image.asset(
                     'assets/images/profile/top.png',
                     fit: BoxFit.cover,
@@ -98,8 +99,8 @@ class ProfilePage extends StatelessWidget {
                         child: Text(
                           l10n.myProfile,
                           style: const TextStyle(
-                            fontSize: 32, 
-                            fontWeight: FontWeight.bold, 
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                             letterSpacing: -1,
                           ),
@@ -113,21 +114,72 @@ class ProfilePage extends StatelessWidget {
                       const SizedBox(height: 30),
                       // 功能卡片组
                       _buildGroup([
-                        _buildCustomTile(l10n.myPosts, 'assets/images/profile/my_posts.svg', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MyPostsPage()))),
-                        _buildCustomTile(l10n.myFavorites, 'assets/images/profile/favorites.svg', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FavoritesPage()))),
+                        _buildCustomTile(
+                          l10n.myPosts,
+                          'assets/images/profile/my_posts.svg',
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const MyPostsPage(),
+                            ),
+                          ),
+                        ),
+                        _buildCustomTile(
+                          l10n.myFavorites,
+                          'assets/images/profile/favorites.svg',
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const FavoritesPage(),
+                            ),
+                          ),
+                        ),
                       ]),
                       _buildGroup([
+                        if (!user.usedInvitationCode)
+                          _buildCustomTile(
+                            l10n.invitationCode,
+                            'assets/images/profile/invitationcode.svg',
+                            () => _showInvitationCodeDialog(context, l10n),
+                          ),
                         _buildCustomTile(
-                          l10n.language, 
-                          'assets/images/profile/language.svg', 
+                          l10n.language,
+                          'assets/images/profile/language.svg',
                           () => _showLanguageDialog(context, l10n),
                           trailingText: currentLanguageName,
                         ),
-                        _buildCustomTile(l10n.editProfile, 'assets/images/profile/edit_profile.svg', () => Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfilePage(user: user)))),
-                        _buildCustomTile(l10n.resetPassword, 'assets/images/profile/reset_password.svg', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ResetPasswordPage()))),
+                        _buildCustomTile(
+                          l10n.editProfile,
+                          'assets/images/profile/edit_profile.svg',
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditProfilePage(user: user),
+                            ),
+                          ),
+                        ),
+                        _buildCustomTile(
+                          l10n.resetPassword,
+                          'assets/images/profile/reset_password.svg',
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ResetPasswordPage(),
+                            ),
+                          ),
+                        ),
                       ]),
                       _buildGroup([
-                        _buildCustomTile(l10n.privacyPolicy, 'assets/images/profile/privacy_policy.svg', () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyPage()))),
+                        _buildCustomTile(
+                          l10n.privacyPolicy,
+                          'assets/images/profile/privacy_policy.svg',
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PrivacyPolicyPage(),
+                            ),
+                          ),
+                        ),
                       ]),
                       const SizedBox(height: 35),
                       _buildLogoutButton(context, l10n),
@@ -152,7 +204,10 @@ class ProfilePage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFFCCFF00), width: 1), // 荧光绿边框
+            border: Border.all(
+              color: const Color(0xFFCCFF00),
+              width: 1,
+            ), // 荧光绿边框
           ),
           child: ClipOval(
             child: Container(
@@ -163,7 +218,11 @@ class ProfilePage extends StatelessWidget {
                   ? CachedNetworkImage(
                       imageUrl: user.avatarUrl!,
                       fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => const Icon(Icons.person, size: 32, color: Colors.white54),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.person,
+                        size: 32,
+                        color: Colors.white54,
+                      ),
                     )
                   : const Icon(Icons.person, size: 32, color: Colors.white54),
             ),
@@ -176,11 +235,17 @@ class ProfilePage extends StatelessWidget {
             children: [
               Text(
                 user.username,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
-                (user.bio == null || user.bio!.isEmpty) ? l10n.defaultBio : user.bio!,
+                (user.bio == null || user.bio!.isEmpty)
+                    ? l10n.defaultBio
+                    : user.bio!,
                 style: const TextStyle(color: Colors.white70, fontSize: 14),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -197,7 +262,10 @@ class ProfilePage extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFCCFF00).withOpacity(0.3), width: 1), 
+        border: Border.all(
+          color: const Color(0xFFCCFF00).withOpacity(0.3),
+          width: 1,
+        ),
       ),
       child: Material(
         color: Colors.transparent,
@@ -208,7 +276,12 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildCustomTile(String title, String assetPath, VoidCallback onTap, {String? trailingText}) {
+  Widget _buildCustomTile(
+    String title,
+    String assetPath,
+    VoidCallback onTap, {
+    String? trailingText,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -216,34 +289,43 @@ class ProfilePage extends StatelessWidget {
         child: Row(
           children: [
             SvgPicture.asset(
-              assetPath, 
-              width: 26, height: 26,
-              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-              errorBuilder: (context, error, stackTrace) => const Icon(Icons.circle, size: 6, color: Colors.white10),
+              assetPath,
+              width: 26,
+              height: 26,
+              colorFilter: const ColorFilter.mode(
+                Colors.white,
+                BlendMode.srcIn,
+              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.circle, size: 6, color: Colors.white10),
             ),
             const SizedBox(width: 16),
             Text(
-              title, 
+              title,
               style: const TextStyle(
-                color: Colors.white, 
-                fontSize: 16, 
-                fontWeight: FontWeight.w400, 
-                height: 22 / 16, 
-                letterSpacing: 0, 
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                height: 22 / 16,
+                letterSpacing: 0,
               ),
             ),
             const Spacer(),
             if (trailingText != null)
               Text(
-                trailingText, 
+                trailingText,
                 style: const TextStyle(
-                  color: Colors.white54, 
+                  color: Colors.white54,
                   fontSize: 14,
                   height: 22 / 14,
-                )
+                ),
               ),
             const SizedBox(width: 8),
-            const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 14),
+            const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.white24,
+              size: 14,
+            ),
           ],
         ),
       ),
@@ -257,15 +339,21 @@ class ProfilePage extends StatelessWidget {
         return Dialog(
           backgroundColor: const Color(0xFF1C1C1E),
           insetPadding: const EdgeInsets.symmetric(horizontal: 40),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 24),
               // 1. 标题
               Text(
-                l10n.selectLanguage, 
-                style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500)
+                l10n.selectLanguage,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 16),
               // 2. 顶头分割线
@@ -281,7 +369,9 @@ class ProfilePage extends StatelessWidget {
                         children: [
                           InkWell(
                             onTap: () {
-                              context.read<LocaleBloc>().add(ChangeLocale(Locale(lang['code']!)));
+                              context.read<LocaleBloc>().add(
+                                ChangeLocale(Locale(lang['code']!)),
+                              );
                               Navigator.of(dialogContext).pop();
                             },
                             child: Container(
@@ -291,7 +381,7 @@ class ProfilePage extends StatelessWidget {
                               child: Text(
                                 lang['name']!,
                                 style: const TextStyle(
-                                  color: Color(0xFFCCFF00), 
+                                  color: Color(0xFFCCFF00),
                                   fontSize: 18,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -299,7 +389,11 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           if (index < _supportedLanguages.length - 1)
-                            const Divider(color: Colors.white10, height: 1, thickness: 0.5), // 移除缩进，顶头显示
+                            const Divider(
+                              color: Colors.white10,
+                              height: 1,
+                              thickness: 0.5,
+                            ), // 移除缩进，顶头显示
                         ],
                       );
                     }).toList(),
@@ -314,6 +408,27 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  void _showInvitationCodeDialog(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (_) => _InvitationCodeDialog(l10n: l10n),
+    );
+
+    if (result == true && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.invitationCodeApplied),
+          backgroundColor: const Color(0xFF1C1C1E),
+        ),
+      );
+      // 重新拉取用户资料，usedInvitationCode 变为 true 后入口自动消失
+      context.read<AuthBloc>().add(AppStarted());
+    }
+  }
+
   Widget _buildLogoutButton(BuildContext context, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -323,25 +438,35 @@ class ProfilePage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () => context.read<AuthBloc>().add(LogoutEvent()),
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFCCFF00), 
+            backgroundColor: const Color(0xFFCCFF00),
             foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
             elevation: 0,
           ),
-          child: Text(l10n.logout, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          child: Text(
+            l10n.logout,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildDeleteAccountButton(BuildContext context, AppLocalizations l10n) {
+  Widget _buildDeleteAccountButton(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) {
     return TextButton(
       onPressed: () {
         showDialog(
           context: context,
           builder: (dialogContext) => Dialog(
             backgroundColor: const Color(0xFF1C1C1E),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -381,7 +506,10 @@ class ProfilePage extends StatelessWidget {
                           alignment: Alignment.center,
                           child: Text(
                             l10n.cancel,
-                            style: const TextStyle(color: Colors.white, fontSize: 16),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
@@ -417,9 +545,216 @@ class ProfilePage extends StatelessWidget {
       child: Text(
         l10n.deleteAccount,
         style: const TextStyle(
-          color: Color(0xFFCCFF00), 
+          color: Color(0xFFCCFF00),
           decoration: TextDecoration.underline,
           fontSize: 13,
+        ),
+      ),
+    );
+  }
+}
+
+class _InvitationCodeDialog extends StatefulWidget {
+  final AppLocalizations l10n;
+  const _InvitationCodeDialog({required this.l10n});
+
+  @override
+  State<_InvitationCodeDialog> createState() => _InvitationCodeDialogState();
+}
+
+class _InvitationCodeDialogState extends State<_InvitationCodeDialog> {
+  final _controller = TextEditingController();
+  bool _isLoading = false;
+  String? _errorText;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  String _mapError(String raw) {
+    final l10n = widget.l10n;
+    if (raw == 'incorrectInvitationCode') return l10n.incorrectInvitationCode;
+    if (raw == 'invitationCodeRequired') return l10n.invitationCodeRequired;
+    return raw;
+  }
+
+  Future<void> _submit() async {
+    final code = _controller.text.trim();
+    if (code.isEmpty) {
+      setState(() => _errorText = widget.l10n.invitationCodeRequired);
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+      _errorText = null;
+    });
+
+    try {
+      await context.read<AuthRepositoryImpl>().applyInvitationCode(code);
+      if (mounted) Navigator.of(context).pop(true);
+    } catch (e) {
+      final raw = e.toString().replaceFirst('Exception: ', '');
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorText = _mapError(raw);
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return Dialog(
+      backgroundColor: const Color(0xFF1C1C1E),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.invitationCode,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _isLoading
+                      ? null
+                      : () => Navigator.of(context).pop(false),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white54,
+                    size: 22,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _controller,
+              enabled: !_isLoading,
+              autofocus: true,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _submit(),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              decoration: InputDecoration(
+                hintText: l10n.invitationCodeInputHint,
+                hintStyle: const TextStyle(color: Colors.white38, fontSize: 14),
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.06),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+                suffixIcon: GestureDetector(
+                  onTap: _isLoading
+                      ? null
+                      : () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              backgroundColor: const Color(0xFF1C1C1E),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              content: Text(
+                                l10n.invitationCodeTooltip,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  height: 1.5,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text(
+                                    l10n.save,
+                                    style: const TextStyle(
+                                      color: Color(0xFFCCFF00),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                  child: const Icon(
+                    Icons.info_outline,
+                    color: Color(0xFFCCFF00),
+                    size: 20,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(
+                    color: const Color(0xFFCCFF00).withOpacity(0.3),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(color: Color(0xFFCCFF00)),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: Colors.white12),
+                ),
+              ),
+            ),
+            if (_errorText != null) ...[
+              const SizedBox(height: 10),
+              Text(
+                _errorText!,
+                style: const TextStyle(color: Colors.redAccent, fontSize: 13),
+              ),
+            ],
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFCCFF00),
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  elevation: 0,
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.black,
+                        ),
+                      )
+                    : Text(
+                        l10n.save,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );

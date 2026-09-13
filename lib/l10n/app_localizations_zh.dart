@@ -344,6 +344,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get incorrectInvitationCode => '邀请码不正确';
 
   @override
+  String get invitationCodeInputHint => '请输入邀请码';
+
+  @override
+  String get invitationCodeTooltip => '如果您已购买其他产品，请输入产品包装上的激活码以查看其教学视频。';
+
+  @override
+  String get invitationCodeRequired => '邀请码不能为空';
+
+  @override
+  String get invitationCodeApplied => '邀请码验证成功，已解锁全部类型视频';
+
+  @override
   String get usernameAlreadyExists => '用户名已存在';
 
   @override

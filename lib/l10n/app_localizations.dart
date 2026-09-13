@@ -638,6 +638,30 @@ abstract class AppLocalizations {
   /// **'Incorrect invitation code'**
   String get incorrectInvitationCode;
 
+  /// No description provided for @invitationCodeInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter invitation code'**
+  String get invitationCodeInputHint;
+
+  /// No description provided for @invitationCodeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have purchased other products, enter the activation code on the product package to view their tutorial videos.'**
+  String get invitationCodeTooltip;
+
+  /// No description provided for @invitationCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the invitation code'**
+  String get invitationCodeRequired;
+
+  /// No description provided for @invitationCodeApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Invitation code applied! All video types are now unlocked.'**
+  String get invitationCodeApplied;
+
   /// No description provided for @usernameAlreadyExists.
   ///
   /// In en, this message translates to:

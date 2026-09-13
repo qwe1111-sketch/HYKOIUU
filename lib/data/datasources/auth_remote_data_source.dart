@@ -31,6 +31,7 @@ abstract class AuthRemoteDataSource {
   });
   Future<void> deleteAccount();
   Future<bool> checkUsername(String username);
+  Future<void> applyInvitationCode(String invitationCode);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -248,5 +249,18 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return data['exists'] == true;
     }
     return false;
+  }
+
+  @override
+  Future<void> applyInvitationCode(String invitationCode) async {
+    final headers = await _getAuthHeaders();
+    final response = await client.post(
+      Uri.parse('$_baseUrl/apply-invitation-code'),
+      headers: headers,
+      body: jsonEncode({'invitationCode': invitationCode}),
+    );
+    if (response.statusCode != 200) {
+      throw _handleError(response);
+    }
   }
 }
