@@ -333,20 +333,28 @@ class _VideosPageState extends State<VideosPage> {
             const SizedBox(height: 8),
             // Type list
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: _videoTypes.length,
-                itemBuilder: (context, index) {
-                  final type = _videoTypes[index];
-                  final int typeId = type['id'] as int;
-                  final String typeName = type['name'] as String? ?? 'Unknown';
-                  return _buildTypeDrawerItem(
-                    label: _getTranslatedTypeName(typeName, l10n),
-                    iconPath: _getTypeIcon(typeName),
-                    isSelected: _selectedTypeId == typeId,
-                    onTap: () => _onTypeSelected(typeId),
-                  );
+              child: RefreshIndicator(
+                color: const Color(0xFFCCFF00),
+                backgroundColor: Colors.white.withOpacity(0.08),
+                onRefresh: () async {
+                  await _loadVideoTypes();
                 },
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: _videoTypes.length,
+                  itemBuilder: (context, index) {
+                    final type = _videoTypes[index];
+                    final int typeId = type['id'] as int;
+                    final String typeName = type['name'] as String? ?? 'Unknown';
+                    return _buildTypeDrawerItem(
+                      label: _getTranslatedTypeName(typeName, l10n),
+                      iconPath: _getTypeIcon(typeName),
+                      isSelected: _selectedTypeId == typeId,
+                      onTap: () => _onTypeSelected(typeId),
+                    );
+                  },
+                ),
               ),
             ),
           ],
