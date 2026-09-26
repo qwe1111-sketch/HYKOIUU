@@ -139,6 +139,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get username => 'Nom d\'utilisateur';
 
   @override
+  String get usernameOrEmail => 'Nom d\'utilisateur ou e-mail';
+
+  @override
+  String get enterUsernameOrEmail =>
+      'Veuillez saisir votre nom d\'utilisateur ou e-mail';
+
+  @override
   String get enterUsername => 'Veuillez entrer votre nom d\'utilisateur';
 
   @override
@@ -445,6 +452,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get enterUsernameHint => 'Entrez le nom d\'utilisateur';
 
   @override
+  String get enterUsernameOrEmailHint =>
+      'Entrez le nom d\'utilisateur ou l\'e-mail';
+
+  @override
   String get enterEmailHint => 'Entrez l\'adresse e-mail';
 
   @override
@@ -478,6 +489,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get save => 'Enregistrer';
+
+  @override
+  String get submit => 'Envoyer';
+
+  @override
+  String get gotIt => 'Compris';
 
   @override
   String get deviceIncompatible =>

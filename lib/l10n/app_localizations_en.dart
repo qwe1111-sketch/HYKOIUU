@@ -138,6 +138,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get username => 'Username';
 
   @override
+  String get usernameOrEmail => 'Username or Email';
+
+  @override
+  String get enterUsernameOrEmail => 'Please enter your username or email';
+
+  @override
   String get enterUsername => 'Please enter your username';
 
   @override
@@ -437,6 +443,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterUsernameHint => 'Enter the Username';
 
   @override
+  String get enterUsernameOrEmailHint => 'Enter username or email';
+
+  @override
   String get enterEmailHint => 'Enter the Email';
 
   @override
@@ -469,6 +478,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get save => 'Save';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get gotIt => 'Got it';
 
   @override
   String get deviceIncompatible =>

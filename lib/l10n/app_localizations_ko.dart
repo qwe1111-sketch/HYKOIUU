@@ -138,6 +138,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get username => '아이디';
 
   @override
+  String get usernameOrEmail => '아이디 또는 이메일';
+
+  @override
+  String get enterUsernameOrEmail => '아이디 또는 이메일을 입력해 주세요';
+
+  @override
   String get enterUsername => '아이디를 입력해주세요';
 
   @override
@@ -432,6 +438,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get enterUsernameHint => '아이디를 입력하세요';
 
   @override
+  String get enterUsernameOrEmailHint => '아이디 또는 이메일 입력';
+
+  @override
   String get enterEmailHint => '이메일을 입력하세요';
 
   @override
@@ -463,6 +472,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get save => '저장';
+
+  @override
+  String get submit => '제출';
+
+  @override
+  String get gotIt => '확인';
 
   @override
   String get deviceIncompatible => '기기에서 이 고화질 형식을 디코딩할 수 없습니다.';

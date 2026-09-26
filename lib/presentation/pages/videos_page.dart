@@ -346,7 +346,8 @@ class _VideosPageState extends State<VideosPage> {
                   itemBuilder: (context, index) {
                     final type = _videoTypes[index];
                     final int typeId = type['id'] as int;
-                    final String typeName = type['name'] as String? ?? 'Unknown';
+                    final String typeName =
+                        type['name'] as String? ?? 'Unknown';
                     return _buildTypeDrawerItem(
                       label: _getTranslatedTypeName(typeName, l10n),
                       iconPath: _getTypeIcon(typeName),

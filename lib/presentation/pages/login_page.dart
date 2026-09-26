@@ -134,13 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _buildLabel(l10n.username),
+                                    _buildLabel(l10n.usernameOrEmail),
                                     const SizedBox(height: 12),
                                     _buildTextField(
                                       controller: _usernameController,
-                                      hintText: l10n.enterUsernameHint,
+                                      hintText: l10n.enterUsernameOrEmailHint,
                                       prefixIconPath: 'assets/images/login/username.svg',
-                                      validator: (value) => value!.isEmpty ? l10n.enterUsername : null,
+                                      validator: (value) =>
+                                          value!.isEmpty ? l10n.enterUsernameOrEmail : null,
                                     ),
                                     const SizedBox(height: 24),
                                     _buildLabel(l10n.password),

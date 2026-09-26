@@ -138,6 +138,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get username => 'ユーザー名';
 
   @override
+  String get usernameOrEmail => 'ユーザー名またはメールアドレス';
+
+  @override
+  String get enterUsernameOrEmail => 'ユーザー名またはメールアドレスを入力してください';
+
+  @override
   String get enterUsername => 'ユーザー名を入力してください';
 
   @override
@@ -431,6 +437,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get enterUsernameHint => 'ユーザー名を入力してください';
 
   @override
+  String get enterUsernameOrEmailHint => 'ユーザー名またはメールアドレスを入力';
+
+  @override
   String get enterEmailHint => 'メールアドレスを入力してください';
 
   @override
@@ -462,6 +471,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get save => '保存';
+
+  @override
+  String get submit => '送信';
+
+  @override
+  String get gotIt => 'OK';
 
   @override
   String get deviceIncompatible => 'お使いのデバイスではこの高画質フォーマットをデコードできません';

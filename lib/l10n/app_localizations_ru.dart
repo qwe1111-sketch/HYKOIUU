@@ -153,6 +153,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get username => 'Имя пользователя';
 
   @override
+  String get usernameOrEmail => 'Имя пользователя или эл. почта';
+
+  @override
+  String get enterUsernameOrEmail =>
+      'Пожалуйста, введите имя пользователя или эл. почту';
+
+  @override
   String get enterUsername => 'Пожалуйста, введите имя пользователя';
 
   @override
@@ -458,6 +465,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get enterUsernameHint => 'Введите имя пользователя';
 
   @override
+  String get enterUsernameOrEmailHint =>
+      'Введите имя пользователя или эл. почту';
+
+  @override
   String get enterEmailHint => 'Введите эл. почту';
 
   @override
@@ -491,6 +502,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get save => 'Сохранить';
+
+  @override
+  String get submit => 'Отправить';
+
+  @override
+  String get gotIt => 'Понятно';
 
   @override
   String get deviceIncompatible =>

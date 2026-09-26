@@ -683,7 +683,7 @@ class _InvitationCodeDialogState extends State<_InvitationCodeDialog> {
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
                                   child: Text(
-                                    l10n.save,
+                                    l10n.gotIt,
                                     style: const TextStyle(
                                       color: Color(0xFFCCFF00),
                                     ),
@@ -746,7 +746,7 @@ class _InvitationCodeDialogState extends State<_InvitationCodeDialog> {
                         ),
                       )
                     : Text(
-                        l10n.save,
+                        l10n.submit,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

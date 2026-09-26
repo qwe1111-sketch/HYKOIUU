@@ -242,6 +242,18 @@ abstract class AppLocalizations {
   /// **'Username'**
   String get username;
 
+  /// No description provided for @usernameOrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Username or Email'**
+  String get usernameOrEmail;
+
+  /// No description provided for @enterUsernameOrEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your username or email'**
+  String get enterUsernameOrEmail;
+
   /// No description provided for @enterUsername.
   ///
   /// In en, this message translates to:
@@ -794,6 +806,12 @@ abstract class AppLocalizations {
   /// **'Enter the Username'**
   String get enterUsernameHint;
 
+  /// No description provided for @enterUsernameOrEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter username or email'**
+  String get enterUsernameOrEmailHint;
+
   /// No description provided for @enterEmailHint.
   ///
   /// In en, this message translates to:
@@ -859,6 +877,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get save;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @gotIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get gotIt;
 
   /// No description provided for @deviceIncompatible.
   ///

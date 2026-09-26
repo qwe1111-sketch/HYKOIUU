@@ -137,6 +137,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get username => '用户名';
 
   @override
+  String get usernameOrEmail => '用户名或邮箱';
+
+  @override
+  String get enterUsernameOrEmail => '请输入用户名或邮箱';
+
+  @override
   String get enterUsername => '请输入用户名';
 
   @override
@@ -426,6 +432,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enterUsernameHint => '请输入用户名';
 
   @override
+  String get enterUsernameOrEmailHint => '请输入用户名或邮箱';
+
+  @override
   String get enterEmailHint => '请输入电子邮箱';
 
   @override
@@ -457,6 +466,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get save => '保存';
+
+  @override
+  String get submit => '提交';
+
+  @override
+  String get gotIt => '了解';
 
   @override
   String get deviceIncompatible => '您的设备暂时无法解码此高清格式';
