@@ -213,6 +213,9 @@ class _RegisterPageState extends State<RegisterPage> {
             case 'invalidVerificationCode':
               message = l10n.invalidVerificationCode;
               break;
+            case 'networkError':
+              message = l10n.networkError;
+              break;
             default:
               message = state.message;
           }

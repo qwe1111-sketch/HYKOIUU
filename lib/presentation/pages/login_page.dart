@@ -34,7 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (_formKey.currentState!.validate()) {
-      context.read<AuthBloc>().add(LoginEvent(_usernameController.text, _passwordController.text));
+      context.read<AuthBloc>().add(
+        LoginEvent(_usernameController.text, _passwordController.text),
+      );
     }
   }
 
@@ -47,10 +49,14 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const HomePage()),
+            );
           } else if (state is AuthError) {
             setState(() {
-              _backendError = l10n.invalidUsernameOrPassword;
+              _backendError = state.message == 'networkError'
+                  ? l10n.networkError
+                  : l10n.invalidUsernameOrPassword;
             });
           }
         },
@@ -96,7 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                   return SingleChildScrollView(
                     physics: const NeverScrollableScrollPhysics(), // 禁止滚动
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
                       child: IntrinsicHeight(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -112,8 +120,15 @@ class _LoginPageState extends State<LoginPage> {
                                       'assets/images/login/app_logo.svg',
                                       height: 70,
                                       fit: BoxFit.contain,
-                                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                                      placeholderBuilder: (context) => const Icon(Icons.warning, color: Colors.amber),
+                                      colorFilter: const ColorFilter.mode(
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
+                                      placeholderBuilder: (context) =>
+                                          const Icon(
+                                            Icons.warning,
+                                            color: Colors.amber,
+                                          ),
                                     ),
                                     const SizedBox(height: 20),
                                     Text(
@@ -139,9 +154,11 @@ class _LoginPageState extends State<LoginPage> {
                                     _buildTextField(
                                       controller: _usernameController,
                                       hintText: l10n.enterUsernameOrEmailHint,
-                                      prefixIconPath: 'assets/images/login/username.svg',
-                                      validator: (value) =>
-                                          value!.isEmpty ? l10n.enterUsernameOrEmail : null,
+                                      prefixIconPath:
+                                          'assets/images/login/username.svg',
+                                      validator: (value) => value!.isEmpty
+                                          ? l10n.enterUsernameOrEmail
+                                          : null,
                                     ),
                                     const SizedBox(height: 24),
                                     _buildLabel(l10n.password),
@@ -149,18 +166,29 @@ class _LoginPageState extends State<LoginPage> {
                                     _buildTextField(
                                       controller: _passwordController,
                                       hintText: l10n.enterPasswordHint,
-                                      prefixIconPath: 'assets/images/login/password.svg',
+                                      prefixIconPath:
+                                          'assets/images/login/password.svg',
                                       obscureText: _obscurePassword,
                                       suffixIcon: IconButton(
                                         icon: SvgPicture.asset(
-                                          _obscurePassword ? 'assets/images/login/off.svg' : 'assets/images/profile/password.svg',
+                                          _obscurePassword
+                                              ? 'assets/images/login/off.svg'
+                                              : 'assets/images/profile/password.svg',
                                           width: 20,
                                           height: 20,
-                                          colorFilter: const ColorFilter.mode(Color(0xFFCCFF00), BlendMode.srcIn),
+                                          colorFilter: const ColorFilter.mode(
+                                            Color(0xFFCCFF00),
+                                            BlendMode.srcIn,
+                                          ),
                                         ),
-                                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                        onPressed: () => setState(
+                                          () => _obscurePassword =
+                                              !_obscurePassword,
+                                        ),
                                       ),
-                                      validator: (value) => value!.isEmpty ? l10n.enterPassword : null,
+                                      validator: (value) => value!.isEmpty
+                                          ? l10n.enterPassword
+                                          : null,
                                     ),
                                   ],
                                 ),
@@ -172,31 +200,47 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Center(
                                     child: Text(
                                       _backendError!,
-                                      style: const TextStyle(color: Colors.redAccent),
+                                      style: const TextStyle(
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              _buildLoginButton(l10n, isLoading: state is AuthLoading),
+                              _buildLoginButton(
+                                l10n,
+                                isLoading: state is AuthLoading,
+                              ),
                               const SizedBox(height: 16),
                               Center(
                                 child: TextButton(
                                   onPressed: () async {
-                                    final result = await Navigator.of(context).push<bool>(
-                                      MaterialPageRoute(
-                                        builder: (_) => BlocProvider.value(
-                                          value: BlocProvider.of<AuthBloc>(context),
-                                          child: const ForgotPasswordPage(),
-                                        ),
-                                      ),
-                                    );
+                                    final result = await Navigator.of(context)
+                                        .push<bool>(
+                                          MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                              value: BlocProvider.of<AuthBloc>(
+                                                context,
+                                              ),
+                                              child: const ForgotPasswordPage(),
+                                            ),
+                                          ),
+                                        );
                                     if (result == true) {
                                       if (!mounted) return;
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text(l10n.codeSent),
-                                          backgroundColor: const Color(0xFF6B8E23),
+                                          backgroundColor: const Color(
+                                            0xFF6B8E23,
+                                          ),
                                           behavior: SnackBarBehavior.floating,
-                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
                                           margin: const EdgeInsets.all(16),
                                         ),
                                       );
@@ -219,7 +263,9 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (_) => BlocProvider.value(
-                                          value: BlocProvider.of<AuthBloc>(context),
+                                          value: BlocProvider.of<AuthBloc>(
+                                            context,
+                                          ),
                                           child: const RegisterPage(),
                                         ),
                                       ),
@@ -228,11 +274,17 @@ class _LoginPageState extends State<LoginPage> {
                                   child: RichText(
                                     text: TextSpan(
                                       text: l10n.noAccount,
-                                      style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.7),
+                                        fontSize: 14,
+                                      ),
                                       children: [
                                         TextSpan(
                                           text: l10n.signUp,
-                                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -282,21 +334,33 @@ class _LoginPageState extends State<LoginPage> {
         filled: true,
         fillColor: const Color(0xFF2C2C2E),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 16),
+        hintStyle: TextStyle(
+          color: Colors.white.withOpacity(0.3),
+          fontSize: 16,
+        ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
             prefixIconPath,
             width: 20,
             height: 20,
-            colorFilter: const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              Colors.white70,
+              BlendMode.srcIn,
+            ),
           ),
         ),
         suffixIcon: suffixIcon,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
@@ -335,10 +399,17 @@ class _LoginPageState extends State<LoginPage> {
             ? const SizedBox(
                 width: 24,
                 height: 24,
-                child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 2,
+                ),
+              )
             : Text(
                 l10n.login,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
       ),
     );

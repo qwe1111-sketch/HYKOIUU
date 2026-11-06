@@ -60,21 +60,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   void _sendForgotPasswordCode() {
     if (_formKey.currentState?.validate() == true) {
-      context.read<AuthBloc>().add(ForgotPasswordSendCodeEvent(
-            _usernameController.text,
-            _emailController.text,
-          ));
+      context.read<AuthBloc>().add(
+        ForgotPasswordSendCodeEvent(
+          _usernameController.text,
+          _emailController.text,
+        ),
+      );
     }
   }
 
   void _resetForgottenPassword() {
     if (_formKey.currentState?.validate() == true) {
-      context.read<AuthBloc>().add(ForgotPasswordResetEvent(
-            _usernameController.text,
-            _emailController.text,
-            _codeController.text,
-            _passwordController.text,
-          ));
+      context.read<AuthBloc>().add(
+        ForgotPasswordResetEvent(
+          _usernameController.text,
+          _emailController.text,
+          _codeController.text,
+          _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -86,22 +90,30 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       listener: (context, state) {
         if (state is ForgotPasswordCodeSent) {
           _startCountdown();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.codeSent)));
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(l10n.codeSent)));
         } else if (state is ForgotPasswordSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(l10n.passwordResetSuccessLogin), backgroundColor: Colors.green));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.passwordResetSuccessLogin),
+              backgroundColor: Colors.green,
+            ),
+          );
           Navigator.of(context).pop(true);
         } else if (state is AuthError) {
           if (state.errorType == 'ForgotPasswordSendCodeError') {
             _timer?.cancel();
             setState(() => _isCodeSent = false);
           }
-          final message =
-              state.message == 'usernameAndEmailMismatch' ? l10n.usernameAndEmailMismatch : state.message;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(message),
-            backgroundColor: Colors.redAccent,
-          ));
+          final message = state.message == 'usernameAndEmailMismatch'
+              ? l10n.usernameAndEmailMismatch
+              : state.message == 'networkError'
+              ? l10n.networkError
+              : state.message;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(message), backgroundColor: Colors.redAccent),
+          );
         }
       },
       child: Scaffold(
@@ -155,7 +167,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             'assets/images/community/back.svg',
                             width: 24,
                             height: 24,
-                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
@@ -203,8 +218,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               _buildTextField(
                                 controller: _usernameController,
                                 hintText: l10n.enterUsernameHint,
-                                prefixIconPath: 'assets/images/login/username.svg',
-                                validator: (value) => value!.isEmpty ? l10n.enterUsername : null,
+                                prefixIconPath:
+                                    'assets/images/login/username.svg',
+                                validator: (value) =>
+                                    value!.isEmpty ? l10n.enterUsername : null,
                               ),
                               const SizedBox(height: 24),
                               _buildLabel(l10n.email),
@@ -214,14 +231,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 hintText: l10n.enterEmailHint,
                                 prefixIconPath: 'assets/images/login/email.svg',
                                 validator: (value) =>
-                                    (value == null || !value.contains('@')) ? l10n.enterValidEmail : null,
+                                    (value == null || !value.contains('@'))
+                                    ? l10n.enterValidEmail
+                                    : null,
                               ),
                               const SizedBox(height: 48),
                               _buildButton(
                                 text: l10n.sendVerificationCode,
                                 onPressed: _sendForgotPasswordCode,
-                                isLoading: context.watch<AuthBloc>().state is AuthLoading &&
-                                    (context.watch<AuthBloc>().state as AuthLoading).loadingType ==
+                                isLoading:
+                                    context.watch<AuthBloc>().state
+                                        is AuthLoading &&
+                                    (context.watch<AuthBloc>().state
+                                                as AuthLoading)
+                                            .loadingType ==
                                         'ForgotPasswordSendCode',
                               ),
                             ] else ...[
@@ -230,7 +253,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               _buildTextField(
                                 controller: _codeController,
                                 hintText: l10n.enterCodeHint,
-                                prefixIconPath: 'assets/images/login/verificationcode.svg',
+                                prefixIconPath:
+                                    'assets/images/login/verificationcode.svg',
                                 suffixIcon: Padding(
                                   padding: const EdgeInsets.only(right: 16.0),
                                   child: Column(
@@ -238,12 +262,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     children: [
                                       Text(
                                         _countdown > 0 ? '$_countdown s' : '',
-                                        style: const TextStyle(color: Color(0xFFCCFF00), fontSize: 14),
+                                        style: const TextStyle(
+                                          color: Color(0xFFCCFF00),
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                                validator: (value) => value!.isEmpty ? l10n.enterVerificationCode : null,
+                                validator: (value) => value!.isEmpty
+                                    ? l10n.enterVerificationCode
+                                    : null,
                               ),
                               const SizedBox(height: 24),
                               _buildLabel(l10n.password),
@@ -251,7 +280,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               _buildTextField(
                                 controller: _passwordController,
                                 hintText: l10n.enterNewPassword,
-                                prefixIconPath: 'assets/images/login/password.svg',
+                                prefixIconPath:
+                                    'assets/images/login/password.svg',
                                 obscureText: _obscurePassword,
                                 suffixIcon: IconButton(
                                   icon: SvgPicture.asset(
@@ -260,12 +290,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         : 'assets/images/profile/password.svg',
                                     width: 20,
                                     height: 20,
-                                    colorFilter: const ColorFilter.mode(Color(0xFFCCFF00), BlendMode.srcIn),
+                                    colorFilter: const ColorFilter.mode(
+                                      Color(0xFFCCFF00),
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
-                                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                  onPressed: () => setState(
+                                    () => _obscurePassword = !_obscurePassword,
+                                  ),
                                 ),
                                 validator: (value) =>
-                                    (value == null || value.length < 6) ? l10n.passwordTooShort : null,
+                                    (value == null || value.length < 6)
+                                    ? l10n.passwordTooShort
+                                    : null,
                               ),
                               const SizedBox(height: 24),
                               _buildLabel(l10n.confirmNewPassword),
@@ -273,7 +310,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               _buildTextField(
                                 controller: _confirmPasswordController,
                                 hintText: l10n.enterConfirmPassword,
-                                prefixIconPath: 'assets/images/login/password.svg',
+                                prefixIconPath:
+                                    'assets/images/login/password.svg',
                                 obscureText: _obscureConfirmPassword,
                                 suffixIcon: IconButton(
                                   icon: SvgPicture.asset(
@@ -282,18 +320,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                         : 'assets/images/profile/password.svg',
                                     width: 20,
                                     height: 20,
-                                    colorFilter: const ColorFilter.mode(Color(0xFFCCFF00), BlendMode.srcIn),
+                                    colorFilter: const ColorFilter.mode(
+                                      Color(0xFFCCFF00),
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
-                                  onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                                  onPressed: () => setState(
+                                    () => _obscureConfirmPassword =
+                                        !_obscureConfirmPassword,
+                                  ),
                                 ),
-                                validator: (value) => value != _passwordController.text ? l10n.passwordsDoNotMatch : null,
+                                validator: (value) =>
+                                    value != _passwordController.text
+                                    ? l10n.passwordsDoNotMatch
+                                    : null,
                               ),
                               const SizedBox(height: 48),
                               _buildButton(
                                 text: l10n.confirmReset,
                                 onPressed: _resetForgottenPassword,
-                                isLoading: context.watch<AuthBloc>().state is AuthLoading &&
-                                    (context.watch<AuthBloc>().state as AuthLoading).loadingType ==
+                                isLoading:
+                                    context.watch<AuthBloc>().state
+                                        is AuthLoading &&
+                                    (context.watch<AuthBloc>().state
+                                                as AuthLoading)
+                                            .loadingType ==
                                         'ForgotPasswordReset',
                               ),
                             ],
@@ -339,21 +390,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         filled: true,
         fillColor: const Color(0xFF2C2C2E),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 16),
+        hintStyle: TextStyle(
+          color: Colors.white.withOpacity(0.3),
+          fontSize: 16,
+        ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
             prefixIconPath,
             width: 20,
             height: 20,
-            colorFilter: const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              Colors.white70,
+              BlendMode.srcIn,
+            ),
           ),
         ),
         suffixIcon: suffixIcon,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
@@ -394,10 +457,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
         child: isLoading
             ? const SizedBox(
-                width: 24, height: 24, child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                  strokeWidth: 2,
+                ),
+              )
             : Text(
                 text,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
       ),
     );

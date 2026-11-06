@@ -230,6 +230,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
             case 'usernameAlreadyExists':
               message = l10n.usernameAlreadyExists;
               break;
+            case 'networkError':
+              message = l10n.networkError;
+              break;
             default:
               message = state.message;
           }

@@ -61,17 +61,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   void _sendVerificationCode() {
     if (_emailFieldKey.currentState?.validate() == true) {
       _startCountdown();
-      context.read<AuthBloc>().add(SendPasswordResetCodeEvent(_emailController.text));
+      context.read<AuthBloc>().add(
+        SendPasswordResetCodeEvent(_emailController.text),
+      );
     }
   }
 
   void _resetPassword() {
     if (_formKey.currentState?.validate() == true) {
-      context.read<AuthBloc>().add(ResetPasswordEvent(
-            _emailController.text,
-            _codeController.text,
-            _passwordController.text,
-          ));
+      context.read<AuthBloc>().add(
+        ResetPasswordEvent(
+          _emailController.text,
+          _codeController.text,
+          _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -85,10 +89,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(content: Text(l10n.codeSent)));
-        } else if (state is AuthUnauthenticated && ModalRoute.of(context)?.isCurrent == true) {
+        } else if (state is AuthUnauthenticated &&
+            ModalRoute.of(context)?.isCurrent == true) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(l10n.passwordResetSuccessLogin)));
+            ..showSnackBar(
+              SnackBar(content: Text(l10n.passwordResetSuccessLogin)),
+            );
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginPage()),
             (Route<dynamic> route) => false,
@@ -100,7 +107,16 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           }
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.redAccent));
+            ..showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.message == 'networkError'
+                      ? l10n.networkError
+                      : state.message,
+                ),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
         }
       },
       child: Scaffold(
@@ -154,7 +170,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             'assets/images/community/back.svg',
                             width: 24,
                             height: 24,
-                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
@@ -204,8 +223,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               hintText: l10n.enterEmailHint,
                               prefixIconPath: 'assets/images/login/email.svg',
                               validator: (value) {
-                                final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-                                if (value == null || !emailRegex.hasMatch(value)) {
+                                final emailRegex = RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                );
+                                if (value == null ||
+                                    !emailRegex.hasMatch(value)) {
                                   return l10n.enterValidEmail;
                                 }
                                 return null;
@@ -221,7 +243,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   child: _buildTextField(
                                     controller: _codeController,
                                     hintText: l10n.enterCodeHint,
-                                    prefixIconPath: 'assets/images/login/verificationcode.svg',
+                                    prefixIconPath:
+                                        'assets/images/login/verificationcode.svg',
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return l10n.enterVerificationCode;
@@ -235,12 +258,17 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   height: 60,
                                   width: 110,
                                   child: ElevatedButton(
-                                    onPressed: (_timer?.isActive ?? false) ? null : _sendVerificationCode,
+                                    onPressed: (_timer?.isActive ?? false)
+                                        ? null
+                                        : _sendVerificationCode,
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: const Color(0xFFCCFF00),
                                       foregroundColor: Colors.black,
-                                      disabledBackgroundColor: const Color(0xFFCCFF00).withOpacity(0.3),
-                                      disabledForegroundColor: Colors.black.withOpacity(0.5),
+                                      disabledBackgroundColor: const Color(
+                                        0xFFCCFF00,
+                                      ).withOpacity(0.3),
+                                      disabledForegroundColor: Colors.black
+                                          .withOpacity(0.5),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(30),
                                       ),
@@ -248,7 +276,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       elevation: 0,
                                     ),
                                     child: Text(
-                                      (_timer?.isActive ?? false) ? '${_countdown}s' : l10n.sendVerificationCode,
+                                      (_timer?.isActive ?? false)
+                                          ? '${_countdown}s'
+                                          : l10n.sendVerificationCode,
                                       style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
@@ -264,7 +294,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             _buildTextField(
                               controller: _passwordController,
                               hintText: l10n.enterNewPassword,
-                              prefixIconPath: 'assets/images/login/password.svg',
+                              prefixIconPath:
+                                  'assets/images/login/password.svg',
                               obscureText: _obscurePassword,
                               suffixIcon: IconButton(
                                 icon: SvgPicture.asset(
@@ -273,9 +304,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       : 'assets/images/login/password.svg',
                                   width: 20,
                                   height: 20,
-                                  colorFilter: const ColorFilter.mode(Color(0xFFCCFF00), BlendMode.srcIn),
+                                  colorFilter: const ColorFilter.mode(
+                                    Color(0xFFCCFF00),
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
-                                onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword,
+                                ),
                               ),
                               validator: (value) {
                                 if (value == null || value.length < 6) {
@@ -290,7 +326,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             _buildTextField(
                               controller: _confirmPasswordController,
                               hintText: l10n.enterConfirmPassword,
-                              prefixIconPath: 'assets/images/login/password.svg',
+                              prefixIconPath:
+                                  'assets/images/login/password.svg',
                               obscureText: _obscureConfirmPassword,
                               suffixIcon: IconButton(
                                 icon: SvgPicture.asset(
@@ -299,9 +336,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                       : 'assets/images/login/password.svg',
                                   width: 20,
                                   height: 20,
-                                  colorFilter: const ColorFilter.mode(Color(0xFFCCFF00), BlendMode.srcIn),
+                                  colorFilter: const ColorFilter.mode(
+                                    Color(0xFFCCFF00),
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
-                                onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                                onPressed: () => setState(
+                                  () => _obscureConfirmPassword =
+                                      !_obscureConfirmPassword,
+                                ),
                               ),
                               validator: (value) {
                                 if (value != _passwordController.text) {
@@ -330,7 +373,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 
@@ -352,21 +399,33 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         filled: true,
         fillColor: const Color(0xFF2C2C2E),
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white.withOpacity(0.3), fontSize: 16),
+        hintStyle: TextStyle(
+          color: Colors.white.withOpacity(0.3),
+          fontSize: 16,
+        ),
         prefixIcon: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
             prefixIconPath,
             width: 20,
             height: 20,
-            colorFilter: const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              Colors.white70,
+              BlendMode.srcIn,
+            ),
           ),
         ),
         suffixIcon: suffixIcon,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 18,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.1),
+            width: 1,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(28),
@@ -388,7 +447,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget _buildSubmitButton(AppLocalizations l10n) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        final isLoading = state is ResettingPasswordInProgress || (state is AuthLoading && state.loadingType == null);
+        final isLoading =
+            state is ResettingPasswordInProgress ||
+            (state is AuthLoading && state.loadingType == null);
         return SizedBox(
           width: double.infinity,
           height: 56,
@@ -398,13 +459,27 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               backgroundColor: const Color(0xFFCCFF00),
               foregroundColor: Colors.black,
               disabledBackgroundColor: const Color(0xFFCCFF00).withOpacity(0.3),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(28),
+              ),
               elevation: 0,
             ),
             child: isLoading
                 ? const SizedBox(
-                    height: 24, width: 24, child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2))
-                : Text(l10n.confirmReset, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : Text(
+                    l10n.confirmReset,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
           ),
         );
       },

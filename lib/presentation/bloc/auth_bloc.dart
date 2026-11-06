@@ -205,7 +205,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UpdateProfileEvent>(_onUpdateProfile);
   }
 
+  /// 判断异常是否由网络不可用/连接失败导致，避免把底层异常直接展示给用户
+  bool _isNetworkError(Object e) {
+    final raw = e.toString().toLowerCase();
+    return raw.contains('socketexception') ||
+        raw.contains('socketfailed') ||
+        raw.contains('clientexception') ||
+        raw.contains('failed host lookup') ||
+        raw.contains('nodename nor servname') ||
+        raw.contains('connection refused') ||
+        raw.contains('connection reset') ||
+        raw.contains('network is unreachable') ||
+        raw.contains('timeout') ||
+        raw.contains('timed out');
+  }
+
   String _extractErrorMessage(Object e) {
+    if (_isNetworkError(e)) {
+      return 'networkError';
+    }
     if (e is Exception) {
       final message = e.toString().replaceFirst('Exception: ', '');
       if (message == '用户名与邮箱不匹配') {

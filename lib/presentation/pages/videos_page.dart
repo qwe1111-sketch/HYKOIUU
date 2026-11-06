@@ -15,11 +15,13 @@ import 'package:sport_flutter/domain/usecases/favorite_video.dart';
 import 'package:sport_flutter/domain/usecases/get_videos.dart';
 import 'package:sport_flutter/domain/usecases/unfavorite_video.dart';
 import 'package:sport_flutter/l10n/app_localizations.dart';
+import 'package:sport_flutter/presentation/bloc/auth_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/recommended_video_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/video_bloc.dart';
 import 'package:sport_flutter/presentation/bloc/video_event.dart';
 import 'package:sport_flutter/presentation/bloc/video_state.dart';
 import 'package:sport_flutter/presentation/pages/video_detail_page.dart';
+import 'package:sport_flutter/presentation/widgets/invitation_code_dialog.dart';
 import 'package:sport_flutter/presentation/widgets/translated_text.dart';
 
 class VideosPage extends StatefulWidget {
@@ -60,9 +62,13 @@ class _VideosPageState extends State<VideosPage> {
       if (mounted) {
         setState(() {
           _videoTypes = types;
-          // Auto-select first type if available
+          // Auto-select default type if available
           if (types.isNotEmpty && _selectedTypeId == null) {
-            _selectedTypeId = types.first['id'] as int;
+            final defaultType = types.firstWhere(
+              (t) => t['is_default'] == 1 || t['is_default'] == true,
+              orElse: () => types.first,
+            );
+            _selectedTypeId = defaultType['id'] as int;
           }
         });
         // Load videos with selected type
@@ -84,9 +90,16 @@ class _VideosPageState extends State<VideosPage> {
     }
   }
 
-  void _onTypeSelected(int? typeId) {
+  Future<void> _onTypeSelected(int? typeId, {bool isDefault = false}) async {
     Navigator.of(context).pop(); // Close drawer
     if (typeId == null) return; // Don't allow null selection
+
+    // 非默认类型需要先输入邀请码
+    if (!isDefault && !_hasInvitationCode()) {
+      final applied = await _showInvitationCodeDialog();
+      if (!applied || !mounted) return;
+    }
+
     setState(() {
       _selectedTypeId = typeId;
     });
@@ -97,6 +110,24 @@ class _VideosPageState extends State<VideosPage> {
     context.read<RecommendedVideoBloc>().add(
       FetchRecommendedVideos(typeId: typeId, isRefresh: true),
     );
+  }
+
+  bool _hasInvitationCode() {
+    final state = context.read<AuthBloc>().state;
+    return state is AuthAuthenticated && state.user.usedInvitationCode;
+  }
+
+  Future<bool> _showInvitationCodeDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (_) => InvitationCodeDialog(l10n: l10n),
+    );
+    if (result == true && mounted) {
+      // 刷新用户信息，使 usedInvitationCode 变为 true
+      context.read<AuthBloc>().add(AppStarted());
+    }
+    return result == true;
   }
 
   @override
@@ -348,11 +379,14 @@ class _VideosPageState extends State<VideosPage> {
                     final int typeId = type['id'] as int;
                     final String typeName =
                         type['name'] as String? ?? 'Unknown';
+                    final bool isDefault =
+                        type['is_default'] == 1 || type['is_default'] == true;
                     return _buildTypeDrawerItem(
                       label: _getTranslatedTypeName(typeName, l10n),
                       iconPath: _getTypeIcon(typeName),
                       isSelected: _selectedTypeId == typeId,
-                      onTap: () => _onTypeSelected(typeId),
+                      onTap: () =>
+                          _onTypeSelected(typeId, isDefault: isDefault),
                     );
                   },
                 ),
